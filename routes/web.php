@@ -7,6 +7,9 @@ use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\ProductDiscountController;
 use App\Http\Controllers\Admin\SubCategoryController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\Vendor\VendorMainController;
+use App\Http\Controllers\Vendor\VendorProductController;
+use App\Http\Controllers\Vendor\VendorStoreController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -66,9 +69,34 @@ Route::middleware(['auth', 'verified', 'rolemanager:admin'])->group(function () 
 //     return view('admin.admin');
 // })->middleware(['auth', 'verified', 'rolemanager:admin'])->name('admin');
 
-Route::get('/vendor/dashboard', function () {
-    return view('vendor');
-})->middleware(['auth', 'verified', 'rolemanager:vendor'])->name('vendor');
+
+
+// vendor routes
+Route::middleware(['auth', 'verified', 'rolemanager:vendor'])->group(function () {
+    Route::prefix('vendor')->group(function () {
+        Route::controller(VendorMainController::class)->group(function () {
+            Route::get('/dashboard', 'index')->name('vendor');
+            Route::get('/order/history', 'order_history')->name('vendor.order.history');
+
+        });
+
+        Route::controller(VendorProductController::class)->group(function () {
+            Route::get('/product/create', 'index')->name('vendor.product');
+            Route::get('/product/manage', 'manage')->name('vendor.product.manage');
+
+        });
+
+        Route::controller(VendorStoreController::class)->group(function () {
+            Route::get('/store/create', 'index')->name('vendor.store.create');
+            Route::get('/store/manage', 'manage')->name('vendor.store.manage');
+        });
+    });
+});
+
+
+// Route::get('/vendor/dashboard', function () {
+//     return view('vendor');
+// })->middleware(['auth', 'verified', 'rolemanager:vendor'])->name('vendor');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
