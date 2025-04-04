@@ -11,6 +11,7 @@ use App\Http\Controllers\Vendor\VendorMainController;
 use App\Http\Controllers\Vendor\VendorProductController;
 use App\Http\Controllers\Vendor\VendorStoreController;
 use App\Http\Controllers\Customer\CustomerMainController;
+use App\Http\Controllers\MasterCategoryController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -62,6 +63,14 @@ Route::middleware(['auth', 'verified', 'rolemanager:admin'])->group(function () 
 
             Route::get('/discount/create', 'index')->name('discount.create');
             Route::get('/discount/manage', 'manage')->name('discount.manage');
+        });
+
+        Route::controller(MasterCategoryController::class)->group(function () {
+
+            Route::post('/store/category', 'storecat')->name('store.cat');
+            Route::get('/category/{id}', 'show_single_category')->name('show.cat');
+            Route::put('/category/update/{id}', 'update_category')->name('update.cat');
+            Route::delete('/category/delete/{id}', 'delete_category')->name('delete.cat');
         });
     });
 });
