@@ -12,7 +12,8 @@
 
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link rel="shortcut icon" href="img/icons/icon-48x48.png" />
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.4/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-DQvkBjpPgn7RC31MCQoOeC9TI2kdqa4+BSgNMNj8v77fdC77Kj5zpWFTJaaAoMbC" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.4/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-DQvkBjpPgn7RC31MCQoOeC9TI2kdqa4+BSgNMNj8v77fdC77Kj5zpWFTJaaAoMbC" crossorigin="anonymous">
 
     <link rel="canonical" href="https://demo-basic.adminkit.io/pages-blank.html" />
 
@@ -37,12 +38,11 @@
 
                     <li class="sidebar-item {{ request()->routeIs('vendor') ? 'active' : '' }}">
                         <a class="sidebar-link" href="{{ route('vendor') }}">
-                            <i class="align-middle" data-feather="home"></i> <span
-                                class="align-middle">Dashboard</span>
+                            <i class="align-middle" data-feather="home"></i> <span class="align-middle">Dashboard</span>
                         </a>
                     </li>
 
-					<li class="sidebar-header">
+                    <li class="sidebar-header">
                         Product
                     </li>
 
@@ -52,13 +52,12 @@
                                 class="align-middle">Create</span>
                         </a>
                     </li>
-					<li class="sidebar-item {{ request()->routeIs('vendor.product.manage') ? 'active' : '' }}">
+                    <li class="sidebar-item {{ request()->routeIs('vendor.product.manage') ? 'active' : '' }}">
                         <a class="sidebar-link" href="{{ route('vendor.product.manage') }}">
-                            <i class="align-middle" data-feather="sliders"></i> <span
-                                class="align-middle">Manage</span>
+                            <i class="align-middle" data-feather="sliders"></i> <span class="align-middle">Manage</span>
                         </a>
                     </li>
-					<li class="sidebar-header">
+                    <li class="sidebar-header">
                         Store
                     </li>
 
@@ -68,22 +67,20 @@
                                 class="align-middle">Create</span>
                         </a>
                     </li>
-					<li class="sidebar-item {{ request()->routeIs('vendor.store..manage') ? 'active' : '' }}">
+                    <li class="sidebar-item {{ request()->routeIs('vendor.store.manage') ? 'active' : '' }}">
                         <a class="sidebar-link" href="{{ route('vendor.store.manage') }}">
-                            <i class="align-middle" data-feather="sliders"></i> <span
-                                class="align-middle">Manage</span>
+                            <i class="align-middle" data-feather="sliders"></i> <span class="align-middle">Manage</span>
                         </a>
                     </li>
-					
-					
-					<li class="sidebar-header">
+
+
+                    <li class="sidebar-header">
                         Order
                     </li>
 
                     <li class="sidebar-item {{ request()->routeIs('vendor.order.history') ? 'active' : '' }}">
                         <a class="sidebar-link" href="{{ route('vendor.order.history') }}">
-                            <i class="align-middle" data-feather="clock"></i> <span
-                                class="align-middle">History</span>
+                            <i class="align-middle" data-feather="clock"></i> <span class="align-middle">History</span>
                         </a>
                     </li>
 
@@ -129,8 +126,7 @@
                 <div class="navbar-collapse collapse">
                     <ul class="navbar-nav navbar-align">
                         <li class="nav-item dropdown">
-                            <a class="nav-icon dropdown-toggle" href="#" id="alertsDropdown"
-                                data-bs-toggle="dropdown">
+                            <a class="nav-icon dropdown-toggle" href="#" id="alertsDropdown" data-bs-toggle="dropdown">
                                 <div class="position-relative">
                                     <i class="align-middle" data-feather="bell"></i>
                                     <span class="indicator">4</span>
@@ -297,7 +293,13 @@
                                 <a class="dropdown-item" href="#"><i class="align-middle me-1"
                                         data-feather="help-circle"></i> Help Center</a>
                                 <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="#">Log out</a>
+                                <form method="POST" action="{{ route('logout') }}">
+                                    @csrf
+                                    @method('POST')
+                                    {{-- <i class="align-middle me-1" data-feather="help-circle"></i> --}}
+                                    <input type='submit' value='Log out' class='dropdown-item'>
+
+                                </form>
                             </div>
                         </li>
                     </ul>

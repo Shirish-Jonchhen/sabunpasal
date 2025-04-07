@@ -16,7 +16,8 @@
     <link rel="canonical" href="https://demo-basic.adminkit.io/pages-blank.html" />
 
     <title>@yield('admin_page_title')</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.4/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-DQvkBjpPgn7RC31MCQoOeC9TI2kdqa4+BSgNMNj8v77fdC77Kj5zpWFTJaaAoMbC" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.4/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-DQvkBjpPgn7RC31MCQoOeC9TI2kdqa4+BSgNMNj8v77fdC77Kj5zpWFTJaaAoMbC" crossorigin="anonymous">
 
 
     <link href="{{ asset('admin_asset/css/app.css') }}" rel="stylesheet">
@@ -345,7 +346,13 @@
                                 <a class="dropdown-item" href="#"><i class="align-middle me-1"
                                         data-feather="help-circle"></i> Help Center</a>
                                 <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="#">Log out</a>
+                                <form method="POST" action="{{ route('logout') }}">
+                                    @csrf
+                                    @method('POST')
+                                    <input type='submit' value='Log out' class='dropdown-item'>
+
+                                </form>
+                                {{-- <a class="dropdown-item" href="#">Log out</a> --}}
                             </div>
                         </li>
                     </ul>

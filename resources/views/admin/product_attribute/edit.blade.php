@@ -1,11 +1,11 @@
 @extends('admin.layouts.layout')
-@section('admin_page_title', 'Create SubCategory - Admin Panel')
+@section('admin_page_title', 'Create Default Attribute - Admin Panel')
 @section('admin_layout')
     <div class="row">
         <div class="col-12">
             <div class="card">
                 <div class="card-header">
-                    <h5 class="card-title mb-0">Create Sub Category</h5>
+                    <h5 class="card-title mb-0">Edit Default Attribute</h5>
                 </div>
                 <div class="card-body">
                     @if ($errors->any())
@@ -24,28 +24,18 @@
                             {{ session("success") }}
                         </div>
                     @endif
-
-
-                    <form action="{{ route("store.subcat") }}" method="POST">
+                    <form action="{{ route('update.attribute', $attribute_info->id) }}" method="POST">
                         @csrf
-                        @method('POST')
-
-                        <label for="subcategory_name" class="form-label fw-bold mb-2">Sub Category Name</label>
-                        <input type="text" class="form-control mb-2" name="subcategory_name" placeholder="Television">
-
-                        <label for="category_id" class="form-label fw-bold mb-2">Category Name</label>
-                        <select name="category_id" id="category_id" class="form-control mb-2">
-                            <option value="">Select Category</option>
-                            @foreach ($categories as $category)
-                                <option value="{{ $category->id }}">{{ $category->category_name }}</option>
-                            @endforeach
-                        </select>
-
-                        <button type="submit" class="btn btn-primary w-100">Create Sub Category</button>
+                        @method('PUT')
+                        <label for="attribute_value" class="form-label fw-bold mb-2">Default Attribute Name</label>
+                        <input type="text" class="form-control mb-2" name="attribute_value" placeholder="XL"
+                            value="{{ $attribute_info->attribute_value }}">
+                        <button type="submit" class="btn btn-primary w-100">Edit Attribute</button>
 
                     </form>
                 </div>
             </div>
         </div>
     </div>
+
 @endsection

@@ -6,7 +6,7 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-header">
-                    <h5 class="card-title mb-0">Create New Store</h5>
+                    <h5 class="card-title mb-0">Edit Store</h5>
                 </div>
                 <div class="card-body">
                     @if ($errors->any())
@@ -25,22 +25,24 @@
                             {{ session("success") }}
                         </div>
                     @endif
-                    <form action="{{ route('create.store') }}" method="POST">
+                    <form action="{{ route('update.store', $store->id) }}" method="POST">
                         @csrf
-                        @method('POST')
+                        @method('PUT')
                         <label for="store_name" class="form-label fw-bold mb-2">Category Name</label>
-                        <input type="text" class="form-control mb-2" name="store_name" placeholder="xyz store">
+                        <input type="text" class="form-control mb-2" name="store_name" placeholder="xyz store"
+                            value="{{ $store->store_name }}">
 
                         <label for="slug" class="form-label fw-bold mb-2">Slug</label>
-                        <input type="text" class="form-control mb-2" name="slug" placeholder="xyz">
+                        <input type="text" class="form-control mb-2" name="slug" placeholder="xyz"
+                            value="{{ $store->slug }}">
 
                         <label for="details" class="form-label fw-bold mb-2">Store Description</label>
                         <textarea class="form-control mb-2" name="details" placeholder="xyz store description"
-                            rows="10"></textarea>
+                            rows="10">{{ $store->details }}</textarea>
                         {{-- <input type="text" class="form-control mb-2" name="store_name" placeholder="xyz store"> --}}
 
 
-                        <button type="submit" class="btn btn-primary w-100">Create Store</button>
+                        <button type="submit" class="btn btn-primary w-100">Edit Store</button>
 
                     </form>
                 </div>

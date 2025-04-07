@@ -12,6 +12,7 @@ use App\Http\Controllers\Vendor\VendorProductController;
 use App\Http\Controllers\Vendor\VendorStoreController;
 use App\Http\Controllers\Customer\CustomerMainController;
 use App\Http\Controllers\MasterCategoryController;
+use App\Http\Controllers\MasterSubCategoryController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -57,6 +58,11 @@ Route::middleware(['auth', 'verified', 'rolemanager:admin'])->group(function () 
 
             Route::get('/productattribute/create', 'index')->name('productattribute.create');
             Route::get('/productattribute/manage', 'manage')->name('productattribute.manage');
+            Route::post('/defaultattribute/create', 'create_attribute')->name('attribute.create');
+            Route::get('/defaultattribute/{id}', 'show_single_attribute')->name('show.attribute');
+            Route::put('/defaultattribute/update/{id}', 'update_attribute')->name('update.attribute');
+            Route::delete('/defaultattribute/delete/{id}', 'delete_attribute')->name('delete.attribute');
+
         });
 
         Route::controller(ProductDiscountController::class)->group(function () {
@@ -71,6 +77,15 @@ Route::middleware(['auth', 'verified', 'rolemanager:admin'])->group(function () 
             Route::get('/category/{id}', 'show_single_category')->name('show.cat');
             Route::put('/category/update/{id}', 'update_category')->name('update.cat');
             Route::delete('/category/delete/{id}', 'delete_category')->name('delete.cat');
+        });
+
+
+        Route::controller(MasterSubCategoryController::class)->group(function () {
+
+            Route::post('/store/subcategory', 'store_subcat')->name('store.subcat');
+            Route::get('/subcategory/{id}', 'show_single_subcategory')->name('show.subcat');
+            Route::put('/subcategory/update/{id}', 'update_subcategory')->name('update.subcat');
+            Route::delete('/subcategory/delete/{id}', 'delete_subcategory')->name('delete.subcat');
         });
     });
 });
@@ -99,6 +114,10 @@ Route::middleware(['auth', 'verified', 'rolemanager:vendor'])->group(function ()
         Route::controller(VendorStoreController::class)->group(function () {
             Route::get('/store/create', 'index')->name('vendor.store.create');
             Route::get('/store/manage', 'manage')->name('vendor.store.manage');
+            Route::post('/store/publish', 'store')->name('create.store');
+            Route::get('/store/{id}', 'show_single_store')->name('show.store');
+            Route::put('/store/update/{id}', 'update_store')->name('update.store');
+            Route::delete('/store/delete/{id}', 'delete_store')->name('delete.store');
         });
     });
 });
