@@ -28,7 +28,7 @@
                     <form action="{{ route('create.store') }}" method="POST">
                         @csrf
                         @method('POST')
-                        <label for="store_name" class="form-label fw-bold mb-2">Category Name</label>
+                        <label for="store_name" class="form-label fw-bold mb-2">Store Name</label>
                         <input type="text" class="form-control mb-2" name="store_name" placeholder="xyz store">
 
                         <label for="slug" class="form-label fw-bold mb-2">Slug</label>
