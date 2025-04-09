@@ -23,7 +23,7 @@ class VendorProductController extends Controller
 
     public function manage()
     {
-        $products = Product::where('vendor_id', Auth::user()->id)->all();
+        $products = Product::where('vendor_id', Auth::user()->id)->get();
         return view('vendor.product.manage', compact('products'));
     }
 
@@ -76,4 +76,14 @@ class VendorProductController extends Controller
 
     }
 
+    public function delete_product($id){
+        $product = Product::findOrFail($id);
+        $product->delete();
+        return redirect()->back()->with('success', 'Product Deleted successfully');
+    }
+
+    public function show_single_product($id){
+        $product = Product::findOrFail($id);
+        return view('vendor.product.edit', compact('product'));
+    }
 }
