@@ -34,6 +34,23 @@
                         <input type="text" class="form-control mb-2" name="product_name" placeholder="Harpic 750Ml"
                             value="{{ $product->product_name }}">
 
+                        <label class="form-label fw-bold mb-2">Product Images</label>
+                        <div class="mb-3">
+                            <!-- Show existing images -->
+                            @if($product->images)
+                                <div class="d-flex flex-wrap gap-3">
+                                    @foreach($product->images as $image)
+                                        <div class="position-relative h-200 justify-center item-center" style="width: 150px;">
+                                            <img src="{{ asset('storage/' . $image->image_path) }}" alt="Product Image"
+                                                class="img-thumbnail w-100 h-auto object-fit ">
+                                            <button type="button" class="btn btn-danger btn-sm position-absolute top-0 end-0"
+                                                onclick="deleteImage('{{ $image }}')"> ✖ </button>
+                                        </div>
+                                    @endforeach
+                                </div>
+                            @endif
+                        </div>
+
                         <label for="description" class="form-label fw-bold mb-2">Product Description</label>
                         <textarea class="form-control mb-2" name="description" placeholder="Describe your product"
                             rows="10">{{ $product->description }}</textarea>

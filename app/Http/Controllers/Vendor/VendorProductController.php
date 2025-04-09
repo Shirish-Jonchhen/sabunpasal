@@ -104,6 +104,10 @@ class VendorProductController extends Controller
             'stock_quantity' => 'required|integer|min:0',
             'images.*'=> 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'slug' => ['required', 'string', Rule::unique('products', 'slug')->ignore($id)],
+            'meta_title' => 'nullable|string|max:255',
+            'meta_description' => 'nullable|string',
+            'stock_status' => 'nullable|string',
+            'status' => 'nullable|string',
         ]);
         // dd($validate);
 
