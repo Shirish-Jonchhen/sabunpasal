@@ -10,6 +10,7 @@ use App\Models\ProductImage;
 use Illuminate\Http\Request;
 
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rule;
 
 
 class VendorProductController extends Controller
@@ -85,5 +86,30 @@ class VendorProductController extends Controller
     public function show_single_product($id){
         $product = Product::findOrFail($id);
         return view('vendor.product.edit', compact('product'));
+    }
+
+    public function update_product(Request $request, $id){
+        $product = Product::findOrFail($id);
+        $validate = $request->validate( [
+            'product_name' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'sku'=> ['required', 'string', Rule::unique('products', 'sku')->ignore($id)],
+            // 'category_id' => 'required|exists:categories,id',
+            // 'subcategory_id' => 'nullable|exists:sub_categories,id',
+            // 'store_id' => 'required|exists:stores,id',
+            'visibility' => 'nullable|boolean',
+            'regular_price' => 'required|numeric|min:0',
+            'discounted_price' => 'nullable|numeric|min:0',
+            'tax_rate' => 'required|numeric|min:0|max:100',
+            'stock_quantity' => 'required|integer|min:0',
+            'images.*'=> 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'slug' => ['required', 'string', Rule::unique('products', 'slug')->ignore($id)],
+        ]);
+        // dd($validate);
+
+        $validate['visibility'] = $request->has('visibility') ? 1 : 0;
+
+        $product->update($validate);
+        return redirect()->back()->with('success', 'Product Updated successfully');
     }
 }

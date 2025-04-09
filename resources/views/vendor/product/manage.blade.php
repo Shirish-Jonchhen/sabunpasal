@@ -13,12 +13,12 @@
                     @if ($errors->any())
                         <div class="alert alert-danger alert-dismissable fade show">
                             {{-- <ul type="none"> --}}
-                            @foreach ($errors->all() as $error)
-                                {{-- <li> --}}
-                                *{{ $error }} <br>
-                                {{-- </li> --}}
-                            @endforeach
-                            {{-- </ul> --}}
+                                @foreach ($errors->all() as $error)
+                                    {{-- <li> --}}
+                                        *{{ $error }} <br>
+                                        {{-- </li> --}}
+                                @endforeach
+                                {{-- </ul> --}}
                         </div>
                     @endif
                     @if (session('success'))
@@ -26,7 +26,7 @@
                             {{ session('success') }}
                         </div>
                     @endif
-                    <div class = "table-responsive">
+                    <div class="table-responsive">
                         <table class="table">
                             <thead>
                                 <tr>
@@ -43,6 +43,7 @@
                                     <th scope="col">Quantity</th>
                                     <th scope="col">Stock Status</th>
                                     <th scope="col">Status</th>
+                                    <th scope="col">Visibility</th>
                                     <th scope="col">Action</th>
                                 </tr>
                             </thead>
@@ -55,8 +56,8 @@
                                         <td>
                                             @if ($product->images)
                                                 @foreach ($product->images as $image)
-                                                    <img src="{{ asset('storage/' . $image->image_path) }}"
-                                                        alt="Product Image" width="50">
+                                                    <img src="{{ asset('storage/' . $image->image_path) }}" alt="Product Image"
+                                                        width="50">
                                                 @endforeach
                                             @else
                                                 No Image
@@ -72,10 +73,13 @@
                                         <td>{{ $product->stock_quantity }}</td>
                                         <td>{{ $product->stock_status }}</td>
                                         <td>{{ $product->status }}</td>
+                                        <td>{{ $product->visibility }}</td>
                                         <td>
-                                            <a href="{{ route('vendor.product.show',$product->id) }}" class="btn btn-primary btn-sm">Edit</a>
+                                            <a href="{{ route('vendor.product.show', $product->id) }}"
+                                                class="btn btn-primary btn-sm">Edit</a>
 
-                                            <form action="{{ route('vendor.product.delete',$product->id) }}" method="POST" style="display: inline-block;">
+                                            <form action="{{ route('vendor.product.delete', $product->id) }}" method="POST"
+                                                style="display: inline-block;">
                                                 @csrf
                                                 @method('DELETE')
                                                 <input type="submit" value="Delete" class="btn btn-danger btn-sm">
