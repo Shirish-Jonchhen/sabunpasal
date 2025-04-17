@@ -6,11 +6,13 @@ use App\Http\Controllers\Admin\ProductAttributeController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\ProductDiscountController;
 use App\Http\Controllers\Admin\SubCategoryController;
+use App\Http\Controllers\BrandController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Vendor\VendorMainController;
 use App\Http\Controllers\Vendor\VendorProductController;
 use App\Http\Controllers\Vendor\VendorStoreController;
 use App\Http\Controllers\Customer\CustomerMainController;
+use App\Http\Controllers\MasterBrandContoller;
 use App\Http\Controllers\MasterCategoryController;
 use App\Http\Controllers\MasterSubCategoryController;
 use Illuminate\Support\Facades\Route;
@@ -53,6 +55,12 @@ Route::middleware(['auth', 'verified', 'rolemanager:admin'])->group(function () 
             Route::get('/product/review/manage', 'review_manage')->name('product.review.manage');
         });
 
+        Route::controller(BrandController::class)->group(function () {
+
+            Route::get('/brand/create', 'index')->name('brand.create');
+            Route::get('/brand/manage', 'manage')->name('brand.manage');
+        });
+
 
         Route::controller(ProductAttributeController::class)->group(function () {
 
@@ -86,6 +94,14 @@ Route::middleware(['auth', 'verified', 'rolemanager:admin'])->group(function () 
             Route::get('/subcategory/{id}', 'show_single_subcategory')->name('show.subcat');
             Route::put('/subcategory/update/{id}', 'update_subcategory')->name('update.subcat');
             Route::delete('/subcategory/delete/{id}', 'delete_subcategory')->name('delete.subcat');
+        });
+
+        Route::controller(MasterBrandContoller::class)->group(function () {
+
+            Route::post('/store/brand', 'store_brand')->name('store.brand');
+            Route::get('/brand/{id}', 'show_single_brand')->name('show.brand');
+            Route::put('/brand/update/{id}', 'update_brand')->name('update.brand');
+            Route::delete('/brand/delete/{id}', 'delete_brand')->name('delete.brand');
         });
     });
 });

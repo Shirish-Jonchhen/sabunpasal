@@ -26,7 +26,8 @@ class Product extends Model
         'visibility',
         'meta_title',
         'meta_description',
-        'status'
+        'status',
+        'is_on_sale', // Added this line
     ];
 
     public function category()
@@ -37,6 +38,11 @@ class Product extends Model
     public function subcategory()
     {
         return $this->belongsTo(SubCategory::class);
+    }
+
+    public function brand()
+    {
+        return $this->belongsTo(Brand::class);
     }
 
     public function store(){

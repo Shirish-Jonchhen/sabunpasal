@@ -119,9 +119,13 @@
                         </label><br>
                         <input class="mb-2" type="checkbox" name="visibility" id="visibility" value="1" {{ $product->visibility ? 'checked' : '' }}> <br>
 
+                        <label class="form-label fw-bold mb-2" for="is_on_sale">
+                            On Sale
+                        </label><br>
+                        <input class="mb-2" type="checkbox" name="is_on_sale" id="is_on_sale" value="1" {{ $product->is_on_sale ? 'checked' : '' }}> <br>
 
                         <label for="meta_title" class="form-label fw-bold mb-2">Meta Title</label>
-                        <input type="text" class="form-control mb-2" name="meta_title" placeholder="Meta Titles"
+                        <input type="text" class="form-control mb-2" name="meta_title" placeholder="Meta Title"
                             value="{{ $product->meta_title }}">
 
                         <label for="meta_description" class="form-label fw-bold mb-2">Meta Description</label>
@@ -140,7 +144,7 @@
 
 
 
-                        <button type="submit" class="btn btn-primary w-100">Add Product</button>
+                        <button type="submit" class="btn btn-primary w-100">Update Product</button>
 
                     </form>
                 </div>

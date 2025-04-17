@@ -44,6 +44,7 @@
                                     <th scope="col">Stock Status</th>
                                     <th scope="col">Status</th>
                                     <th scope="col">Visibility</th>
+                                    <th scope="col">On Sale</th>
                                     <th scope="col">Action</th>
                                 </tr>
                             </thead>
@@ -74,6 +75,7 @@
                                         <td>{{ $product->stock_status }}</td>
                                         <td>{{ $product->status }}</td>
                                         <td>{{ $product->visibility }}</td>
+                                        <td>{{ $product->is_on_sale }}</td>
                                         <td>
                                             <a href="{{ route('vendor.product.show', $product->id) }}"
                                                 class="btn btn-primary btn-sm">Edit</a>
