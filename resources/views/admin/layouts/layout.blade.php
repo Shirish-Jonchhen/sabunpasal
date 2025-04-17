@@ -74,6 +74,23 @@
                         </a>
                     </li>
 
+
+                    <li class="sidebar-header">
+                        Brand
+                    </li>
+
+                    <li class="sidebar-item {{ request()->routeIs('brand.create') ? 'active' : '' }}">
+                        <a class="sidebar-link" href="{{ route('brand.create') }}">
+                            <i class="align-middle" data-feather="plus-circle"></i> <span
+                                class="align-middle">Create</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-item {{ request()->routeIs('brand.manage') ? 'active' : '' }}">
+                        <a class="sidebar-link" href="{{ route('brand.manage') }}">
+                            <i class="align-middle" data-feather="sliders"></i> <span class="align-middle">Manage</span>
+                        </a>
+                    </li>
+
                     <li class="sidebar-header">
                         Attribute
                     </li>

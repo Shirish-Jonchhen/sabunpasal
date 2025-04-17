@@ -30,17 +30,18 @@ class VendorProductController extends Controller
     }
 
     public function store_product(Request $request)
-    {
 
+    {
         $validate = $request->validate([
             'product_name' => 'required|string|max:255',
             'description' => 'nullable|string',
-            'sku' => 'required|string|unique:products,sku',
+            'sku'  => 'required|string|unique:products,sku',
             'category_id' => 'required|exists:categories,id',
             'subcategory_id' => 'nullable|exists:sub_categories,id',
             'store_id' => 'required|exists:stores,id',
             'regular_price' => 'required|numeric|min:0',
-            'discounted_price' => 'nullable|numeric|min:0',
+            'is_on_sale' => 'nullable|boolean',
+            'discounted_price' => 'nullable|numeric|lt:regular_price|required_if:is_on_sale,1',
             'tax_rate' => 'required|numeric|min:0|max:100',
             'stock_quantity' => 'required|integer|min:0',
             'images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
@@ -126,7 +127,6 @@ class VendorProductController extends Controller
             'tax_rate' => 'required|numeric|min:0|max:100',
             'stock_quantity' => 'required|integer|min:0',
             'images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'new_images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'slug' => ['required', 'string', Rule::unique('products', 'slug')->ignore($id)],
             'meta_title' => 'nullable|string|max:255',
             'meta_description' => 'nullable|string',
@@ -136,36 +136,9 @@ class VendorProductController extends Controller
         // dd($validate);
 
         $validate['visibility'] = $request->has('visibility') ? 1 : 0;
+        $validate['is_on_sale'] = $request->has('is_on_sale') ? 1 : 0;
 
         $product->update($validate);
-
-
-        if ($request->filled('deleted_images')) {
-            $deletedImageIds = explode(',', $request->deleted_images);
-            foreach ($deletedImageIds as $imageId) {
-                $image = ProductImage::find($imageId);
-                if ($image) {
-                    $imagePath = public_path('storage/' . $image->image_path);
-                    if (file_exists($imagePath)) {
-                        unlink($imagePath);
-                    }
-
-                    // Delete from database
-                    $image->delete();
-                }
-            }
-        }
-
-        if ($request->hasFile('new_images')) {
-            foreach ($request->file('new_images') as $file) {
-                $path = $file->store('product_images', 'public'); // Save image to storage
-
-                ProductImage::create([
-                    'product_id' => $product->id,
-                    'image_path' => $path,
-                ]);
-            }
-        }
         return redirect()->back()->with('success', 'Product Updated successfully');
     }
 }
