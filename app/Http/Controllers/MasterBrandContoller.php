@@ -15,7 +15,7 @@ class MasterBrandContoller extends Controller
             'description' => 'nullable|string',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'website_url' => 'nullable|url',
- 
+
         ]);
 
         Brand::create([
@@ -28,23 +28,14 @@ class MasterBrandContoller extends Controller
             'meta_description' => $request->input('meta_description'),
             'logo_path' => $request->file('image') ? $request->file('image')->store('brand_logos', 'public') : null,
         ]);
-    
-    
+
+
         return redirect()->back()->with('success', 'Brand Added successfully');
     }
 
-    public function show_single_brand($id){
+    public function show_single_brand($id)
+    {
         $brand_info = Brand::find($id);
         return view('admin.brand.edit', compact('brand_info'));
-        
     }
-    
-    public function delete_brand($id){
-        $brand = Brand::findOrFail($id);
-        $brand->delete();
-        return redirect()->back()->with('success', 'Brand Removed Successfully');
-
-    }
-
-   
 }

@@ -148,7 +148,7 @@
 
 
 
-                            <button type="submit" class="btn btn-primary w-100">Add Product</button>
+                            <button type="submit" class="btn btn-primary w-100">Update Product</button>
 
                     </form>
                 </div>
@@ -191,8 +191,8 @@
                         imgWrapper.style.justifyContent = 'center';
 
                         imgWrapper.innerHTML = `
-                                                    <img src="${e.target.result}" class="img-thumbnail object-fit-contain" style="max-width: 100%; max-height: 100%;">
-                                                `;
+                                                        <img src="${e.target.result}" class="img-thumbnail object-fit-contain" style="max-width: 100%; max-height: 100%;">
+                                                    `;
 
                         previewContainer.appendChild(imgWrapper);
                     };

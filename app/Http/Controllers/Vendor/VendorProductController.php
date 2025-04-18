@@ -126,7 +126,7 @@ class VendorProductController extends Controller
             'discounted_price' => 'nullable|numeric|min:0',
             'tax_rate' => 'required|numeric|min:0|max:100',
             'stock_quantity' => 'required|integer|min:0',
-            'images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'new_images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'slug' => ['required', 'string', Rule::unique('products', 'slug')->ignore($id)],
             'meta_title' => 'nullable|string|max:255',
             'meta_description' => 'nullable|string',
@@ -137,6 +137,34 @@ class VendorProductController extends Controller
 
         $validate['visibility'] = $request->has('visibility') ? 1 : 0;
         $validate['is_on_sale'] = $request->has('is_on_sale') ? 1 : 0;
+
+        if ($request->filled('deleted_images')) {
+            $deletedImageIds = explode(',', $request->deleted_images);
+            foreach ($deletedImageIds as $imageId) {
+                $image = ProductImage::find($imageId);
+                if ($image) {
+                    $imagePath = public_path('storage/' . $image->image_path);
+                    if (file_exists($imagePath)) {
+                        unlink($imagePath);
+                    }
+
+                    // Delete from database
+                    $image->delete();
+                }
+            }
+        }
+
+        if ($request->hasFile('new_images')) {
+            foreach ($request->file('new_images') as $file) {
+                $path = $file->store('product_images', 'public'); // Save image to storage
+
+                ProductImage::create([
+                    'product_id' => $product->id,
+                    'image_path' => $path,
+                ]);
+            }
+        }
+
 
         $product->update($validate);
         return redirect()->back()->with('success', 'Product Updated successfully');
