@@ -65,7 +65,7 @@
                             value="{{ $brand_info->slug }}" readonly>
 
                         <label class="form-label fw-bold mb-2" for="is_featured">
-                            Visible
+                            Is Featured
                         </label><br>
                         <input class="mb-2" type="checkbox" name="is_featured" id="is_featured" value="1" {{ $brand_info->is_featured ? 'checked' : '' }}> <br>
 
@@ -108,38 +108,38 @@
                 });
             });
 
-            // Preview newly added image
-            const imageInput = document.getElementById('image-input');
-            if (imageInput) {
-                imageInput.addEventListener('change', function (event) {
-                    let previewContainer = document.getElementById('new-image-preview');
-                    if (!previewContainer) {
-                        previewContainer = document.createElement('div');
-                        previewContainer.id = 'new-image-preview';
-                        this.parentNode.appendChild(previewContainer);
-                    }
-                    previewContainer.innerHTML = "";
+            // // Preview newly added image
+            // const imageInput = document.getElementById('image-input');
+            // if (imageInput) {
+            //     imageInput.addEventListener('change', function (event) {
+            //         let previewContainer = document.getElementById('new-image-preview');
+            //         if (!previewContainer) {
+            //             previewContainer = document.createElement('div');
+            //             previewContainer.id = 'new-image-preview';
+            //             this.parentNode.appendChild(previewContainer);
+            //         }
+            //         previewContainer.innerHTML = "";
 
-                    Array.from(event.target.files).forEach(file => {
-                        const reader = new FileReader();
-                        reader.onload = function (e) {
-                            const imgWrapper = document.createElement('div');
-                            imgWrapper.classList.add('position-relative', 'image-wrapper');
-                            imgWrapper.style.width = '150px';
-                            imgWrapper.style.height = '200px';
-                            imgWrapper.style.display = 'flex';
-                            imgWrapper.style.alignItems = 'center';
-                            imgWrapper.style.justifyContent = 'center';
+            //         Array.from(event.target.files).forEach(file => {
+            //             const reader = new FileReader();
+            //             reader.onload = function (e) {
+            //                 const imgWrapper = document.createElement('div');
+            //                 imgWrapper.classList.add('position-relative', 'image-wrapper');
+            //                 imgWrapper.style.width = '150px';
+            //                 imgWrapper.style.height = '200px';
+            //                 imgWrapper.style.display = 'flex';
+            //                 imgWrapper.style.alignItems = 'center';
+            //                 imgWrapper.style.justifyContent = 'center';
 
-                            imgWrapper.innerHTML = `
-                                        <img src="${e.target.result}" class="img-thumbnail object-fit-contain" style="max-width: 100%; max-height: 100%;">
-                                    `;
-                            previewContainer.appendChild(imgWrapper);
-                        };
-                        reader.readAsDataURL(file);
-                    });
-                });
-            }
+            //                 imgWrapper.innerHTML = `
+            //                             <img src="${e.target.result}" class="img-thumbnail object-fit-contain" style="max-width: 100%; max-height: 100%;">
+            //                         `;
+            //                 previewContainer.appendChild(imgWrapper);
+            //             };
+            //             reader.readAsDataURL(file);
+            //         });
+            //     });
+            // }
         });
     </script>
 

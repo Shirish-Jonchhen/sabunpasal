@@ -42,6 +42,21 @@
                             <i class="align-middle" data-feather="home"></i> <span class="align-middle">Dashboard</span>
                         </a>
                     </li>
+                    <li class="sidebar-header">
+                        Home Page Banner
+                    </li>
+
+                    <li class="sidebar-item {{ request()->routeIs('home.banner.create') ? 'active' : '' }}">
+                        <a class="sidebar-link" href="{{ route('home.banner.create') }}">
+                            <i class="align-middle" data-feather="plus-circle"></i> <span
+                                class="align-middle">Create</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-item {{ request()->routeIs('home.banner.manage') ? 'active' : '' }}">
+                        <a class="sidebar-link" href="{{ route('home.banner.manage') }}">
+                            <i class="align-middle" data-feather="sliders"></i> <span class="align-middle">Manage</span>
+                        </a>
+                    </li>
 
                     <li class="sidebar-header">
                         Category
@@ -164,13 +179,6 @@
                                 class="align-middle">Settings</span>
                         </a>
                     </li>
-
-
-
-
-
-
-
                 </ul>
 
                 <div class="sidebar-cta">

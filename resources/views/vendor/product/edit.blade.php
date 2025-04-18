@@ -175,30 +175,30 @@
             });
 
             // Preview newly added images
-            document.getElementById('image-input').addEventListener('change', function (event) {
-                let previewContainer = document.getElementById('new-image-preview');
-                previewContainer.innerHTML = ""; // Clear previous previews
+            // document.getElementById('image-input').addEventListener('change', function (event) {
+            //     let previewContainer = document.getElementById('new-image-preview');
+            //     previewContainer.innerHTML = ""; // Clear previous previews
 
-                Array.from(event.target.files).forEach(file => {
-                    let reader = new FileReader();
-                    reader.onload = function (e) {
-                        let imgWrapper = document.createElement('div');
-                        imgWrapper.classList.add('position-relative', 'image-wrapper');
-                        imgWrapper.style.width = '150px';
-                        imgWrapper.style.height = '200px';
-                        imgWrapper.style.display = 'flex';
-                        imgWrapper.style.alignItems = 'center';
-                        imgWrapper.style.justifyContent = 'center';
+            //     Array.from(event.target.files).forEach(file => {
+            //         let reader = new FileReader();
+            //         reader.onload = function (e) {
+            //             let imgWrapper = document.createElement('div');
+            //             imgWrapper.classList.add('position-relative', 'image-wrapper');
+            //             imgWrapper.style.width = '150px';
+            //             imgWrapper.style.height = '200px';
+            //             imgWrapper.style.display = 'flex';
+            //             imgWrapper.style.alignItems = 'center';
+            //             imgWrapper.style.justifyContent = 'center';
 
-                        imgWrapper.innerHTML = `
-                                                        <img src="${e.target.result}" class="img-thumbnail object-fit-contain" style="max-width: 100%; max-height: 100%;">
-                                                    `;
+            //             imgWrapper.innerHTML = `
+            //                                             <img src="${e.target.result}" class="img-thumbnail object-fit-contain" style="max-width: 100%; max-height: 100%;">
+            //                                         `;
 
-                        previewContainer.appendChild(imgWrapper);
-                    };
-                    reader.readAsDataURL(file);
-                });
-            });
+            //             previewContainer.appendChild(imgWrapper);
+            //         };
+            //         reader.readAsDataURL(file);
+            //     });
+            // });
         });
     </script>
 @endsection

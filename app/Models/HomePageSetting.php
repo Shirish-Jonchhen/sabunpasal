@@ -23,7 +23,7 @@ class HomePageSetting extends Model
         return match ($this->link_type) {
             'product' => $this->belongsTo(Product::class, 'link_id'),
             'subcategory' => $this->belongsTo(SubCategory::class, 'link_id'),
-            // 'brand' => $this->belongsTo(Brand::class, 'link_id'),
+            'brand' => $this->belongsTo(Brand::class, 'link_id'),
             default => null
         };
     }

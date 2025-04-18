@@ -54,8 +54,9 @@
                                         {{-- <th scope="row">{{ $loop->iteration }}</th> --}}
                                         <td> {{ $product->id }}</td>
                                         <td>{{ $product->product_name }}</td>
-                                        <td class="d-flex gap-2 justify-content-center align-items-center">
-                                            @if ($product->images)
+                                        <td>
+                                            @if ($product->images && $product->images->count() > 0)
+                            
                                                 @foreach ($product->images as $image)
                                                     <img src="{{ asset('storage/' . $image->image_path) }}" alt="Product Image"
                                                         width="50">

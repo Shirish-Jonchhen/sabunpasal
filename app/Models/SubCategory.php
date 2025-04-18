@@ -11,6 +11,12 @@ class SubCategory extends Model
 
     protected $fillable = [
         'subcategory_name',
+        'slug',
+        'description',
+        'icon_path',
+        'is_featured',
+        'meta_title',
+        'meta_description',
         'category_id',
     ];
 
@@ -18,6 +24,9 @@ class SubCategory extends Model
         return $this->belongsTo(Category::class);
     }
 
+    public function products(){
+        return $this->hasMany(Product::class);
+    }
 
 
 

@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\AdminMainController;
 use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\Admin\HomePageSettingController;
 use App\Http\Controllers\Admin\ProductAttributeController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\ProductDiscountController;
@@ -15,6 +16,7 @@ use App\Http\Controllers\Customer\CustomerMainController;
 use App\Http\Controllers\MasterBrandContoller;
 use App\Http\Controllers\MasterCategoryController;
 use App\Http\Controllers\MasterSubCategoryController;
+use App\Models\HomePageSetting;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -37,11 +39,24 @@ Route::middleware(['auth', 'verified', 'rolemanager:admin'])->group(function () 
             Route::get('/order/history', 'order_history')->name('admin.order.histroy');
         });
 
+        Route::controller(HomePageSettingController::class)->group(function () {
+
+            Route::get('/home/banner/create', 'index')->name('home.banner.create');
+            Route::get('/home/banner/manage', 'manage')->name('home.banner.manage');
+
+            Route::post('/home/banner/add', 'add_home_banner')->name('add.home.banner');
+            // Route::get('/home/banner/{id}', 'show_single_home_banner')->name('show.home.banner');
+            // Route::put('/home/banner/update/{id}', 'update_home_banner')->name('update.home.banner');
+            Route::delete('/home/banner/delete/{id}', 'delete_home_banner')->name('delete.home.banner');
+        });
+        
+
         Route::controller(CategoryController::class)->group(function () {
 
             Route::get('/category/create', 'index')->name('category.create');
             Route::get('/category/manage', 'manage')->name('category.manage');
         });
+        
 
         Route::controller(SubCategoryController::class)->group(function () {
 

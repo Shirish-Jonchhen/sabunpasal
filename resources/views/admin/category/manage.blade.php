@@ -31,6 +31,9 @@
                             <tr>
                                 <th scope="col">#</th>
                                 <th scope="col">Category Name</th>
+                                <th scope="col">Image</th>
+                                <th scope="col">Slug</th>
+                                <th scope="col">Is Featured</th>
                                 <th scope="col">Action</th>
                             </tr>
                         </thead>
@@ -40,6 +43,19 @@
                                 {{-- <th scope="row">{{ $loop->iteration }}</th> --}}
                                 <td> {{$category->id}}</td>
                                 <td>{{ $category->category_name }}</td>
+                                <td>
+                                    @if ($category->icon_path)
+                                        <img src="{{ asset('storage/' . $category->icon_path) }}" alt="Category Icon"
+                                            width="50">
+                                    @else
+                                        No Image
+                                    @endif
+                                </td>
+                                <td>{{ $category->slug }}</td>
+                                <td>
+                                    {{ $category->is_featured }}
+                                    
+                                </td>
                                 <td>
                                     <a href="{{ route('show.cat', $category->id ) }}" class="btn btn-primary btn-sm">Edit</a>
 
