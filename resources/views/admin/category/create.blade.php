@@ -32,7 +32,7 @@
 
 
                         <label for="description" class="form-label fw-bold mb-2">Category Description</label>
-                        <textarea class="form-control mb-2" name="description" placeholder="Describe your Brand" rows="10"></textarea>
+                        <textarea class="form-control mb-2" name="description" placeholder="Describe your Category" rows="10"></textarea>
 
 
                         <label for="image" class="form-label fw-bold mb-2">Category Icon</label>

@@ -17,10 +17,10 @@ class Product extends Model
         'category_id',
         'subcategory_id',
         'store_id',
-        'regular_price',
-        'discounted_price',
+        // 'regular_price',
+        // 'discounted_price',
         'tax_rate',
-        'stock_quantity',
+        // 'stock_quantity',
         'stock_status',
         'slug',
         'visibility',
@@ -34,6 +34,8 @@ class Product extends Model
     {
         return $this->belongsTo(Category::class);
     }
+
+
 
     public function subcategory()
     {
@@ -57,5 +59,10 @@ class Product extends Model
     public function images()
     {
         return $this->hasMany(ProductImage::class);
+    }
+
+    public function variants()
+    {
+        return $this->hasMany(ProductVariant::class);
     }
 }

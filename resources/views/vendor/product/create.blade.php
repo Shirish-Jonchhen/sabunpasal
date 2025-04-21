@@ -46,24 +46,24 @@
                         <livewire:category-subcategory />
 
                         <label for="store_id" class="form-label fw-bold mb-2">Product Store</label>
-                        <select class="form-control mb-2" name='store_id' wire:model.live="selectedSubcategory">
-                            <option value="">Select a Subcategory</option>
+                        <select class="form-control mb-2" name='store_id'>
+                            <option value="">Select a Store</option>
                             @foreach($stores as $store)
                                 <option value="{{ $store->id }}">{{ $store->store_name }}</option>
                             @endforeach
                         </select>
 
-                        <label for="regular_price	" class="form-label fw-bold mb-2">Regular Price</label>
-                        <input type="number" class="form-control mb-2" name="regular_price" placeholder="100.00">
-
+                        {{-- <label for="regular_price	" class="form-label fw-bold mb-2">Regular Price</label>
+                        <input type="number" class="form-control mb-2" name="regular_price" placeholder="100.00"> --}}
+{{-- 
                         <label for="discounted_price" class="form-label fw-bold mb-2">Discounted Price</label>
-                        <input type="number" class="form-control mb-2" name="discounted_price" placeholder="50.00">
+                        <input type="number" class="form-control mb-2" name="discounted_price" placeholder="50.00"> --}}
 
                         <label for="tax_rate" class="form-label fw-bold mb-2">Tax Rate</label>
                         <input type="number" class="form-control mb-2" name="tax_rate" placeholder="13">
 
-                        <label for="stock_quantity	" class="form-label fw-bold mb-2">Stock Quantity</label>
-                        <input type="number" class="form-control mb-2" name="stock_quantity" placeholder="500">
+                        {{-- <label for="stock_quantity	" class="form-label fw-bold mb-2">Stock Quantity</label>
+                        <input type="number" class="form-control mb-2" name="stock_quantity" placeholder="500"> --}}
 
                         <label for="slug" class="form-label fw-bold mb-2">Slug</label>
                         <input type="text" class="form-control mb-2" name="slug" placeholder="demo">

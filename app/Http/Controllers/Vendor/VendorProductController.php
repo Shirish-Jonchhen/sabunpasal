@@ -3,10 +3,11 @@
 namespace App\Http\Controllers\Vendor;
 
 use App\Http\Controllers\Controller;
+use App\Models\DefaultAttribute;
 use App\Models\Store;
 use App\Models\Product;
 use App\Models\ProductImage;
-
+use App\Models\ProductVariant;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -39,11 +40,11 @@ class VendorProductController extends Controller
             'category_id' => 'required|exists:categories,id',
             'subcategory_id' => 'nullable|exists:sub_categories,id',
             'store_id' => 'required|exists:stores,id',
-            'regular_price' => 'required|numeric|min:0',
+            // 'regular_price' => 'required|numeric|min:0',
             'is_on_sale' => 'nullable|boolean',
-            'discounted_price' => 'nullable|numeric|lt:regular_price|required_if:is_on_sale,1',
+            // 'discounted_price' => 'nullable|numeric|lt:regular_price|required_if:is_on_sale,1',
             'tax_rate' => 'required|numeric|min:0|max:100',
-            'stock_quantity' => 'required|integer|min:0',
+            // 'stock_quantity' => 'required|integer|min:0',
             'images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'slug' => 'required|string|unique:products,slug',
         ]);
@@ -56,10 +57,10 @@ class VendorProductController extends Controller
             'category_id' => $validate['category_id'],
             'subcategory_id' => $validate['subcategory_id'],
             'store_id' => $validate['store_id'],
-            'regular_price' => $validate['regular_price'],
-            'discounted_price' => $validate['discounted_price'],
+            // 'regular_price' => $validate['regular_price'],
+            // 'discounted_price' => $validate['discounted_price'],
             'tax_rate' => $validate['tax_rate'],
-            'stock_quantity' => $validate['stock_quantity'],
+            // 'stock_quantity' => $validate['stock_quantity'],
             'slug' => $validate['slug'],
             'meta_title' => $request->meta_title,
             'meta_description' => $request->meta_description,
@@ -122,10 +123,10 @@ class VendorProductController extends Controller
             // 'subcategory_id' => 'nullable|exists:sub_categories,id',
             // 'store_id' => 'required|exists:stores,id',
             'visibility' => 'nullable|boolean',
-            'regular_price' => 'required|numeric|min:0',
-            'discounted_price' => 'nullable|numeric|min:0',
+            // 'regular_price' => 'required|numeric|min:0',
+            // 'discounted_price' => 'nullable|numeric|min:0',
             'tax_rate' => 'required|numeric|min:0|max:100',
-            'stock_quantity' => 'required|integer|min:0',
+            // 'stock_quantity' => 'required|integer|min:0',
             'new_images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'slug' => ['required', 'string', Rule::unique('products', 'slug')->ignore($id)],
             'meta_title' => 'nullable|string|max:255',
@@ -168,5 +169,82 @@ class VendorProductController extends Controller
 
         $product->update($validate);
         return redirect()->back()->with('success', 'Product Updated successfully');
+    }
+
+
+
+
+
+
+    //variant 
+    public function index_variant(){
+        $products = Product::where('vendor_id', Auth::user()->id)->get();
+        $attributes = DefaultAttribute::all();
+        return view('vendor.product.variant.create', compact('products','attributes'));
+    }
+
+
+    public function manage_variant(){
+        $product_variants = ProductVariant::whereHas('product', function ($query) {
+            $query->where('vendor_id', Auth::user()->id);
+        })->get();
+        return view('vendor.product.variant.manage', compact('product_variants'));
+    }
+
+    public function store_product_variant(Request $request){
+        $validate = $request->validate([
+            'product_id' => 'required|exists:products,id',
+            'attribute_id' => 'required|exists:default_attributes,id',
+            'regular_price' => 'required|numeric|min:0',
+            'discounted_price' => 'nullable|numeric|lt:regular_price',
+            'stock_quantity' => 'required|integer|min:0',
+            'product_id' => [
+                'required',
+                'integer',
+                Rule::unique('product_variants')->where(function ($query) use ($request) {
+                    return $query->where('attribute_id', $request->attribute_id);
+                })
+            ]
+        ]);
+
+        ProductVariant::create([
+            'product_id' => $validate['product_id'],
+            'attribute_id' => $validate['attribute_id'],
+            'regular_price' => $validate['regular_price'],
+            'discounted_price' => $validate['discounted_price'],
+            'stock_quantity' => $validate['stock_quantity'],
+        ]);
+        return redirect()->back()->with('success', 'Product Variant Added successfully');
+    }
+
+    public function delete_product_variant($id)
+    {
+        $product_variant = ProductVariant::findOrFail($id);
+
+        // Delete the product variant
+        $product_variant->delete();
+
+        return redirect()->back()->with('success', 'Product Variant Deleted successfully');
+    }
+
+    public function show_single_product_variant($id)
+    {
+        $product_variant = ProductVariant::findOrFail($id);
+        return view('vendor.product.variant.edit', compact('product_variant'));
+    }
+
+    public function update_product_variant(Request $request, $id)
+    {
+        $product_variant = ProductVariant::findOrFail($id);
+        $validate = $request->validate([
+            // 'product_id' => 'required|exists:products,id',
+            // 'attribute_id' => 'required|exists:default_attributes,id',
+            'regular_price' => 'required|numeric|min:0',
+            'discounted_price' => 'nullable|numeric|lt:regular_price',
+            'stock_quantity' => 'required|integer|min:0',
+        ]);
+
+        $product_variant->update($validate);
+        return redirect()->back()->with('success', 'Product Variant Updated successfully');
     }
 }

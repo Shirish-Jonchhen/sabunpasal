@@ -89,21 +89,21 @@
 
 
 
-                            <label for="regular_price	" class="form-label fw-bold mb-2">Regular Price</label>
+                            {{-- <label for="regular_price	" class="form-label fw-bold mb-2">Regular Price</label>
                             <input type="number" class="form-control mb-2" name="regular_price" placeholder="100.00"
                                 value="{{ $product->regular_price }}">
 
                             <label for="discounted_price" class="form-label fw-bold mb-2">Discounted Price</label>
                             <input type="number" class="form-control mb-2" name="discounted_price" placeholder="50.00"
-                                value="{{ $product->discounted_price }}">
+                                value="{{ $product->discounted_price }}"> --}}
 
                             <label for="tax_rate" class="form-label fw-bold mb-2">Tax Rate</label>
                             <input type="number" class="form-control mb-2" name="tax_rate" placeholder="13"
                                 value="{{ $product->tax_rate }}">
-
+{{-- 
                             <label for="stock_quantity" class="form-label fw-bold mb-2">Stock Quantity</label>
                             <input type="number" class="form-control mb-2" name="stock_quantity" placeholder="500"
-                                value="{{ $product->stock_quantity }}">
+                                value="{{ $product->stock_quantity }}"> --}}
 
                             <label for="stock_status" class="form-label fw-bold mb-2">Stock Status</label>
                             <select class="form-control mb-2" name="stock_status" id="stock_status">
