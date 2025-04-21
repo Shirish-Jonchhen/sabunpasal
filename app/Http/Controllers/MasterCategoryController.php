@@ -54,7 +54,7 @@ class MasterCategoryController extends Controller
         $category = Category::findOrFail($id);
         $validate = $request->validate([
             'category_name' => 'required|string|min:3|max:255|unique:categories,category_name,' . $id,
-    'slug' => 'required|string|unique:brands,slug,' . $id,
+            'slug' => 'required|string|unique:categories,slug,' . $id,
             'description' => 'nullable|string',
             'new_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'deleted_image' => 'nullable|string',
@@ -82,7 +82,7 @@ class MasterCategoryController extends Controller
             }
         }
         if ($request->hasFile('new_image')) {
-            $validate['icon_path'] = $request->file('new_image')->store('brand_logos', 'public');
+            $validate['icon_path'] = $request->file('new_image')->store('categories_icons', 'public');
         }
         $category->update([
             'category_name' => $validate['category_name'],

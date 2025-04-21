@@ -32,6 +32,9 @@
                                     <th scope="col">#</th>
                                     <th scope="col">Sub Category Name</th>
                                     <th scope="col">Category Name</th>
+                                    <th scope="col">Image</th>
+                                    <th scope="col">Slug</th>
+                                    <th scope="col">Is Featured</th>
                                     <th scope="col">Action</th>
                                 </tr>
                             </thead>
@@ -42,6 +45,19 @@
                                         <td> {{$subcategory->id}}</td>
                                         <td>{{ $subcategory->subcategory_name }}</td>
                                         <td>{{ $subcategory->category->category_name }}</td>
+                                        <td>
+                                            @if ($subcategory->icon_path)
+                                                <img src="{{ asset('storage/' . $subcategory->icon_path) }}" alt="Category Icon"
+                                                    width="50">
+                                            @else
+                                                No Image
+                                            @endif
+                                        </td>
+                                        <td>{{ $subcategory->slug }}</td>
+                                        <td>
+                                            {{ $subcategory->is_featured }}
+
+                                        </td>
                                         <td>
                                             <a href="{{ route("show.subcat", $subcategory->id)   }}"
                                                 class="btn btn-primary btn-sm">Edit</a>
