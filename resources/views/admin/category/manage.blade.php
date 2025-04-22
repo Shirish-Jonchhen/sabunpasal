@@ -1,79 +1,78 @@
 @extends('admin.layouts.layout')
 @section('admin_page_title', 'Manage Category - Admin Panel')
 @section('admin_layout')
+
 <div class="row">
     <div class="col-12">
         <div class="card">
             <div class="card-header">
-                <h5 class="card-title mb-0">All Category</h5>
+                <h5 class="card-title mb-0">Manage Categories</h5>
             </div>
-          
+
             <div class="card-body">
                 @if ($errors->any())
-                <div class="alert alert-danger alert-dismissable fade show">
-                    {{-- <ul type="none"> --}}
+                    <div class="alert alert-danger alert-dismissable fade show">
                         @foreach ($errors->all() as $error)
-                            {{-- <li> --}}
-                                 *{{ $error }} <br>
-                            {{-- </li> --}}
+                            *{{ $error }} <br>
                         @endforeach
-                    {{-- </ul> --}}
-                </div>
-            @endif
-            @if (session("success"))
-                <div class="alert alert-success alert-dismissable fade show">
-                    {{ session("success") }}
-                </div>
-            @endif
-                <div class = "table-responsive">
+                    </div>
+                @endif
+
+                @if (session('success'))
+                    <div class="alert alert-success alert-dismissable fade show">
+                        {{ session('success') }}
+                    </div>
+                @endif
+
+                <livewire:admin.category-manager />
+
+
+                <div class="table-responsive">
                     <table class="table">
                         <thead>
                             <tr>
-                                <th scope="col">#</th>
-                                <th scope="col">Category Name</th>
-                                <th scope="col">Image</th>
-                                <th scope="col">Slug</th>
-                                <th scope="col">Is Featured</th>
-                                <th scope="col">Action</th>
+                                <th>#</th>
+                                <th>Category Name</th>
+                                <th>Image</th>
+                                <th>Slug</th>
+                                <th>Is Featured</th>
+                                <th>Action</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($categories as $category)
-                            <tr>
-                                {{-- <th scope="row">{{ $loop->iteration }}</th> --}}
-                                <td> {{$category->id}}</td>
-                                <td>{{ $category->category_name }}</td>
-                                <td>
-                                    @if ($category->icon_path)
-                                        <img src="{{ asset('storage/' . $category->icon_path) }}" alt="Category Icon"
-                                            width="50">
-                                    @else
-                                        No Image
-                                    @endif
-                                </td>
-                                <td>{{ $category->slug }}</td>
-                                <td>
-                                    {{ $category->is_featured }}
-                                    
-                                </td>
-                                <td>
-                                    <a href="{{ route('show.cat', $category->id ) }}" class="btn btn-primary btn-sm">Edit</a>
-
-                                    <form action="{{ route('delete.cat', $category->id) }}" method="POST" style="display: inline-block;">
-                             
-                                        @csrf
-                                        @method('DELETE')
-                                        <input type="submit" value="Delete" class="btn btn-danger btn-sm">
-                                    </form>
-                                    {{-- <a href="#" class="btn btn-danger btn-sm">Delete</a> --}}
-                                </td>
-                            </tr>
-                            @endforeach
+                            @forelse ($categories as $category)
+                                <tr>
+                                    <td>{{ $category->id }}</td>
+                                    <td>{{ $category->category_name }}</td>
+                                    <td>
+                                        @if ($category->icon_path)
+                                            <img src="{{ asset('storage/' . $category->icon_path) }}" alt="Icon" width="50">
+                                        @else
+                                            No Image
+                                        @endif
+                                    </td>
+                                    <td>{{ $category->slug }}</td>
+                                    <td>{{ $category->is_featured }}</td>
+                                    <td>
+                                        <a href="{{ route('show.cat', $category->id) }}" class="btn btn-primary btn-sm">Edit</a>
+                                        <form action="{{ route('delete.cat', $category->id) }}" method="POST" style="display:inline-block;">
+                                            @csrf
+                                            @method('DELETE')
+                                            <input type="submit" class="btn btn-danger btn-sm" value="Delete">
+                                        </form>
+                                    </td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="6" class="text-center">No categories found.</td>
+                                </tr>
+                            @endforelse
                         </tbody>
-
                     </table>
-                </div>
-               
+                    <div class="d-flex justify-content-end mt-3"> 
+                        {{ $categories->links("vendor.pagination.default") }}
+                     </div> 
+                    
             </div>
         </div>
     </div>

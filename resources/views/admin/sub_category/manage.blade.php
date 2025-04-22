@@ -25,6 +25,28 @@
                             {{ session("success") }}
                         </div>
                     @endif
+
+
+                    <livewire:admin.subcategory-manager />
+
+                    {{-- <div class="mb-3">
+                        <a href="{{ route('add.subcat') }}" class="btn btn-primary">Add Sub Category</a>
+                    {{-- <form method="GET" action="{{ route('subcategory.manage') }}" class="mb-3">
+                        <div class="row g-2 align-items-center">
+                            <div class="col-auto">
+                                <input list="category-list" name="subcategory_id" class="form-control"
+                                    placeholder="Search category..." onchange="this.form.submit()" autocomplete="off"
+                                    value="{{ $subcategories->firstWhere('id', request('subcategory_id'))->subcategory_name ?? '' }}">
+                                <datalist id="category-list">
+                                    @foreach ($all_subcategories as $subcat)
+                                        <option value="{{ $subcat->id }}">{{ $subcat->subcategory_name }}</option>
+                                    @endforeach
+                                </datalist>
+                            </div>
+                        </div>
+                    </form> --}}
+
+
                     <div class="table-responsive">
                         <table class="table">
                             <thead>
@@ -76,6 +98,10 @@
                             </tbody>
 
                         </table>
+
+                        <div class="d-flex justify-content-end mt-3"> 
+                            {{ $subcategories->links("vendor.pagination.default") }}
+                         </div> 
                     </div>
 
                 </div>

@@ -26,6 +26,8 @@
                             {{ session('success') }}
                         </div>
                     @endif
+
+                    <livewire:vendor.product-variant-manager />
                     <div class="table-responsive">
                         <table class="table">
                             <thead>

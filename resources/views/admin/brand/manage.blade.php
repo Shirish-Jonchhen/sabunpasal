@@ -25,6 +25,11 @@
                             {{ session('success') }}
                         </div>
                     @endif
+
+
+
+                    <livewire:admin.brand-manager />
+
                     <div class = "table-responsive">
                         <table class="table">
                             <thead>
@@ -76,6 +81,10 @@
                             </tbody>
 
                         </table>
+
+                        <div class="d-flex justify-content-end mt-3"> 
+                            {{ $brands->links("vendor.pagination.default") }}
+                         </div> 
                     </div>
 
                 </div>

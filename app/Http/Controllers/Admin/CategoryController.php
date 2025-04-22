@@ -13,9 +13,11 @@ class CategoryController extends Controller
         return view('admin.category.create');
     }
 
-    public function manage()
+    public function manage(Request $request)
     {
-        $categories = Category::all();
-        return view('admin.category.manage',compact("categories"));
+
+        $categories = Category::orderBy('id', 'asc')->paginate(10);
+
+        return view('admin.category.manage', compact('categories'));
     }
 }

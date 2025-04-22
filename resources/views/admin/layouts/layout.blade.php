@@ -22,6 +22,7 @@
 
     <link href="{{ asset('admin_asset/css/app.css') }}" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    @livewireStyles
 </head>
 
 <body>
@@ -349,6 +350,9 @@
                                 </div>
                             </div>
                         </li>
+
+
+
                         <li class="nav-item dropdown">
                             <a class="nav-icon dropdown-toggle d-inline-block d-sm-none" href="#"
                                 data-bs-toggle="dropdown">
@@ -358,7 +362,7 @@
                             <a class="nav-link dropdown-toggle d-none d-sm-inline-block" href="#"
                                 data-bs-toggle="dropdown">
                                 <img src="img/avatars/avatar.jpg" class="avatar img-fluid rounded me-1"
-                                    alt="Charles Hall" /> <span class="text-dark">Charles Hall</span>
+                                    alt="Charles Hall" /> <span class="text-dark">{{ Auth::user()->name }}</span>
                             </a>
                             <div class="dropdown-menu dropdown-menu-end">
                                 <a class="dropdown-item" href="pages-profile.html"><i class="align-middle me-1"
@@ -380,6 +384,9 @@
                                 {{-- <a class="dropdown-item" href="#">Log out</a> --}}
                             </div>
                         </li>
+
+
+
                     </ul>
                 </div>
             </nav>
@@ -426,6 +433,7 @@
     </div>
 
     <script src="{{ asset('admin_asset/js/app.js') }}"></script>
+    @livewireScripts
 
 </body>
 

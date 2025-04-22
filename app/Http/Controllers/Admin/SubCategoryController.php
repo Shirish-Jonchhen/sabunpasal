@@ -18,9 +18,11 @@ class SubCategoryController extends Controller
         return view('admin.sub_category.create', compact('categories'));
     }
 
-    public function manage()
+    public function manage(Request $request)
     {
-        $subcategories = SubCategory::all();
+  
+        $subcategories = SubCategory::orderBy('id', 'asc')->paginate(10);
+
         return view('admin.sub_category.manage', compact('subcategories'));
     }
 }

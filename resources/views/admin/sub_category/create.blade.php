@@ -42,7 +42,7 @@
                         </select>
 
                         <label for="description" class="form-label fw-bold mb-2">Sub Category Description</label>
-                        <textarea class="form-control mb-2" name="description" placeholder="Describe your Brand"
+                        <textarea class="form-control mb-2" name="description" placeholder="Describe your sub category"
                             rows="10"></textarea>
 
 

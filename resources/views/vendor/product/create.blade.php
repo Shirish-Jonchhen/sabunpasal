@@ -43,7 +43,7 @@
                         <label for="sku" class="form-label fw-bold mb-2">SKU</label>
                         <input type="text" class="form-control mb-2" name="sku" placeholder="SKU">
 
-                        <livewire:category-subcategory />
+                        <livewire:category-subcategory /> 
 
                         <label for="store_id" class="form-label fw-bold mb-2">Product Store</label>
                         <select class="form-control mb-2" name='store_id'>
