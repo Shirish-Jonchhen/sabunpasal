@@ -13,19 +13,25 @@ use App\Http\Controllers\Vendor\VendorMainController;
 use App\Http\Controllers\Vendor\VendorProductController;
 use App\Http\Controllers\Vendor\VendorStoreController;
 use App\Http\Controllers\Customer\CustomerMainController;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\MasterBrandContoller;
 use App\Http\Controllers\MasterCategoryController;
 use App\Http\Controllers\MasterSubCategoryController;
 use App\Models\HomePageSetting;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('welcome');
+// Route::get('/', function () {
+//     return view('welcome');
+// });
+
+
+Route::controller(HomeController::class)->group(function () {
+    Route::get('/', 'index')->name('home');
 });
 
-// Route::get('/dashboard', function () {
-//     return view('dashboard');
-// })->middleware(['auth', 'verified', 'rolemanager:customer'])->name('dashboard');
+// Route::get('/home', function () {
+//     return view('home.index');
+// })->middleware(['auth', 'verified'])->name('home');
 
 //admin routes
 Route::middleware(['auth', 'verified', 'rolemanager:admin'])->group(function () {
@@ -120,12 +126,6 @@ Route::middleware(['auth', 'verified', 'rolemanager:admin'])->group(function () 
         });
     });
 });
-
-// Route::get('/admin/dashboard', function () {
-//     return view('admin.admin');
-// })->middleware(['auth', 'verified', 'rolemanager:admin'])->name('admin');
-
-
 
 // vendor routes
 Route::middleware(['auth', 'verified', 'rolemanager:vendor'])->group(function () {
