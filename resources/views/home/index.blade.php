@@ -304,12 +304,16 @@
             <h2>Our Trusted Brands</h2>
             <div class="brand-logos">
                 <!-- Static Brand Logos -->
-                <img src="https://picsum.photos/seed/brand1/150/80?grayscale" alt="Brand Logo 1">
+                @foreach ($brands as $brand)
+                    <img src="{{ asset('storage/' . $brand->logo_path) }}" alt="{{ $brand->name }} Logo">
+                    
+                @endforeach
+                {{-- <img src="https://picsum.photos/seed/brand1/150/80?grayscale" alt="Brand Logo 1">
                 <img src="https://picsum.photos/seed/brand2/150/80?grayscale" alt="Brand Logo 2">
                 <img src="https://picsum.photos/seed/brand3/150/80?grayscale" alt="Brand Logo 3">
                 <img src="https://picsum.photos/seed/brand4/150/80?grayscale" alt="Brand Logo 4">
                 <img src="https://picsum.photos/seed/brand5/150/80?grayscale" alt="Brand Logo 5">
-                <img src="https://picsum.photos/seed/brand6/150/80?grayscale" alt="Brand Logo 6">
+                <img src="https://picsum.photos/seed/brand6/150/80?grayscale" alt="Brand Logo 6"> --}}
             </div>
         </section>
         <!-- End Brands Section -->

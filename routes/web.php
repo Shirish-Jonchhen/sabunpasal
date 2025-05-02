@@ -145,12 +145,12 @@ Route::middleware(['auth', 'verified', 'rolemanager:vendor'])->group(function ()
             Route::delete('/product/delete/{id}', 'delete_product')->name('vendor.product.delete');
 
 
-            Route::get('/product/variant/create', 'index_variant')->name('vendor.product.variant');
-            Route::get('/product/variant/manage', 'manage_variant')->name('vendor.product.variant.manage');
-            Route::post('/product/variant/store','store_product_variant')->name('vendor.product.variant.store');
-            Route::get('/product/variant/{id}', 'show_single_product_variant')->name('vendor.product.variant.show');
-            Route::put('/product/variant/update/{id}', 'update_product_variant')->name('vendor.update.product.variant');
-            Route::delete('/product/variant/delete/{id}', 'delete_product_variant')->name('vendor.product.variant.delete');
+            // Route::get('/product/variant/create', 'index_variant')->name('vendor.product.variant');
+            // Route::get('/product/variant/manage', 'manage_variant')->name('vendor.product.variant.manage');
+            // Route::post('/product/variant/store','store_product_variant')->name('vendor.product.variant.store');
+            // Route::get('/product/variant/{id}', 'show_single_product_variant')->name('vendor.product.variant.show');
+            // Route::put('/product/variant/update/{id}', 'update_product_variant')->name('vendor.update.product.variant');
+            // Route::delete('/product/variant/delete/{id}', 'delete_product_variant')->name('vendor.product.variant.delete');
         });
 
         Route::controller(VendorStoreController::class)->group(function () {

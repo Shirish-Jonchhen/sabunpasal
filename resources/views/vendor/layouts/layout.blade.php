@@ -60,7 +60,7 @@
                         </a>
                     </li>
 
-                    <li class="sidebar-item {{ request()->routeIs('vendor.product.variant') ? 'active' : '' }}">
+                    {{-- <li class="sidebar-item {{ request()->routeIs('vendor.product.variant') ? 'active' : '' }}">
                         <a class="sidebar-link" href="{{ route('vendor.product.variant') }}">
                             <i class="align-middle" data-feather="plus-circle"></i> <span
                                 class="align-middle">Create variant</span>
@@ -70,7 +70,7 @@
                         <a class="sidebar-link" href="{{ route('vendor.product.variant.manage') }}">
                             <i class="align-middle" data-feather="sliders"></i> <span class="align-middle">Manage Variant</span>
                         </a>
-                    </li>
+                    </li> --}}
 
 
 

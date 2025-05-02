@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Brand;
 use App\Models\Category;
 use App\Models\HomePageSetting;
 use App\Models\SubCategory;
@@ -14,6 +15,7 @@ class HomeController extends Controller
         $banners = HomePageSetting::all();
         $categories = Category::all();
         $featured_subcategories = SubCategory::where('is_featured', 1)->get();
-        return view('home.index', compact('banners', 'categories', 'featured_subcategories'));
+        $brands = Brand::all();
+        return view('home.index', compact('banners', 'categories', 'featured_subcategories','brands'));
     }
 }

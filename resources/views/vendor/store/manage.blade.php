@@ -32,7 +32,7 @@
                                 <tr>
                                     <th scope="col">#</th>
                                     <th scope="col">Store Name</th>
-                                    <th scope="col">Store Details</th>
+                                    {{-- <th scope="col">Store Details</th> --}}
                                     <th scope="col">Store Slug</th>
                                     <th scope="col">Action</th>
                                 </tr>
@@ -43,7 +43,7 @@
                                         {{-- <th scope="row">{{ $loop->iteration }}</th> --}}
                                         <td> {{$store->id}}</td>
                                         <td>{{ $store->store_name }}</td>
-                                        <td>{{ $store->details }}</td>
+                                        {{-- <td>{{ $store->details }}</td> --}}
                                         <td>{{ $store->slug }}</td>
                                         <td>
                                             <a href="{{ route('show.store', $store->id) }}"

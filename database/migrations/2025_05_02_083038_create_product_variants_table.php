@@ -6,20 +6,23 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
+    /**
+     * Run the migrations.
+     */
     public function up(): void
     {
         Schema::create('product_variants', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('product_id')->constrained('products')->onDelete('cascade');
-            $table->foreignId('attribute_id')->constrained('default_attributes')->onDelete('cascade');
-            $table->decimal('regular_price', 10, 2);
-            $table->decimal('discounted_price', 10, 2)->nullable();
-            $table->integer('stock_quantity')->default(0);
+            $table->foreignId('product_id')->constrained()->onDelete('cascade');
+            $table->string('variant_name'); // e.g., Lavender, Bleach
+            $table->string('size'); // e.g., 750ml, 500ml
             $table->timestamps();
         });
-        
     }
 
+    /**
+     * Reverse the migrations.
+     */
     public function down(): void
     {
         Schema::dropIfExists('product_variants');

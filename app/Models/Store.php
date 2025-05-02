@@ -24,3 +24,9 @@ class Store extends Model
 
 
 }
+
+// Run this in your terminal to generate models with migrations:
+// php artisan make:model Product -m
+// php artisan make:model ProductVariant -m
+// php artisan make:model VariantPrice -m
+// php artisan make:model VariantImage -m
