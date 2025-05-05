@@ -40,9 +40,9 @@
                         <label class="form-label fw-bold mb-2">Product Description</label>
                         <textarea class="form-control mb-2" name="description" rows="5" placeholder="Describe your product">{{ $product->description }}</textarea>
 
-                        <label class="form-label fw-bold mb-2">SKU</label>
+                        {{-- <label class="form-label fw-bold mb-2">SKU</label>
                         <input type="text" class="form-control mb-2" name="sku" value="{{ $product->sku }}"
-                            placeholder="SKU">
+                            placeholder="SKU"> --}}
 
 
                         <label class="form-label fw-bold mb-2">Category</label>
@@ -81,6 +81,26 @@
                         <input type="text" class="form-control mb-2" name="meta_description"
                             value="{{ $product->meta_description }}" placeholder="Meta Description">
 
+                        <label class="form-label fw-bold mb-2" for='visibility'>Visibility</label>
+                        <input type='checkbox' class="form-check-input form-control mb-2" id='visibility' name='visibility' value='1'
+                            {{ $product->visibility ? 'checked' : '' }}><br>
+
+                        <label class="form-label fw-bold mb-2" for='is_on_sale'>Is On Sale</label>
+                        <input type='checkbox' class="form-check-input form-control mb-2" id='is_on_sale' name='is_on_sale' value='1'
+                            {{ $product->is_on_sale ? 'checked' : '' }}><br>
+
+
+                        <label class="form-label fw-bold mb-2" for='status'>Status</label>
+                        <select class="form-control mb-2" name="status">
+                            <option value="active" {{ $product->status == 'active' ? 'selected' : '' }}>Active</option>
+                            <option value="inactive" {{ $product->status == 'inactive' ? 'selected' : '' }}>Inactive
+                            </option>
+                        </select>
+
+
+
+
+
                         <!-- Product Variants -->
                         <div class="card mt-3">
                             <div class="card-header">
@@ -89,7 +109,7 @@
                             <div class="card-body" id="variant-section">
                                 @foreach ($product->variants as $variantIndex => $variant)
                                     <div class="variant-group mb-4">
-                                        
+
                                         <label class="form-label fw-bold mb-2">Flavor</label>
                                         <input type="text" class="form-control mb-2"
                                             name="variants[{{ $variantIndex }}][flavor]"
@@ -107,22 +127,23 @@
                                         <label class="form-label fw-bold mb-2">Existing Images</label>
                                         <div class="row existing-images mb-3" data-variant="{{ $variantIndex }}">
                                             @if ($variant->images->isEmpty())
-                                                <p>  No existing images</p>
+                                                <p> No existing images</p>
                                             @else
-                                            @foreach ($variant->images as $imageIndex => $image)
-                                            <div class="col-md-3 mb-2 existing-image-wrapper"
-                                                data-image-id="{{ $image->id }}">
-                                                <img src="{{ asset('storage/' . $image->image_path) }}"
-                                                    class="img-thumbnail" style="height:100px; object-fit:contain;">
-                                                <input type="hidden"
-                                                    name="variants[{{ $variantIndex }}][existing_images][]"
-                                                    value="{{ $image->image_path }}">
-                                                <button type="button"
-                                                    class="btn btn-sm btn-danger btn-block mt-1 remove-existing-image">x</button>
-                                            </div>
-                                        @endforeach
+                                                @foreach ($variant->images as $imageIndex => $image)
+                                                    <div class="col-md-3 mb-2 existing-image-wrapper"
+                                                        data-image-id="{{ $image->id }}">
+                                                        <img src="{{ asset('storage/' . $image->image_path) }}"
+                                                            class="img-thumbnail"
+                                                            style="height:100px; object-fit:contain;">
+                                                        <input type="hidden"
+                                                            name="variants[{{ $variantIndex }}][existing_images][]"
+                                                            value="{{ $image->image_path }}">
+                                                        <button type="button"
+                                                            class="btn btn-sm btn-danger btn-block mt-1 remove-existing-image">x</button>
+                                                    </div>
+                                                @endforeach
                                             @endif
-                                           
+
                                         </div>
 
                                         <div class="variant-prices d-flex mb-2" data-variant="{{ $variantIndex }}">
@@ -138,6 +159,9 @@
                                                         @endforeach
                                                     </select>
                                                     <input type="number" class="form-control mb-2"
+                                                        name="variants[{{ $variantIndex }}][prices][{{ $priceIndex }}][old_price]"
+                                                        value="{{ $price->old_price }}" placeholder="Old Price">
+                                                    <input type="number" class="form-control mb-2"
                                                         name="variants[{{ $variantIndex }}][prices][{{ $priceIndex }}][price]"
                                                         value="{{ $price->price }}" placeholder="Price">
                                                     <input type="number" class="form-control mb-2"
@@ -150,7 +174,8 @@
                                         </div>
                                         <button type="button" class="btn btn-info btn-sm mb-4"
                                             onclick="addPriceRow({{ $variantIndex }})">Add Price</button> <br>
-                                        <button type="button" class="btn btn-danger btn-md remove-variant">Remove Variant</button>
+                                        <button type="button" class="btn btn-danger btn-md remove-variant">Remove
+                                            Variant</button>
                                         <hr>
                                     </div>
                                 @endforeach
@@ -205,6 +230,7 @@
                     <select class="form-control mb-2" name="variants[${variantIndex}][prices][${priceIndex}][unit]">
                         ${unitOptions}
                     </select>
+                    <input type="number" class="form-control mb-2" name="variants[${variantIndex}][prices][${priceIndex}][old_price]" placeholder="Old Price">
                     <input type="number" class="form-control mb-2" name="variants[${variantIndex}][prices][${priceIndex}][price]" placeholder="Price">
                     <input type="number" class="form-control mb-2" name="variants[${variantIndex}][prices][${priceIndex}][stock]" placeholder="Stock">
                     <button type="button" class="btn btn-danger btn-sm remove-price">Remove Price</button>
@@ -232,10 +258,10 @@
             }
         });
         document.addEventListener('click', function(e) {
-        if (e.target.classList.contains('remove-existing-image')) {
-            const wrapper = e.target.closest('.existing-image-wrapper');
-            wrapper.remove();
-        }
-    });
+            if (e.target.classList.contains('remove-existing-image')) {
+                const wrapper = e.target.closest('.existing-image-wrapper');
+                wrapper.remove();
+            }
+        });
     </script>
 @endsection

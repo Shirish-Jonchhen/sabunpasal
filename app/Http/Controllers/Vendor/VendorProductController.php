@@ -15,6 +15,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
@@ -38,43 +39,59 @@ class VendorProductController extends Controller
     }
 
     public function store_product(Request $request)
-
     {
         // Validate incoming request data
         $validator = Validator::make($request->all(), [
             'product_name' => 'required|string|max:255',
             'description' => 'nullable|string',
-            'sku' => 'required|string|max:255|unique:products',
             'category_id' => 'required|exists:categories,id',
             'subcategory_id' => 'required|exists:sub_categories,id',
             'brand_id' => 'required|exists:brands,id',
             'store_id' => 'required|exists:stores,id',
             'tax_rate' => 'required|numeric',
             'meta_title' => 'required|string|max:255',
-            'meta_description' => 'required|string|max:255',
-            'images.*' => 'image|mimes:jpg,jpeg,png,gif|max:2048', // Validate product images
+            'meta_description' => 'required|string',
+            'images.*' => 'image|mimes:jpg,jpeg,png,gif|max:2048',
             'variants.*.flavor' => 'string|max:255',
             'variants.*.size' => 'string|max:255',
             'variants.*.prices.*.unit' => 'required|string|max:50',
             'variants.*.prices.*.price' => 'required|numeric',
+            'variants.*.prices.*.old_price' => 'nullable|numeric',
             'variants.*.prices.*.stock' => 'required|integer',
         ]);
 
-        // Check if validation fails
+        // Validation for old_price being greater than new price
+        $validator->after(function ($validator) use ($request) {
+            foreach ($request->input('variants', []) as $vIndex => $variant) {
+                foreach ($variant['prices'] ?? [] as $pIndex => $price) {
+                    $old = $price['old_price'] ?? null;
+                    $new = $price['price'] ?? null;
+
+                    if (!is_null($old) && is_numeric($old) && is_numeric($new) && $old <= $new) {
+                        $validator->errors()->add(
+                            "variants.$vIndex.prices.$pIndex.old_price",
+                            "Old price must be greater than the price."
+                        );
+                    }
+                }
+            }
+        });
+
         if ($validator->fails()) {
             return redirect()->back()->withErrors($validator)->withInput();
         }
 
-        // Start transaction to ensure data integrity
         DB::beginTransaction();
 
         try {
+            $store = Store::findOrFail($request->store_id);
+
             // Create product
             $product = Product::create([
                 'name' => $request->product_name,
                 'description' => $request->description,
-                'sku' => $request->sku,
                 'vendor_id' => Auth::user()->id,
+                'slug' => $this->generateSlug($store->slug, $request->product_name),
                 'category_id' => $request->category_id,
                 'subcategory_id' => $request->subcategory_id,
                 'store_id' => $request->store_id,
@@ -82,33 +99,33 @@ class VendorProductController extends Controller
                 'tax_rate' => $request->tax_rate,
                 'meta_title' => $request->meta_title,
                 'meta_description' => $request->meta_description,
-                'status' => 'active', // You can set default status as needed
-                'is_on_sale' => false, // Adjust as needed
+                'status' => 'active',
+                'is_on_sale' => false,
             ]);
-
-            // // Save product images
-            // if ($request->hasFile('images')) {
-            //     foreach ($request->file('images') as $image) {
-            //         $imagePath = $image->store('products', 'public');
-            //         $product->images()->create([
-            //             'image_path' => $imagePath,
-            //         ]);
-            //     }
-            // }
 
             // Process variants
             foreach ($request->variants as $variantData) {
+                // Generate SKU using the created function
+                $sku = $this->generateSku(
+                    $store->slug,
+                    $request->product_name,
+                    $variantData['flavor'] . '-' . $variantData['size']
+                );
+
+                // Create product variant
                 $variant = ProductVariant::create([
                     'product_id' => $product->id,
                     'size' => $variantData['size'],
                     'variant_name' => $variantData['flavor'],
+                    'sku' => $sku,
                 ]);
 
                 // Process variant prices
                 foreach ($variantData['prices'] as $priceData) {
                     VariantPrice::create([
                         'product_variant_id' => $variant->id,
-                        'unit_id' => $priceData['unit'],  // Assuming unit is a DefaultAttribute ID
+                        'unit_id' => $priceData['unit'],
+                        'old_price' => $priceData['old_price'],
                         'price' => $priceData['price'],
                         'stock' => $priceData['stock'],
                     ]);
@@ -126,19 +143,15 @@ class VendorProductController extends Controller
                 }
             }
 
-            // Commit transaction
             DB::commit();
-            // dd("Completed");
 
             return redirect()->back()->with('success', 'Product added successfully!');
         } catch (\Exception $e) {
-            // Rollback transaction if error occurs
-            // dd("error");
-
             DB::rollBack();
             return redirect()->back()->with('error', $e->getMessage());
         }
     }
+
 
     public function delete_product($id)
     {
@@ -178,98 +191,135 @@ class VendorProductController extends Controller
 
     public function update_product(Request $request, $id)
     {
-        $product = Product::findOrFail($id);
-
-        // Validate
-        $request->validate([
+        // Validate incoming request data
+        $validator = Validator::make($request->all(), [
             'product_name' => 'required|string|max:255',
             'description' => 'nullable|string',
-            'sku' => 'nullable|string',
             'tax_rate' => 'nullable|numeric',
             'meta_title' => 'nullable|string|max:255',
-            'meta_description' => 'nullable|string|max:500',
+            'meta_description' => 'nullable|string',
             'variants' => 'required|array',
             'variants.*.flavor' => 'required|string|max:255',
             'variants.*.size' => 'required|string|max:255',
             'variants.*.prices' => 'required|array',
             'variants.*.prices.*.unit' => 'required|integer|exists:default_attributes,id',
+            'variants.*.prices.*.old_price' => 'required|numeric|min:0',
             'variants.*.prices.*.price' => 'required|numeric|min:0',
             'variants.*.prices.*.stock' => 'required|integer|min:0',
         ]);
-    
-        // Update product
-        $product->update([
-            'name' => $request->product_name,
-            'description' => $request->description,
-            'sku' => $request->sku,
-            'tax_rate' => $request->tax_rate,
-            'meta_title' => $request->meta_title,
-            'meta_description' => $request->meta_description,
-        ]);
-    
-        // Collect kept image IDs BEFORE deleting old variants
-        $keepImageIds = [];
-        foreach ($request->variants as $variantData) {
-            if (!empty($variantData['existing_images'])) {
-                $keepImageIds = array_merge($keepImageIds, $variantData['existing_images']);
-            }
-        }
 
+        // Validation for old_price being greater than new price
+        $validator->after(function ($validator) use ($request) {
+            foreach ($request->input('variants', []) as $vIndex => $variant) {
+                foreach ($variant['prices'] ?? [] as $pIndex => $price) {
+                    $old = $price['old_price'] ?? null;
+                    $new = $price['price'] ?? null;
 
-    
-        // Delete removed images BEFORE deleting variants
-        foreach ($product->variants as $variant) {
-            foreach ($variant->images as $image) {
-                if (!in_array($image->image_path, $keepImageIds)) {
-                    Storage::disk('public')->delete($image->image_path);
-                    $image->delete();
+                    if (!is_null($old) && is_numeric($old) && is_numeric($new) && $old <= $new) {
+                        $validator->errors()->add(
+                            "variants.$vIndex.prices.$pIndex.old_price",
+                            "Old price must be greater than the price."
+                        );
+                    }
                 }
             }
+        });
+
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator)->withInput();
         }
-    
-        // Remove old variants & prices
-        foreach ($product->variants as $oldVariant) {
-            $oldVariant->prices()->delete();
-            $oldVariant->delete(); // This will also delete images (if cascade is set), but we already handled image deletion above
-        }
-    
-        // Add new variants
-        foreach ($request->variants as $variantData) {
-            $variant = $product->variants()->create([
-                'variant_name' => $variantData['flavor'] ?? null,
-                'size' => $variantData['size'] ?? null,
+
+        DB::beginTransaction();
+
+        try {
+            $product = Product::findOrFail($id);
+            $store = Store::findOrFail($request->store_id);
+
+            // Update product details
+            $product->update([
+                'name' => $request->product_name,
+                'description' => $request->description,
+                'tax_rate' => $request->tax_rate,
+                'meta_title' => $request->meta_title,
+                'slug' => $this->generateSlug($store->slug, $request->product_name, $product->id),
+                'meta_description' => $request->meta_description,
+                'status' => $request->status,
+                'is_on_sale' => $request->is_on_sale ? 1 : 0,
+                'visibility' => $request->visibility ? 1 : 0,
             ]);
-    
-            // Add prices
-            foreach ($variantData['prices'] as $priceData) {
-                $variant->prices()->create([
-                    'unit_id' => $priceData['unit'],
-                    'price' => $priceData['price'],
-                    'stock' => $priceData['stock'],
-                ]);
+
+            // Collect kept image IDs BEFORE deleting old variants
+            $keepImageIds = [];
+            foreach ($request->variants as $variantData) {
+                if (!empty($variantData['existing_images'])) {
+                    $keepImageIds = array_merge($keepImageIds, $variantData['existing_images']);
+                }
             }
 
-            // dd($variantData['existing_images']);
-            // Re-attach preserved images
-            if (!empty($variantData['existing_images'])) {
-                foreach ($variantData['existing_images'] as $imageId) {
-                    $image =  VariantImage::create([
-                        'product_variant_id' => $variant->id,
-                        'image_path' => $imageId,
+            // Delete removed images BEFORE deleting variants
+            foreach ($product->variants as $variant) {
+                foreach ($variant->images as $image) {
+                    if (!in_array($image->image_path, $keepImageIds)) {
+                        Storage::disk('public')->delete($image->image_path);
+                        $image->delete();
+                    }
+                }
+            }
+
+            // Remove old variants & prices
+            foreach ($product->variants as $oldVariant) {
+                $oldVariant->prices()->delete();
+                $oldVariant->delete(); // This will also delete images (if cascade is set), but we already handled image deletion above
+            }
+
+            // Add new variants
+            foreach ($request->variants as $variantData) {
+                $variant = $product->variants()->create([
+                    'variant_name' => $variantData['flavor'] ?? null,
+                    'size' => $variantData['size'] ?? null,
+                    'sku' => $this->generateSku(
+                        $store->slug,
+                        $request->product_name,
+                        $variantData['flavor'] . '-' . $variantData['size']
+                    ),
+                ]);
+
+                // Add prices
+                foreach ($variantData['prices'] as $priceData) {
+                    $variant->prices()->create([
+                        'unit_id' => $priceData['unit'],
+                        'old_price' => $priceData['old_price'],
+                        'price' => $priceData['price'],
+                        'stock' => $priceData['stock'],
                     ]);
                 }
-            }
-    
-            // Handle new images
-            if (isset($variantData['images'])) {
-                foreach ($variantData['images'] as $image) {
-                    $imagePath = $image->store('product_variants', 'public');
-                    $variant->images()->create(['image_path' => $imagePath]);
+
+                // Re-attach preserved images
+                if (!empty($variantData['existing_images'])) {
+                    foreach ($variantData['existing_images'] as $imageId) {
+                        $image = VariantImage::create([
+                            'product_variant_id' => $variant->id,
+                            'image_path' => $imageId,
+                        ]);
+                    }
+                }
+
+                // Handle new images
+                if (isset($variantData['images'])) {
+                    foreach ($variantData['images'] as $image) {
+                        $imagePath = $image->store('product_variants', 'public');
+                        $variant->images()->create(['image_path' => $imagePath]);
+                    }
                 }
             }
+
+            DB::commit();
+
+            return redirect()->back()->with('success', 'Product updated successfully!');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()->back()->with('error', $e->getMessage());
         }
-    
-        return back()->with('success', 'Product updated successfully!');
     }
 
 
@@ -277,78 +327,69 @@ class VendorProductController extends Controller
 
 
 
-    // //variant 
-    // public function index_variant()
-    // {
-    //     $products = Product::where('vendor_id', Auth::user()->id)->get();
-    //     $attributes = DefaultAttribute::all();
-    //     return view('vendor.product.variant.create', compact('products', 'attributes'));
-    // }
 
 
-    // public function manage_variant()
-    // {
-    //     $product_variants = ProductVariant::whereHas('product', function ($query) {
-    //         $query->where('vendor_id', Auth::user()->id);
-    //     })->get();
-    //     return view('vendor.product.variant.manage', compact('product_variants'));
-    // }
 
-    // public function store_product_variant(Request $request)
-    // {
-    //     $validate = $request->validate([
-    //         'product_id' => 'required|exists:products,id',
-    //         'attribute_id' => 'required|exists:default_attributes,id',
-    //         'regular_price' => 'required|numeric|min:0',
-    //         'discounted_price' => 'nullable|numeric|lt:regular_price',
-    //         'stock_quantity' => 'required|integer|min:0',
-    //         'product_id' => [
-    //             'required',
-    //             'integer',
-    //             Rule::unique('product_variants')->where(function ($query) use ($request) {
-    //                 return $query->where('attribute_id', $request->attribute_id);
-    //             })
-    //         ]
-    //     ]);
 
-    //     ProductVariant::create([
-    //         'product_id' => $validate['product_id'],
-    //         'attribute_id' => $validate['attribute_id'],
-    //         'regular_price' => $validate['regular_price'],
-    //         'discounted_price' => $validate['discounted_price'],
-    //         'stock_quantity' => $validate['stock_quantity'],
-    //     ]);
-    //     return redirect()->back()->with('success', 'Product Variant Added successfully');
-    // }
 
-    // public function delete_product_variant($id)
-    // {
-    //     $product_variant = ProductVariant::findOrFail($id);
 
-    //     // Delete the product variant
-    //     $product_variant->delete();
+    public function generateSku($storeSlug, $productName, $variantInfo)
+    {
+        // Abbreviate parts
+        $storeAbbr  = strtoupper(Str::slug(Str::words($storeSlug, 2, ''), ''));
+        $productAbbr = strtoupper(Str::slug(Str::words($productName, 3, ''), ''));
+        $variantAbbr = strtoupper(str_replace(' ', '', $variantInfo)); // Simple clean-up
 
-    //     return redirect()->back()->with('success', 'Product Variant Deleted successfully');
-    // }
+        // Prefix to search existing SKUs
+        $skuPrefix = "$storeAbbr-$productAbbr-$variantAbbr";
 
-    // public function show_single_product_variant($id)
-    // {
-    //     $product_variant = ProductVariant::findOrFail($id);
-    //     return view('vendor.product.variant.edit', compact('product_variant'));
-    // }
+        // Check if SKU already exists
+        if (ProductVariant::where('sku', 'like', "$skuPrefix%")->exists()) {
+            throw new \Exception("This variant of this product already exists in this store.");
+        }
 
-    // public function update_product_variant(Request $request, $id)
-    // {
-    //     $product_variant = ProductVariant::findOrFail($id);
-    //     $validate = $request->validate([
-    //         // 'product_id' => 'required|exists:products,id',
-    //         // 'attribute_id' => 'required|exists:default_attributes,id',
-    //         'regular_price' => 'required|numeric|min:0',
-    //         'discounted_price' => 'nullable|numeric|lt:regular_price',
-    //         'stock_quantity' => 'required|integer|min:0',
-    //     ]);
+        // Find the highest existing SKU with this prefix
+        $lastSku = ProductVariant::where('sku', 'like', "$skuPrefix%")
+            ->orderByDesc('sku')
+            ->value('sku');
 
-    //     $product_variant->update($validate);
-    //     return redirect()->back()->with('success', 'Product Variant Updated successfully');
-    // }
+        // Extract and increment last numeric ID
+        $lastId = 0;
+        if ($lastSku) {
+            $parts = explode('-', $lastSku);
+            $lastId = intval(end($parts));
+        }
+
+        $nextId = str_pad($lastId + 1, 3, '0', STR_PAD_LEFT); // e.g. 001, 002
+        $sku = "$skuPrefix-$nextId";
+
+        return $sku;
+    }
+
+
+
+
+
+    public function generateSlug($storeSlug, $productName, $productId = null)
+    {
+        // Convert the product name into a slug
+        $productSlug = Str::slug($productName, '-');
+    
+        // Combine store slug and product slug
+        $slug = "{$storeSlug}-{$productSlug}";
+    
+        // Check if the slug already exists in the database, excluding the current product if an ID is provided
+        $existingProduct = Product::where('slug', $slug)
+                                  ->when($productId, function ($query) use ($productId) {
+                                      return $query->where('id', '!=', $productId);
+                                  })
+                                  ->first();
+    
+        // If the slug already exists, throw an exception to prevent duplication
+        if ($existingProduct) {
+            throw new \Exception("The product with this name already exists in the store.");
+        }
+    
+        return $slug;
+    }
 }

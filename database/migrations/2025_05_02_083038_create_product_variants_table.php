@@ -16,6 +16,7 @@ return new class extends Migration
             $table->foreignId('product_id')->constrained()->onDelete('cascade');
             $table->string('variant_name'); // e.g., Lavender, Bleach
             $table->string('size'); // e.g., 750ml, 500ml
+            $table->string('sku')->unique();
             $table->timestamps();
         });
     }

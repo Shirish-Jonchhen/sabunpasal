@@ -14,14 +14,19 @@
                 @foreach ($products as $product)
                     <li class="list-group-item">
                         <div class="d-flex align-items-center gap-3">
-                            @if ($product->images)
-                                <img src="{{ asset('storage/' . $product->images->first()->image_path) }}" alt="Icon" width="40" height="40" class="rounded">
+                            @php
+                            $firstVariant = $product->variants->first();
+                            $firstPrice = $firstVariant?->prices->first();
+                            $imagePath = $firstVariant?->images->first()?->image_path;
+                        @endphp
+                            @if ($imagePath)
+                                <img src="{{ asset('storage/' . $imagePath) }}" alt="Icon" width="40" height="40" class="rounded">
                             @else
                                 <div style="width: 40px; height: 40px; background-color: #eee;" class="rounded text-center d-flex align-items-center justify-content-center">N/A</div>
                             @endif
                             
                             <div>
-                                <strong>{!! preg_replace("/(" . preg_quote($search) . ")/i", "<span style='color:orange;'>$1</span>", $product->product_name, 1) !!}</strong><br>
+                                <strong>{!! preg_replace("/(" . preg_quote($search) . ")/i", "<span style='color:orange;'>$1</span>", $product->name, 1) !!}</strong><br>
                                 <small>ID: {{ $product->id }} | Slug: {{ $product->slug }} | On Sale: {{ $product->is_on_sale ? 'Yes' : 'No' }}</small>
                             </div>
 

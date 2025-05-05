@@ -37,8 +37,8 @@
                         <label class="form-label fw-bold mb-2">Product Description</label>
                         <textarea class="form-control mb-2" name="description" rows="5" placeholder="Describe your product"></textarea>
 
-                        <label class="form-label fw-bold mb-2">SKU</label>
-                        <input type="text" class="form-control mb-2" name="sku" placeholder="SKU">
+                        {{-- <label class="form-label fw-bold mb-2">SKU</label>
+                        <input type="text" class="form-control mb-2" name="sku" placeholder="SKU"> --}}
 
                         <!-- Livewire Category -->
                         <livewire:category-subcategory />
@@ -130,6 +130,7 @@
                     <select class="form-control mb-2" name="variants[${variantIndex}][prices][${priceIndex}][unit]">
                         ${unitOptions}
                     </select>
+                    <input type="number" class="form-control mb-2" name="variants[${variantIndex}][prices][${priceIndex}][old_price]" placeholder="Old Price">
                     <input type="number" class="form-control mb-2" name="variants[${variantIndex}][prices][${priceIndex}][price]" placeholder="Price">
                     <input type="number" class="form-control mb-2" name="variants[${variantIndex}][prices][${priceIndex}][stock]" placeholder="Stock">
                     <button type="button" class="btn btn-danger btn-sm remove-price mb-1">Remove Price</button>

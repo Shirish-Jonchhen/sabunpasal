@@ -33,7 +33,7 @@
                                 <th>#</th>
                                 <th>Product Name</th>
                                 <th>Image</th>
-                                <th>SKU</th>
+
                                 <th>Category</th>
                                 <th>Sub Category</th>
                                 <th>Store</th>
@@ -65,7 +65,7 @@
                                             No Image
                                         @endif
                                     </td>
-                                    <td>{{ $product->sku }}</td>
+                        
                                     <td>{{ $product->category->category_name ?? '-' }}</td>
                                     <td>{{ $product->subcategory->subcategory_name ?? '-' }}</td>
                                     <td>{{ $product->store->store_name ?? '-' }}</td>

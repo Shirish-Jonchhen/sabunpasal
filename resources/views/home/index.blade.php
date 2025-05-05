@@ -114,12 +114,14 @@
                 <a href="/products?tag=trending" class="view-all-link">View All Trending <i
                         class="fas fa-arrow-right"></i></a>
             </div>
+
             <div class="product-grid product-grid-horizontal" id="product-grid-featured-1">
                 <!-- Static Example Product Cards (Replace with Blade foreach in Laravel) -->
+                @foreach ($sale_products as $product)
                 <div class="product-card" data-product-id="prod_001">
                     <div class="product-image-container">
-                        <img src="https://picsum.photos/seed/prod_001/300/300" alt="Sparkle All-Purpose Cleaner"
-                            class="product-image">
+                        <img src="{{ asset('storage/' . $product->variants->first()->images->first()?->image_path) }}" alt="Sparkle All-Purpose Cleaner"
+                            class="product-image ">
                         <button class="wishlist-button" title="Add to Wishlist" aria-label="Toggle Wishlist">
                             <i class="fas fa-heart"></i>
                         </button>
@@ -127,7 +129,32 @@
                     <div class="product-info">
                         <span class="product-category">All Purpose Cleaners</span>
                         <h3 class="product-name" title="Sparkle All-Purpose Cleaner">Sparkle All-Purpose Cleaner</h3>
-                        <p class="product-price">$4.99</p>
+                        <p
+                        class="product-old-price"
+                        >
+                            @php
+                                $lowestOldPrice = $product->variants->flatMap->prices->sortBy('old_price')->first()->old_price ?? '0.00';
+                                $highestOldPrice = $product->variants->flatMap->prices->sortByDesc('old_price')->first()->old_price ?? '0.00';
+                            @endphp
+                        
+                            @if ($lowestOldPrice == $highestOldPrice)
+                                NRs.{{ $lowestOldPrice }}
+                            @else
+                                NRs.{{ $lowestOldPrice }} - NRs.{{ $highestOldPrice }}
+                            @endif
+                        </p>
+                        <p class="product-price">
+                            @php
+                                $lowestPrice = $product->variants->flatMap->prices->sortBy('price')->first()->price ?? '0.00';
+                                $highestPrice = $product->variants->flatMap->prices->sortByDesc('price')->first()->price ?? '0.00';
+                            @endphp
+                        
+                            @if ($lowestPrice == $highestPrice)
+                                NRs.{{ $lowestPrice }}
+                            @else
+                                NRs.{{ $lowestPrice }} - NRs.{{ $highestPrice }}
+                            @endif
+                        </p>
                     </div>
                     <div class="product-actions">
                         <button class="btn btn-primary add-to-cart-button">
@@ -135,64 +162,7 @@
                         </button>
                     </div>
                 </div>
-                <div class="product-card" data-product-id="prod_004">
-                    <div class="product-image-container">
-                        <img src="https://picsum.photos/seed/prod_004/300/300" alt="Ocean Breeze Laundry Detergent"
-                            class="product-image">
-                        <button class="wishlist-button" title="Add to Wishlist" aria-label="Toggle Wishlist">
-                            <i class="fas fa-heart"></i>
-                        </button>
-                    </div>
-                    <div class="product-info">
-                        <span class="product-category">Laundry Detergents</span>
-                        <h3 class="product-name" title="Ocean Breeze Laundry Detergent">Ocean Breeze Laundry Detergent
-                        </h3>
-                        <p class="product-price">$12.99</p>
-                    </div>
-                    <div class="product-actions">
-                        <button class="btn btn-primary add-to-cart-button">
-                            <i class="fas fa-cart-plus"></i> Add to Cart
-                        </button>
-                    </div>
-                </div>
-                <div class="product-card" data-product-id="prod_006">
-                    <div class="product-image-container">
-                        <img src="https://picsum.photos/seed/prod_006/300/300" alt="Shine Bright Floor Cleaner"
-                            class="product-image">
-                        <button class="wishlist-button" title="Add to Wishlist" aria-label="Toggle Wishlist">
-                            <i class="fas fa-heart"></i>
-                        </button>
-                    </div>
-                    <div class="product-info">
-                        <span class="product-category">Floor Care</span>
-                        <h3 class="product-name" title="Shine Bright Floor Cleaner">Shine Bright Floor Cleaner</h3>
-                        <p class="product-price">$9.99</p>
-                    </div>
-                    <div class="product-actions">
-                        <button class="btn btn-primary add-to-cart-button">
-                            <i class="fas fa-cart-plus"></i> Add to Cart
-                        </button>
-                    </div>
-                </div>
-                <div class="product-card" data-product-id="prod_007">
-                    <div class="product-image-container">
-                        <img src="https://picsum.photos/seed/prod_007/300/300" alt="EcoClean All-Purpose Wipes"
-                            class="product-image">
-                        <button class="wishlist-button" title="Add to Wishlist" aria-label="Toggle Wishlist">
-                            <i class="fas fa-heart"></i>
-                        </button>
-                    </div>
-                    <div class="product-info">
-                        <span class="product-category">All Purpose Cleaners</span>
-                        <h3 class="product-name" title="EcoClean All-Purpose Wipes">EcoClean All-Purpose Wipes</h3>
-                        <p class="product-price">$6.49</p>
-                    </div>
-                    <div class="product-actions">
-                        <button class="btn btn-primary add-to-cart-button">
-                            <i class="fas fa-cart-plus"></i> Add to Cart
-                        </button>
-                    </div>
-                </div>
+                @endforeach
                 <!-- Add more static featured products as needed -->
             </div>
         </section>
@@ -213,25 +183,53 @@
 
         <!-- Featured Products Section 2 (Kitchen Essentials - Static Example) -->
         <section id="featured-products-2" class="products-section container">
+
             <div class="section-header">
-                <h2>Kitchen Essentials</h2>
-                <a href="/category/kitchen-cleaners" class="view-all-link">Shop Kitchen <i
+                <h2>{{ $randomCategory->category_name}}</h2>
+                <a href="/category/kitchen-cleaners" class="view-all-link">Shop more <i
                         class="fas fa-arrow-right"></i></a>
             </div>
             <div class="product-grid product-grid-horizontal" id="product-grid-featured-2">
                 <!-- Static Example Product Cards -->
+                @foreach ($randomCategory->products->shuffle() as $product)
+
                 <div class="product-card" data-product-id="prod_003">
                     <div class="product-image-container">
-                        <img src="https://picsum.photos/seed/prod_003/300/300" alt="Scrub Free Kitchen Degreaser"
+                        <img src="{{ asset('storage/' . $product->variants->first()->images->first()?->image_path) }}" alt="Scrub Free Kitchen Degreaser"
                             class="product-image">
                         <button class="wishlist-button" title="Add to Wishlist" aria-label="Toggle Wishlist">
                             <i class="fas fa-heart"></i>
                         </button>
                     </div>
                     <div class="product-info">
-                        <span class="product-category">Kitchen Cleaners</span>
-                        <h3 class="product-name" title="Scrub Free Kitchen Degreaser">Scrub Free Kitchen Degreaser</h3>
-                        <p class="product-price">$6.99</p>
+                        <span class="product-category">{{ $product->category->category_name }} - {{ $product->subcategory->subcategory_name }}</span>
+                        <h3 class="product-name" title="Scrub Free Kitchen Degreaser">{{ $product->name }}</h3>
+                        <p
+                        class="product-old-price"
+                        >
+                            @php
+                                $lowestOldPrice = $product->variants->flatMap->prices->sortBy('old_price')->first()->old_price ?? '0.00';
+                                $highestOldPrice = $product->variants->flatMap->prices->sortByDesc('old_price')->first()->old_price ?? '0.00';
+                            @endphp
+                        
+                            @if ($lowestOldPrice == $highestOldPrice)
+                                NRs.{{ $lowestOldPrice }}
+                            @else
+                                NRs.{{ $lowestOldPrice }} - NRs.{{ $highestOldPrice }}
+                            @endif
+                        </p>
+                        <p class="product-price">
+                            @php
+                                $lowestPrice = $product->variants->flatMap->prices->sortBy('price')->first()->price ?? '0.00';
+                                $highestPrice = $product->variants->flatMap->prices->sortByDesc('price')->first()->price ?? '0.00';
+                            @endphp
+                        
+                            @if ($lowestPrice == $highestPrice)
+                                NRs.{{ $lowestPrice }}
+                            @else
+                                NRs.{{ $lowestPrice }} - NRs.{{ $highestPrice }}
+                            @endif
+                        </p>
                     </div>
                     <div class="product-actions">
                         <button class="btn btn-primary add-to-cart-button">
@@ -239,44 +237,10 @@
                         </button>
                     </div>
                 </div>
-                <div class="product-card" data-product-id="prod_009">
-                    <div class="product-image-container">
-                        <img src="https://picsum.photos/seed/prod_009/300/300" alt="Stainless Steel Shine"
-                            class="product-image">
-                        <button class="wishlist-button" title="Add to Wishlist" aria-label="Toggle Wishlist">
-                            <i class="fas fa-heart"></i>
-                        </button>
-                    </div>
-                    <div class="product-info">
-                        <span class="product-category">Kitchen Cleaners</span>
-                        <h3 class="product-name" title="Stainless Steel Shine">Stainless Steel Shine</h3>
-                        <p class="product-price">$8.99</p>
-                    </div>
-                    <div class="product-actions">
-                        <button class="btn btn-primary add-to-cart-button">
-                            <i class="fas fa-cart-plus"></i> Add to Cart
-                        </button>
-                    </div>
-                </div>
-                <div class="product-card" data-product-id="prod_013">
-                    <div class="product-image-container">
-                        <img src="https://picsum.photos/seed/prod_013/300/300" alt="BioBlast Drain Cleaner"
-                            class="product-image">
-                        <button class="wishlist-button" title="Add to Wishlist" aria-label="Toggle Wishlist">
-                            <i class="fas fa-heart"></i>
-                        </button>
-                    </div>
-                    <div class="product-info">
-                        <span class="product-category">Kitchen Cleaners</span>
-                        <h3 class="product-name" title="BioBlast Drain Cleaner">BioBlast Drain Cleaner</h3>
-                        <p class="product-price">$8.49</p>
-                    </div>
-                    <div class="product-actions">
-                        <button class="btn btn-primary add-to-cart-button">
-                            <i class="fas fa-cart-plus"></i> Add to Cart
-                        </button>
-                    </div>
-                </div>
+                @endforeach
+                
+
+
                 <!-- Add more static featured products as needed -->
             </div>
         </section>

@@ -16,6 +16,7 @@ return new class extends Migration
             $table->foreignId('product_variant_id')->constrained()->onDelete('cascade');
             $table->foreignId('unit_id')->constrained('default_attributes')->onDelete('cascade');
             $table->decimal('price', 10, 2);
+            $table->decimal('old_price', 10, 2)->nullable();
             $table->unsignedInteger('stock')->default(0);
             $table->timestamps();
         });

@@ -24,7 +24,7 @@ class ProductManager extends Component
     public function render()
     {
         $products = Product::when($this->search, function ($query) {
-                $query->where('product_name', 'like', '%' . $this->search . '%');
+                $query->where('name', 'like', '%' . $this->search . '%');
             })->where('vendor_id', Auth::user()->id)
             ->orderBy('id', 'asc')
             ->paginate(5); // You can adjust the number per page as needed
