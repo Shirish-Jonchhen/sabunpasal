@@ -13,6 +13,7 @@ use App\Http\Controllers\Vendor\VendorMainController;
 use App\Http\Controllers\Vendor\VendorProductController;
 use App\Http\Controllers\Vendor\VendorStoreController;
 use App\Http\Controllers\Customer\CustomerMainController;
+use App\Http\Controllers\CustomerProductController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\MasterBrandContoller;
 use App\Http\Controllers\MasterCategoryController;
@@ -27,6 +28,11 @@ use Illuminate\Support\Facades\Route;
 
 Route::controller(HomeController::class)->group(function () {
     Route::get('/', 'index')->name('home');
+});
+
+
+Route::controller(CustomerProductController::class)->group(function () {
+    Route::get('/product/{slug}', 'index')->name('product.show');
 });
 
 // Route::get('/home', function () {

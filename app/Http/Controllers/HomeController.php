@@ -17,14 +17,11 @@ class HomeController extends Controller
         $categories = Category::all();
         $featured_subcategories = SubCategory::where('is_featured', 1)->get();
         $brands = Brand::all();
-        $sale_products = Product::where('is_on_sale', 1)->get();
-        $randomCategory = Category::with('subcategories.products')
-        ->whereHas('products')
-        ->inRandomOrder()
-        ->first();
+        $sale_products = Product::where('is_on_sale', 1)->get()->shuffle()->take(4);
+        $randomCategories = Category::all()->shuffle();
     
         
 
-        return view('home.index', compact('banners', 'categories', 'featured_subcategories','brands','sale_products','randomCategory'));
+        return view('customer.home.index', compact('banners', 'categories', 'featured_subcategories','brands','sale_products','randomCategories'));
     }
 }

@@ -21,7 +21,7 @@ class CategorySubcategory extends Component
     public function updatedSelectedCategory($categoryId)
     {
         $this->subcategories = SubCategory::where('category_id', $categoryId)->get();
-        $this->selectedSubcategory = null; // Reset selected subcategory
+        $this->selectedSubcategory = null; 
     }
 
     public function render()
