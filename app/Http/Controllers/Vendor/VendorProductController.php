@@ -203,7 +203,7 @@ class VendorProductController extends Controller
             'variants.*.size' => 'required|string|max:255',
             'variants.*.prices' => 'required|array',
             'variants.*.prices.*.unit' => 'required|integer|exists:default_attributes,id',
-            'variants.*.prices.*.old_price' => 'required|numeric|min:0',
+            'variants.*.prices.*.old_price' => 'nullable|numeric|min:0',
             'variants.*.prices.*.price' => 'required|numeric|min:0',
             'variants.*.prices.*.stock' => 'required|integer|min:0',
         ]);
@@ -374,22 +374,22 @@ class VendorProductController extends Controller
     {
         // Convert the product name into a slug
         $productSlug = Str::slug($productName, '-');
-    
+
         // Combine store slug and product slug
         $slug = "{$storeSlug}-{$productSlug}";
-    
+
         // Check if the slug already exists in the database, excluding the current product if an ID is provided
         $existingProduct = Product::where('slug', $slug)
-                                  ->when($productId, function ($query) use ($productId) {
-                                      return $query->where('id', '!=', $productId);
-                                  })
-                                  ->first();
-    
+            ->when($productId, function ($query) use ($productId) {
+                return $query->where('id', '!=', $productId);
+            })
+            ->first();
+
         // If the slug already exists, throw an exception to prevent duplication
         if ($existingProduct) {
             throw new \Exception("The product with this name already exists in the store.");
         }
-    
+
         return $slug;
     }
 }

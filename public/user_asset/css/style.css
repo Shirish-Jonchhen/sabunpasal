@@ -1710,7 +1710,7 @@ ul {
 .thumbnail-images .thumbnail {
     width: 80px; /* Adjust size as needed */
     height: 80px;
-    object-fit: cover;
+    object-fit: contain;
     border: 2px solid var(--border-color);
     border-radius: var(--border-radius);
     cursor: pointer;
@@ -1787,6 +1787,12 @@ ul {
     font-size: 1.8rem;
     font-weight: 700;
     color: var(--primary-color);
+}
+.discounted-price{
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--muted-text-color);
+    text-decoration: line-through;
 }
 .original-price {
     font-size: 1.1rem;
@@ -1893,6 +1899,10 @@ ul {
     font-weight: 500;
 }
 
+.out-of-stock {
+    font-weight: 500;
+    color: var(--danger-color);
+}
 .product-actions-detail {
     display: flex;
     gap: 1rem;
@@ -2390,6 +2400,7 @@ ul {
      /* Product Detail Responsive */
      .product-title { font-size: 1.6rem; }
      .current-price { font-size: 1.6rem; }
+     .discounted-price { font-size: 0.8rem; }
      .product-actions-detail { flex-direction: column; }
      .product-actions-detail .btn { width: 100%; }
      .offer-banner { flex-direction: column; text-align: center; gap: 1rem; }
@@ -2457,6 +2468,7 @@ ul {
      /* Product Detail Responsive */
      .product-title { font-size: 1.4rem; }
      .current-price { font-size: 1.4rem; }
+        .discounted-price { font-size: 0.6rem; }
      .thumbnail-images { gap: 0.5rem; }
      .thumbnail-images .thumbnail { width: 60px; height: 60px; }
      .quantity-controls button { width: 30px; height: 30px; line-height: 30px; font-size: 1rem; }

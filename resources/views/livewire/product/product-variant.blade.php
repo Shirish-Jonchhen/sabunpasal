@@ -25,9 +25,8 @@
             </div>
         </div>
         <script>
-            document.addEventListener("DOMContentLoaded", function() {
-                // Automatically select the first image on page load
-                var firstThumbnail = document.querySelector('.thumbnail');
+            document.addEventListener("DOMContentLoaded", function () {
+                const firstThumbnail = document.querySelector('.thumbnail');
                 if (firstThumbnail) {
                     firstThumbnail.classList.add('selected');
                     document.getElementById('main-product-image').src = firstThumbnail.getAttribute('data-large-src');
@@ -41,7 +40,7 @@
 
                 // Remove the 'selected' class from all thumbnails
                 var thumbnails = document.querySelectorAll('.thumbnail');
-                thumbnails.forEach(function(thumb) {
+                thumbnails.forEach(function (thumb) {
                     thumb.classList.remove('selected');
                 });
 
@@ -49,22 +48,33 @@
                 thumbnail.classList.add('selected');
             }
 
-            // This function updates the image when variant changes
-            Livewire.on('variantChanged', (imagePath) => {
-                var mainImage = document.getElementById('main-product-image');
-                mainImage.src = imagePath;
+            document.addEventListener("livewire:init", () => {
+                Livewire.on("variantChanged", ({ imagePath }) => {
+                    // console.log("Received variantChanged:", imagePath);
 
-                // Remove 'selected' class from all thumbnails
-                var thumbnails = document.querySelectorAll('.thumbnail');
-                thumbnails.forEach(function(thumb) {
-                    thumb.classList.remove('selected');
+                    console.log("imagePath from event:", imagePath);
+
+                    document.querySelectorAll(".thumbnail").forEach((thumb) => {
+                        console.log("thumbnail data-large-src:", thumb.getAttribute("data-large-src"));
+                    });
+                    const mainImage = document.getElementById("main-product-image");
+                    if (mainImage && imagePath) {
+                        mainImage.src = imagePath;
+                    }
+
+                    const thumbnails = document.querySelectorAll(".thumbnail");
+                    thumbnails.forEach((thumb) => {
+                        thumb.classList.remove("selected");
+                    });
+
+                    const selectedThumbnail = Array.from(thumbnails).find(
+                        (thumb) => thumb.getAttribute("data-large-src") === imagePath
+                    );
+
+                    if (selectedThumbnail) {
+                        selectedThumbnail.classList.add("selected");
+                    }
                 });
-
-                // Set the first thumbnail as selected by default
-                var firstThumbnail = document.querySelector('.thumbnail');
-                if (firstThumbnail) {
-                    firstThumbnail.classList.add('selected');
-                }
             });
         </script>
 
@@ -83,10 +93,10 @@
                 <a href="#reviews" class="write-review-link">Write a Review</a>
             </div>
             <div class="product-price-block">
-                <span class="discounted-price">NRs. {{ $old_price }}</span>
+                @if($old_price != null && $old_price != $price)
+                    <span class="discounted-price">NRs. {{ $old_price }}</span>
+                @endif
                 <span class="current-price">NRs. {{ $price }}</span>
-                <!-- <span class="original-price">$6.99</span> -->
-                <!-- <span class="discount-tag">-28%</span> -->
             </div>
 
             <div class="variant-selector">
@@ -117,19 +127,29 @@
 
 
 
-            <div class="quantity-selector">
-                <label for="quantity">Quantity:</label>
-                <div class="quantity-controls">
-                    <button class="quantity-decrease" title="Decrease quantity"
-                        aria-label="Decrease quantity">-</button>
-                    <input type="number" id="quantity" name="quantity" value="1" min="1"
-                        class="quantity-input" aria-label="Quantity">
-                    <button class="quantity-increase" title="Increase quantity"
-                        aria-label="Increase quantity">+</button>
+            <div>
+                <!-- Quantity Selector -->
+                <div class="quantity-selector">
+                    <label for="quantity">Quantity:</label>
+                    <div class="quantity-controls">
+                        <button wire:click="decreaseQuantity" class="quantity-decrease" title="Decrease quantity"
+                            aria-label="Decrease quantity">-</button>
+                        <input type="number" id="quantity" name="quantity" wire:model.live="quantity" value="{{ $quantity }}"
+                            min="1" class="quantity-input" aria-label="Quantity">
+                        <button wire:click="increaseQuantity" class="quantity-increase" title="Increase quantity"
+                            aria-label="Increase quantity">+</button>
+                    </div>
+                    {{-- <span class="stock-status">In Stock {{ $stock}}</span> --}}
+                    @if($stock != null && $stock > 0)
+                    <span class="stock-status">In Stock</span>
+                    @else
+                    <span class="stock-status out-of-stock">Out of Stock</span>
+                    @endif
                 </div>
-                <span class="stock-status">In Stock</span>
             </div>
 
+
+            @if($stock != null && $stock > 0)
             <div class="product-actions-detail">
                 <button class="btn btn-primary btn-buy-now">Buy Now</button>
                 <!-- Add data-product-id to the add to cart button -->
@@ -137,6 +157,9 @@
                     <i class="fas fa-cart-plus"></i> Add to Cart
                 </button>
             </div>
+            @endif
+
+
             <a href="#" class="add-to-wishlist-link" data-product-id="prod_001"><i class="fas fa-heart"></i> Add
                 to Wishlist</a>
 
@@ -179,8 +202,7 @@
             </div>
 
             <div class="seller-info">
-                <span>Sold By: <a href="#">CleanSweep Mart Official</a></span>
-                <span>Warranty: N/A</span>
+                <span>Sold By: <a href="#">{{ $product->store->store_name }}</a></span>
             </div>
 
             <div class="share-product">
