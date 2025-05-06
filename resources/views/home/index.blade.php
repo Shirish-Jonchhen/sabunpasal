@@ -26,29 +26,40 @@
             <!-- Main Hero Content (Banners) -->
             <div class="hero-content-main">
                 <div class="hero-main-banner">
-                    <img src="{{ asset('storage/' . $banners->first()->image_path) }}" alt="Main Promotion Banner">
-                    <div class="hero-banner-content">
-                        <h2>{{ $banners->first()->title }}</h2>
-                        {{-- <p>Get your home ready for any season.</p> --}}
-                        <a href="/products" class="btn btn-primary">Shop Now</a> <!-- Link to products page -->
-                    </div>
+                    @if ($banners->where('position',1)->isEmpty())
+                        <div class="swiper heroSwiper">
+                            <div class="swiper-wrapper">
+                                <div class="swiper-slide">
+                                    <img src="https://picsum.photos/seed/hero1/1200/400" alt="Main Promotion Banner">
+                                    <div class="hero-banner-content">
+                                        <h2>Welcome to CleanSweep Mart</h2>
+                                        <a href="/products" class="btn btn-primary">Shop Now</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    @else
+                        <div class="swiper heroSwiper">
+                            <div class="swiper-wrapper">
+                                @foreach ($banners->where('position', 1) as $banner)
+                                    <div class="swiper-slide">
+                                        <img src="{{ asset('storage/' . $banner->image_path) }}" alt="{{ $banner->title }}">
+                                        <div class="hero-banner-content">
+                                            <h2>{{ $banner->title }}</h2>
+                                            <a href="/products" class="btn btn-primary">Shop Now</a>
+                                        </div>
+                                    </div>
+                                @endforeach
+                            </div>
+                
+
+                
+                            <!-- Optional pagination -->
+                            <div class="swiper-pagination"></div>
+                        </div>
+                    @endif
                 </div>
-                {{-- <div class="hero-side-banners">
-                    <div class="side-banner">
-                        <img src="https://picsum.photos/seed/side1/400/220" alt="Side Promotion 1">
-                        <div class="side-banner-content">
-                            <h4>Eco Savers</h4>
-                            <a href="/category/eco-friendly" class="btn btn-secondary btn-sm">View Range</a>
-                        </div>
-                    </div>
-                    <div class="side-banner">
-                        <img src="https://picsum.photos/seed/side2/400/220" alt="Side Promotion 2">
-                        <div class="side-banner-content">
-                            <h4>Laundry Day</h4>
-                            <a href="/category/laundry-detergents" class="btn btn-secondary btn-sm">Shop Detergents</a>
-                        </div>
-                    </div>
-                </div> --}}
+                
             </div>
             <!-- End Main Hero Content -->
         </section>
@@ -67,36 +78,12 @@
                     <span>{{ $subcat->subcategory_name }}</span>
                 </a>
             @endforeach
-
-            {{-- <a href="/category/bathroom-cleaners" class="icon-nav-item">
-                <i class="fas fa-shower"></i>
-                <span>Bathroom</span>
-            </a>
-            <a href="/category/kitchen-cleaners" class="icon-nav-item">
-                <i class="fas fa-utensils"></i>
-                <span>Kitchen</span>
-            </a>
-            <a href="/category/laundry-detergents" class="icon-nav-item">
-                <i class="fas fa-tshirt"></i>
-                <span>Laundry</span>
-            </a>
-            <a href="/category/disinfectants" class="icon-nav-item">
-                <i class="fas fa-shield-virus"></i>
-                <span>Disinfectants</span>
-            </a>
-            <a href="/category/floor-care" class="icon-nav-item">
-                <i class="fas fa-broom"></i>
-                <span>Floor Care</span>
-            </a>
-            <a href="/products" class="icon-nav-item"> <!-- Link to main products page -->
-                <i class="fas fa-ellipsis-h"></i>
-                <span>View All</span>
-            </a> --}}
         </section>
         <!-- End Icon Navigation -->
 
         <!-- Full Width Banner -->
         <section class="full-width-banner-section container">
+            @if($banners->where('position',2)->isEmpty())
             <div class="full-width-banner">
                 <img src="https://picsum.photos/seed/fullbanner1/1200/200" alt="Full Width Promotion Banner">
                 <div class="full-width-banner-content">
@@ -104,6 +91,17 @@
                     <a href="/category/all-purpose-cleaners/cleaning-wipes" class="btn btn-secondary">Shop Wipes</a>
                 </div>
             </div>
+            @else
+            <div class="full-width-banner">
+                @foreach ($banners->where('position', 2) as $banner)
+                    <img src="{{ asset('storage/' . $banner->image_path) }}" alt="{{ $banner->title }}">
+                    <div class="full-width-banner-content">
+                        <h3>{{ $banner->title }}</h3>
+                        <a href="/category/all-purpose-cleaners/cleaning-wipes" class="btn btn-secondary">Shop Wipes</a>
+                    </div>
+                @endforeach
+            </div>
+            @endif
         </section>
         <!-- End Full Width Banner -->
 
@@ -127,7 +125,7 @@
                         </button>
                     </div>
                     <div class="product-info">
-                        <span class="product-category">All Purpose Cleaners</span>
+                        <span class="product-category">{{ $product->category->category_name }} - {{ $product->subcategory->subcategory_name }}</span>
                         <h3 class="product-name" title="Sparkle All-Purpose Cleaner">Sparkle All-Purpose Cleaner</h3>
                         <p
                         class="product-old-price"
@@ -171,12 +169,25 @@
         <!-- Full Width Banner 2 -->
         <section class="full-width-banner-section container">
             <div class="full-width-banner full-width-banner-dark">
+                @if ($banners->where('position',3)->isEmpty())
                 <img src="https://picsum.photos/seed/fullbanner2/1200/180" alt="New Arrivals Banner">
                 <div class="full-width-banner-content">
                     <h3>Explore Our New Arrivals</h3>
-                    <p>Discover the latest innovations in cleaning technology.</p>
+                    {{-- <p>Discover the latest innovations in cleaning technology.</p> --}}
                     <a href="/products?tag=new" class="btn btn-primary">See What's New</a>
                 </div>
+                @else
+
+                @foreach ($banners->where('position', 3) as $banner)
+                    <img src="{{ asset('storage/' . $banner->image_path) }}" alt="{{ $banner->title }}">
+                    <div class="full-width-banner-content">
+                        <h3>{{ $banner->title }}</h3>
+                        {{-- <p>{{ $banner->description }}</p> --}}
+                        <a href="/products?tag=new" class="btn btn-primary">See What's New</a>
+                    </div>
+                    @endforeach
+                @endif
+               
             </div>
         </section>
         <!-- End Full Width Banner 2 -->
@@ -272,12 +283,6 @@
                     <img src="{{ asset('storage/' . $brand->logo_path) }}" alt="{{ $brand->name }} Logo">
                     
                 @endforeach
-                {{-- <img src="https://picsum.photos/seed/brand1/150/80?grayscale" alt="Brand Logo 1">
-                <img src="https://picsum.photos/seed/brand2/150/80?grayscale" alt="Brand Logo 2">
-                <img src="https://picsum.photos/seed/brand3/150/80?grayscale" alt="Brand Logo 3">
-                <img src="https://picsum.photos/seed/brand4/150/80?grayscale" alt="Brand Logo 4">
-                <img src="https://picsum.photos/seed/brand5/150/80?grayscale" alt="Brand Logo 5">
-                <img src="https://picsum.photos/seed/brand6/150/80?grayscale" alt="Brand Logo 6"> --}}
             </div>
         </section>
         <!-- End Brands Section -->
@@ -314,5 +319,25 @@
             <span id="toast-message"></span>
         </div>
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            new Swiper('.heroSwiper', {
+                loop: true,
+                autoplay: {
+                    delay: 6000,
+                    disableOnInteraction: false,
+                },
+                navigation: {
+                    nextEl: '.swiper-button-next',
+                    prevEl: '.swiper-button-prev',
+                },
+                pagination: {
+                    el: '.swiper-pagination',
+                    clickable: true,
+                },
+            });
+        });
+    </script>
 
 @endsection

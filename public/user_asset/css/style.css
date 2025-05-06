@@ -455,6 +455,7 @@ ul {
 
 /* Adjusting main hero content area */
 .hero-content-main {
+    width:100%;
     display: grid;
     grid-template-rows: auto auto; /* Main banner row, side banners row */
     /* gap: 1.5rem; */
@@ -462,11 +463,22 @@ ul {
 
 .hero-main-banner {
     position: relative;
+    width:100%;
     border-radius: var(--border-radius);
     overflow: hidden;
     box-shadow: var(--shadow-md);
-    min-height: 350px; /* Adjust height as needed */
+    min-height: 350px;
     grid-row: 1 / 2; /* Place in first row */
+}
+.hero-main-banner .swiper {
+    width: 100%;
+    height: 100%; /* Ensures full height inside banner */
+}
+
+.hero-main-banner .swiper-slide {
+    position: relative;
+    width: 100%;
+    height: 100%;
 }
 
 .hero-main-banner img {
@@ -778,7 +790,7 @@ ul {
     overflow: hidden;
     display: flex;
     justify-content: center;
-    
+    align-items: center;
     flex-direction: column;
     box-shadow: none; /* Remove default shadow */
     transition: transform var(--transition-speed), box-shadow var(--transition-speed), border-color var(--transition-speed);

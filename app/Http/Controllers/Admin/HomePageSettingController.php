@@ -29,32 +29,38 @@ class HomePageSettingController extends Controller
                 'required',
                 'image',
                 'mimes:jpeg,png,jpg,gif',
-                'max:2048',
+                'max:4096',
                 function ($attribute, $value, $fail) {
                     $image = getimagesize($value);
                     if (!$image) {
                         return $fail("The uploaded file is not a valid image.");
                     }
-    
+
                     $width = $image[0];
                     $height = $image[1];
                     $ratio = $width / $height;
-    
+
                     // Validate against 16:9 ratio (or your desired ratio)
                     $expectedRatio = 3 / 1;
                     $tolerance = 0.01; // small margin for rounding errors
-    
+
                     if (abs($ratio - $expectedRatio) > $tolerance) {
                         $fail("The $attribute must have a 16:9 aspect ratio.");
                     }
                 },
             ],
-            'position' => ['required', function ($attribute, $value, $fail) {
-                $count = HomePageSetting::where('position', $value)->count();
-                if ($count >= 5) {
-                    $fail("The $attribute '$value' has already been used 5 times.");
-                }
-            },],
+            'position' => [
+                'required',
+                function ($attribute, $value, $fail) {
+                    $count = HomePageSetting::where('position', $value)->count();
+
+                    if ($value == 1 && $count >= 5) {
+                        $fail("The $attribute '$value' has already been used 5 times.");
+                    } elseif ($value != 1 && $count >= 1) {
+                        $fail("The $attribute '$value' can only be used once.");
+                    }
+                },
+            ],
         ]);
 
         $imagePath = $request->file('image')->store('home_banners', 'public');
