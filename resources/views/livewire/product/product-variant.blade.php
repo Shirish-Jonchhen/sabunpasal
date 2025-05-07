@@ -1,4 +1,9 @@
 <div>
+    @if (session()->has('message'))
+        <div class="alert alert-success">
+            {{ session('message') }}
+        </div>
+    @endif
     <section class="product-detail-layout">
         <!-- Product Image Gallery -->
         <div class="product-image-gallery">
@@ -25,7 +30,7 @@
             </div>
         </div>
         <script>
-            document.addEventListener("DOMContentLoaded", function () {
+            document.addEventListener("DOMContentLoaded", function() {
                 const firstThumbnail = document.querySelector('.thumbnail');
                 if (firstThumbnail) {
                     firstThumbnail.classList.add('selected');
@@ -40,7 +45,7 @@
 
                 // Remove the 'selected' class from all thumbnails
                 var thumbnails = document.querySelectorAll('.thumbnail');
-                thumbnails.forEach(function (thumb) {
+                thumbnails.forEach(function(thumb) {
                     thumb.classList.remove('selected');
                 });
 
@@ -49,7 +54,9 @@
             }
 
             document.addEventListener("livewire:init", () => {
-                Livewire.on("variantChanged", ({ imagePath }) => {
+                Livewire.on("variantChanged", ({
+                    imagePath
+                }) => {
                     // console.log("Received variantChanged:", imagePath);
 
                     console.log("imagePath from event:", imagePath);
@@ -93,7 +100,7 @@
                 <a href="#reviews" class="write-review-link">Write a Review</a>
             </div>
             <div class="product-price-block">
-                @if($old_price != null && $old_price != $price)
+                @if ($old_price != null && $old_price != $price)
                     <span class="discounted-price">NRs. {{ $old_price }}</span>
                 @endif
                 <span class="current-price">NRs. {{ $price }}</span>
@@ -134,33 +141,43 @@
                     <div class="quantity-controls">
                         <button wire:click="decreaseQuantity" class="quantity-decrease" title="Decrease quantity"
                             aria-label="Decrease quantity">-</button>
-                        <input type="number" id="quantity" name="quantity" wire:model.live="quantity" value="{{ $quantity }}"
-                            min="1" class="quantity-input" aria-label="Quantity">
+                        <input type="number" id="quantity" name="quantity" wire:model.live="quantity"
+                            value="{{ $quantity }}" min="1" class="quantity-input" aria-label="Quantity">
                         <button wire:click="increaseQuantity" class="quantity-increase" title="Increase quantity"
                             aria-label="Increase quantity">+</button>
                     </div>
                     {{-- <span class="stock-status">In Stock {{ $stock}}</span> --}}
-                    @if($stock != null && $stock > 0)
-                    <span class="stock-status">In Stock</span>
+                    @if ($stock != null && $stock > 0)
+                        <span class="stock-status">In Stock</span>
                     @else
-                    <span class="stock-status out-of-stock">Out of Stock</span>
+                        <span class="stock-status out-of-stock">Out of Stock</span>
                     @endif
                 </div>
             </div>
 
 
-            @if($stock != null && $stock > 0)
-            <div class="product-actions-detail">
-                <button class="btn btn-primary btn-buy-now">Buy Now</button>
-                <!-- Add data-product-id to the add to cart button -->
-                <button class="btn btn-secondary add-to-cart-button" data-product-id="prod_001">
-                    <i class="fas fa-cart-plus"></i> Add to Cart
-                </button>
-            </div>
+            @if ($stock != null && $stock > 0)
+                <div class="product-actions-detail">
+                    <button class="btn btn-primary btn-buy-now">Buy Now</button>
+                    <!-- Add data-product-id to the add to cart button -->
+
+                    @if (Auth::user())
+                        <button class="btn btn-secondary add-to-cart-button" wire:click="addToCart">
+                            <i class="fas fa-cart-plus"></i> Add to Cart
+                        </button>
+                    @else
+                        <button class="btn btn-secondary add-to-cart-button"
+                            onclick="event.preventDefault(); openLoginModal();">
+                            <i class="fas fa-cart-plus"></i> Add to Cart
+                        </button>
+                    @endif
+
+                </div>
             @endif
 
 
-            <a href="#" class="add-to-wishlist-link" data-product-id="prod_001"><i class="fas fa-heart"></i> Add
+            <a href="#" class="add-to-wishlist-link" data-product-id="{{ $product->id }}"><i
+                    class="fas fa-heart"></i> Add
                 to Wishlist</a>
 
 

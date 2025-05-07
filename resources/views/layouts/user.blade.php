@@ -12,6 +12,8 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.4/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-DQvkBjpPgn7RC31MCQoOeC9TI2kdqa4+BSgNMNj8v77fdC77Kj5zpWFTJaaAoMbC" crossorigin="anonymous">
     --}}
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.4/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-DQvkBjpPgn7RC31MCQoOeC9TI2kdqa4+BSgNMNj8v77fdC77Kj5zpWFTJaaAoMbC" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css" />
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
@@ -19,17 +21,122 @@
 </head>
 
 <body>
+    @if ($errors->any())
+    <div id="errorAlert" class="alert alert-danger alert-dismissable show">
+        @foreach ($errors->all() as $error)
+            <p>* {{ $error }}</p>
+        @endforeach
+    </div>
+
+    <style>
+        #errorAlert {
+            position: fixed;
+            top: 20px;
+            /* right: 0; */
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: rgba(220, 53, 69, 0.95); /* Bootstrap danger with transparency */
+            color: white;
+            padding: 16px 24px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            z-index: 9999;
+            opacity: 1;
+            visibility: visible;
+            transition: opacity 0.5s ease, visibility 0.5s ease;
+            max-width: 90%;
+            width: fit-content;
+            text-align: left;
+        }
+
+        #errorAlert.fade {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        #errorAlert p {
+            margin: 0;
+            padding: 2px 0;
+        }
+    </style>
+
+    <script>
+        setTimeout(function () {
+            const alert = document.getElementById('errorAlert');
+            if (alert) alert.classList.add('fade');
+        }, 2500);
+    </script>
+@endif
+
+@if (session("success"))
+<div id="successAlert" class="alert alert-success alert-dismissable show">
+    <p>{{ session("success") }}</p>
+</div>
+
+<style>
+    #successAlert {
+        position: fixed;
+        top: 20px;
+        /* right: 0; */
+        left: 50%;
+        transform: translateX(-50%);
+        background-color: rgba(6, 147, 20, 0.51); /* Bootstrap danger with transparency */
+        color: white;
+        padding: 16px 24px;
+        border-radius: 8px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        z-index: 9999;
+        opacity: 1;
+        visibility: visible;
+        transition: opacity 0.5s ease, visibility 0.5s ease;
+        max-width: 90%;
+        width: fit-content;
+        text-align: left;
+    }
+
+    #successAlert.fade {
+        opacity: 0;
+        visibility: hidden;
+    }
+
+    #successAlert p {
+        margin: 0;
+        padding: 2px 0;
+    }
+</style>
+
+<script>
+    setTimeout(function () {
+        const alert = document.getElementById('successAlert');
+        if (alert) alert.classList.add('fade');
+    }, 2500);
+</script>
+@endif
+
+
     <header class="header">
         <div class="container header-top-bar">
-            <span class="announcement">Free Shipping on Orders Over $50!</span>
+            <span class="announcement"></span>
             <div class="top-bar-links">
                 <a href="#">Track Order</a>
-                <a href="#">Login</a>
-                <a href="#">Register</a>
+                @if (Auth::user())
+                    <form method="POST" action="{{ route('logout') }}" style="display: inline;">
+                        @csrf
+                        <button type="submit" class="link-button">Logout</button>
+                    </form>
+                @else
+                    <a href="#" onclick="event.preventDefault(); openLoginModal();">Login</a>
+
+                    <a href="#" onclick="event.preventDefault(); openRegisterModal();">Register</a>
+
+
+
+                    {{-- <a href="{{ route('register') }}">Register</a> --}}
+                @endif
             </div>
         </div>
         <div class="container header-main">
-            <a href="index.html" class="logo">
+            <a href="{{ route('home') }}" class="logo">
                 <i class="fas fa-soap logo-icon"></i> <!-- Example icon -->
                 <span class="logo-text">CleanSweep Mart</span>
             </a>
@@ -57,24 +164,15 @@
                 </a>
                 <a href="#" class="header-action-link"> <!-- Link to account page -->
                     <i class="fas fa-user"></i>
-                    <span>Account</span>
+                    @if (Auth::user())
+                        <span>{{ Auth::user()->name }}</span>
+                    @else
+                        <span>Account</span>
+                    @endif
+                    {{-- <span>Account</span> --}}
                 </a>
             </div>
         </div>
-        <!-- <nav class="navigation-bar">
-             <div class="container">
-                 <ul class="nav-list">
-                     <li><a href="index.html" class="nav-link active">Home</a></li>
-                     <li><a href="/category/bathroom-cleaners" class="nav-link">Bathroom</a></li>
-                     <li><a href="/category/kitchen-cleaners" class="nav-link">Kitchen</a></li>
-                     <li><a href="/category/laundry-detergents" class="nav-link">Laundry</a></li>
-                     <li><a href="/category/floor-care" class="nav-link">Floor Care</a></li>
-                     <li><a href="/category/eco-friendly" class="nav-link">Eco-Friendly</a></li>
-                     <li><a href="orders.html" class="nav-link">Orders</a></li>
-                     <li><a href="contact.html" class="nav-link">Contact</a></li>
-                 </ul>
-             </div>
-         </nav> -->
     </header>
 
     <main class="page-content">
@@ -146,6 +244,119 @@
             </div>
         </div>
     </footer>
+
+
+    {{-- Login Modal --}}
+    <div id="loginModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <form method="POST" action="{{ route('login') }}">
+                @csrf
+                <div>
+                    <x-input-label for="email" :value="__('Email')" />
+                    <x-text-input id="email" class="block mt-1 w-full" type="email" name="email"
+                        value="{{ old('email') }}" required autofocus />
+                </div>
+
+                <div class="mt-4">
+                    <x-input-label for="password" :value="__('Password')" />
+                    <x-text-input id="password" class="block mt-1 w-full" type="password" name="password"
+                        required />
+                </div>
+
+                <div class="mt-4">
+                    <label>
+                        <input type="checkbox" name="remember"> Remember me
+                    </label>
+                </div>
+
+                <div class="mt-4">
+                    <button type="submit">Login</button>
+                </div>
+
+                <div class="mt-4 text-center">
+                    <a href="#" onclick="openRegisterModal(); closeLoginModal();"
+                        class="underline text-sm text-gray-600 hover:text-gray-900">
+                        {{ __('Don’t have an account? Register') }}
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    {{-- Register Modal --}}
+    <div id="registerModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <form method="POST" action="{{ route('register') }}">
+                @csrf
+
+                <div>
+                    <x-input-label for="name" :value="__('Name')" />
+                    <x-text-input id="name" class="block mt-1 w-full" type="text" name="name"
+                        :value="old('name')" required autofocus autocomplete="name" />
+                </div>
+
+                <div class="mt-4">
+                    <x-input-label for="email" :value="__('Email')" />
+                    <x-text-input id="email" class="block mt-1 w-full" type="email" name="email"
+                        :value="old('email')" required autocomplete="username" />
+                </div>
+
+                <div class="mt-4">
+                    <x-input-label for="password" :value="__('Password')" />
+                    <x-text-input id="password" class="block mt-1 w-full" type="password" name="password" required
+                        autocomplete="new-password" />
+                </div>
+
+                <div class="mt-4">
+                    <x-input-label for="password_confirmation" :value="__('Confirm Password')" />
+                    <x-text-input id="password_confirmation" class="block mt-1 w-full" type="password"
+                        name="password_confirmation" required autocomplete="new-password" />
+                </div>
+
+                <div class="mt-4">
+                    <button type="submit">Register</button>
+                </div>
+
+                <div class="mt-4 text-center">
+                    <a href="#" onclick="closeRegisterModal(); openLoginModal();"
+                        class="underline text-sm text-gray-600 hover:text-gray-900">
+                        {{ __('Already have an account? Login') }}
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        function openLoginModal() {
+            document.getElementById('loginModal').style.display = 'block';
+        }
+
+        function closeLoginModal() {
+            document.getElementById('loginModal').style.display = 'none';
+        }
+
+        function openRegisterModal() {
+            document.getElementById('registerModal').style.display = 'block';
+        }
+
+        function closeRegisterModal() {
+            document.getElementById('registerModal').style.display = 'none';
+        }
+
+
+        window.addEventListener('click', function(event) {
+            const loginModal = document.getElementById('loginModal');
+            const registerModal = document.getElementById('registerModal');
+            if (event.target === loginModal) {
+                closeLoginModal();
+            } else if (event.target === registerModal) {
+                closeRegisterModal();
+            }
+        });
+    </script>
+
+
 
     <script src="{{ asset('user_asset/js/script.js') }}"></script>
     <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>

@@ -180,7 +180,7 @@ Route::middleware(['auth', 'verified', 'rolemanager:vendor'])->group(function ()
 Route::middleware(['auth', 'verified', 'rolemanager:customer'])->group(function () {
     Route::prefix('user')->group(function () {
         Route::controller(CustomerMainController::class)->group(function () {
-            Route::get('/dashboard', 'index')->name('dashboard');
+            // Route::get('/dashboard', 'index')->name('dashboard');
             Route::get('/order/history', 'history')->name('customer.history');
             Route::get('/setting/payment', 'payment')->name('customer.payment');
             Route::get('/affiliate', 'affiliate')->name('customer.affiliate');

@@ -2,7 +2,9 @@
 
 namespace App\Livewire\Product;
 
+use App\Models\CartItem;
 use App\Models\Product;
+use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 
 class ProductVariant extends Component
@@ -103,12 +105,36 @@ class ProductVariant extends Component
         }
     }
 
-    // public function updatedQuantity($value)
-    // {
-    //     if ($value < 1) {
-    //         $this->quantity = 1;
-    //     }
-    // }
+
+    public function addToCart()
+    {
+
+        $cartItem = CartItem::where('user_id', Auth::user()->id)
+            ->where('variant_price_id', $this->selectedUnitID)
+            ->first();
+
+        if ($cartItem) {
+            $cartItem->increment('quantity', $this->quantity);
+            session()->flash('message', 'Item(s) Quantity increased by '. $this->quantity .' in cart.');
+            return;
+        }
+
+        $this->validate([
+            'selectedUnitID' => 'required|exists:variant_prices,id',
+            'quantity' => 'required|integer|min:1',
+        ]);
+    
+        CartItem::create(
+            [
+                'user_id'=> Auth::user()->id,
+                'variant_price_id'=> $this->selectedUnitID,
+                'quantity'=> $this->quantity,
+            ]
+        );
+
+        session()->flash('message', $this->quantity . ' Item(s) added to cart.');
+
+    }
 
 
     public function render()

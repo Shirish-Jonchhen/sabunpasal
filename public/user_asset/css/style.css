@@ -193,6 +193,20 @@ ul {
 .header-top-bar .announcement {
     font-weight: 500;
 }
+.link-button {
+    background: none;
+    border: none;
+    padding: 0;
+    margin: 0;
+    font: inherit;
+    margin-left: 1rem;
+    color: var(--muted-text-color);
+    transition: color var(--transition-speed);
+}
+
+.link-button:hover {
+    color: var(--primary-color);
+}
 
 .top-bar-links a {
     margin-left: 1rem;
@@ -828,6 +842,42 @@ ul {
 }
 
 
+.sale-tag {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background: rgba(255, 255, 255, 0.8);
+    border: none;
+    border-radius: 500px;
+    padding: 0 0.5rem;
+    /* width: 35px;
+    height: 35px; */
+    cursor: pointer;
+    color: var(--muted-text-color);
+    font-size: 0.8rem;
+    font-weight: bold;
+    color: var(--primary-color);
+    line-height: 35px; /* Center icon */
+    text-align: center;
+    transition: color var(--transition-speed), background-color var(--transition-speed), transform var(--transition-speed);
+     z-index: 10; /* Ensure it's above image */
+}
+
+/* .sale-tag:hover {
+    color: var(--danger-color);
+    background: rgba(255, 255, 255, 1);
+    transform: scale(1.1);
+}
+.sale-tag.active {
+    color: var(--danger-color); 
+     background: rgba(255, 255, 255, 1);
+}
+.sale-tag.active i::before {
+     content: "\f004"; 
+     font-weight: 900;
+} */
+
+
 .wishlist-button {
     position: absolute;
     top: 8px;
@@ -835,11 +885,14 @@ ul {
     background: rgba(255, 255, 255, 0.8);
     border: none;
     border-radius: 50%;
+    /* padding: 0 0.5rem; */
     width: 35px;
     height: 35px;
     cursor: pointer;
     color: var(--muted-text-color);
-    font-size: 1rem;
+    font-size: 0.8rem;
+    font-weight: bold;
+    color: var(--primary-color);
     line-height: 35px; /* Center icon */
     text-align: center;
     transition: color var(--transition-speed), background-color var(--transition-speed), transform var(--transition-speed);
@@ -852,11 +905,11 @@ ul {
     transform: scale(1.1);
 }
 .wishlist-button.active {
-    color: var(--danger-color); /* Red when active */
+    color: var(--danger-color); 
      background: rgba(255, 255, 255, 1);
 }
 .wishlist-button.active i::before {
-     content: "\f004"; /* Solid heart */
+     content: "\f004"; 
      font-weight: 900;
 }
 
@@ -1423,13 +1476,13 @@ ul {
 .wishlist-grid .product-card .product-actions .btn-primary {
     /* Style "Move to Cart" button if needed */
 }
-.remove-wishlist-button { /* Explicit remove button on wishlist */
+.remove-sale-tag { /* Explicit remove button on wishlist */
     margin-top: 0.5rem;
     background-color: var(--danger-color);
     color: #fff;
     border-color: var(--danger-color);
 }
-.remove-wishlist-button:hover {
+.remove-sale-tag:hover {
      background-color: #c82333;
      border-color: #c82333;
 }
@@ -2253,7 +2306,7 @@ ul {
 .similar-product .product-price { font-size: 1rem; margin-bottom: 0.5rem; }
 .similar-product .product-actions { padding: 0 0.8rem 0.8rem; }
 .similar-product .btn { width: 100%; } /* Full width button */
-.similar-product .wishlist-button { /* Optional: Hide wishlist on similar */
+.similar-product .sale-tag { /* Optional: Hide wishlist on similar */
     /* display: none; */
 }
 .similar-products-sidebar .view-all-link {
@@ -2318,6 +2371,10 @@ ul {
          grid-template-columns: 1fr 1fr; /* Keep side banners next to each other */
          /* Side banners are already within hero-content-main */
     }
+    .sale-tag {
+        padding: 0 0.3rem;
+        font-size: 0.6rem;
+    }
 
     .icon-nav-section {
         flex-wrap: wrap;
@@ -2357,7 +2414,8 @@ ul {
     h1 { font-size: 2rem; }
     h2 { font-size: 1.5rem; }
 
-    .header-top-bar { display: none; } /* Hide top bar */
+    /* .header-top-bar { display: none; } Hide top bar
+     */
 
     .header-actions { gap: 1rem; }
     .header-action-link i { font-size: 1.2rem; }
@@ -2396,6 +2454,12 @@ ul {
 
      .footer-main { grid-template-columns: 1fr 1fr; } /* Two columns */
      .footer-column { margin-bottom: 1rem; }
+
+     .sale-tag {
+        padding: 0 0.5rem;
+        font-size: 0.6rem;
+    }
+
 
      /* Product Detail Responsive */
      .product-title { font-size: 1.6rem; }
@@ -2488,3 +2552,123 @@ ul {
      .cart-item-subtotal { font-size: 0.9rem; }
      .cart-item-remove button { font-size: 1rem; }
 }
+
+
+/* Modal Overlay */
+#loginModal {
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.6);
+    display: none; /* Controlled by JS */
+}
+
+#registerModal {
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.6);
+    display: none; /* Controlled by JS */
+}
+
+/* Modal Box */
+.modal-content {
+    background-color: #fff;
+    margin: 10% auto;
+    padding: 2rem;
+    border-radius: 8px;
+    width: 90%;
+    max-width: 400px;
+    box-shadow: 0 5px 25px rgba(0, 0, 0, 0.3);
+    position: relative;
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+/* Close Button */
+.modal-content .close {
+    position: absolute;
+    top: 12px;
+    right: 16px;
+    color: #888;
+    font-size: 24px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: color 0.2s ease;
+}
+
+.modal-content .close:hover {
+    color: #333;
+}
+
+/* Form Elements */
+.modal-content form div {
+    margin-bottom: 1rem;
+}
+
+.modal-content label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 0.3rem;
+    color: #333;
+}
+
+.modal-content input[type="email"],
+.modal-content input[type="text"],
+.modal-content input[type="password"] {
+    width: 100%;
+    padding: 0.7rem;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 1rem;
+    outline: none;
+    transition: border 0.2s ease;
+}
+
+.modal-content input[type="email"]:focus,
+.modal-content input[type="text"]:focus,
+.modal-content input[type="password"]:focus {
+    border-color: #007bff;
+}
+
+/* Checkbox */
+.modal-content input[type="checkbox"] {
+    margin-right: 0.5rem;
+}
+
+/* Submit Button */
+.modal-content button[type="submit"] {
+    background-color: #007bff;
+    color: #fff;
+    padding: 0.6rem 1.2rem;
+    border: none;
+    border-radius: 6px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    width: 100%;
+}
+
+.modal-content button[type="submit"]:hover {
+    background-color: #0056b3;
+}
+
+/* Animation */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
