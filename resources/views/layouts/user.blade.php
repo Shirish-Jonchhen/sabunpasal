@@ -7,7 +7,6 @@
     <title>@yield('user_page_title')</title>
     {{--
     <link rel="stylesheet" href="css/style.css"> --}}
-    <link href="{{ asset('user_asset/css/style.css') }}" rel="stylesheet">
     {{--
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.4/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-DQvkBjpPgn7RC31MCQoOeC9TI2kdqa4+BSgNMNj8v77fdC77Kj5zpWFTJaaAoMbC" crossorigin="anonymous">
@@ -17,6 +16,8 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css" />
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="{{ asset('user_asset/css/style.css') }}" rel="stylesheet">
+
     @livewireStyles
 </head>
 
@@ -165,7 +166,7 @@
                 <a href="#" class="header-action-link"> <!-- Link to account page -->
                     <i class="fas fa-user"></i>
                     @if (Auth::user())
-                        <span>{{ Auth::user()->name }}</span>
+                        <span>{{  explode(' ', Auth::user()->name)[0] }}</span>
                     @else
                         <span>Account</span>
                     @endif

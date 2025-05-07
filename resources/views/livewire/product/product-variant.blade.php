@@ -30,7 +30,7 @@
             </div>
         </div>
         <script>
-            document.addEventListener("DOMContentLoaded", function() {
+            document.addEventListener("DOMContentLoaded", function () {
                 const firstThumbnail = document.querySelector('.thumbnail');
                 if (firstThumbnail) {
                     firstThumbnail.classList.add('selected');
@@ -45,7 +45,7 @@
 
                 // Remove the 'selected' class from all thumbnails
                 var thumbnails = document.querySelectorAll('.thumbnail');
-                thumbnails.forEach(function(thumb) {
+                thumbnails.forEach(function (thumb) {
                     thumb.classList.remove('selected');
                 });
 
@@ -176,8 +176,8 @@
             @endif
 
 
-            <a href="#" class="add-to-wishlist-link" data-product-id="{{ $product->id }}"><i
-                    class="fas fa-heart"></i> Add
+            <a href="#" class="add-to-wishlist-link" data-product-id="{{ $product->id }}"><i class="fas fa-heart"></i>
+                Add
                 to Wishlist</a>
 
 
@@ -197,6 +197,7 @@
                     <li><strong>Scent:</strong> {{ $product->variants->find($selectedVariantId)->variant_name }}</li>
                     <li><strong>Category:</strong> {{ $product->category->category_name }}</li>
                     <li><strong>Sub-Category:</strong> {{ $product->subcategory->subcategory_name }}</li>
+                    <li><strong>Brand:</strong> {{ $product->brand->name }}</li>
                     <li><strong>SKU:</strong> {{ $product->variants->find($selectedVariantId)->sku }}</li>
                 </ul>
                 <a href="#description" class="view-more-details-link">View more details</a>
