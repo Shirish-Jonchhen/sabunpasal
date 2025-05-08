@@ -1,7 +1,24 @@
 @extends('layouts.user')
-@section('user_page_title', 'Sabun Pasal - Product Detail')
+@section('user_page_title', 'Sabun Pasal - {{ $product->name }}')
 
 @section('user_content')
+    <style>
+        .star-rating {
+            display: inline-block;
+        }
+
+        .star {
+            font-size: 2rem;
+            color: #ccc;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+
+        .star.hover,
+        .star.selected {
+            color: gold;
+        }
+    </style>
     <div class='container'>
 
         <!-- Breadcrumbs -->
@@ -46,66 +63,113 @@
 
                 <h2 id="reviews" class="info-tab-header">Reviews</h2>
                 <div class="info-tab-content reviews-section">
-                    <div class="reviews-summary">
+
+                    <div class="reviews-summary" >
                         <h4>Overall Rating</h4>
                         <div class="average-rating">
-                            <span class="rating-value">4.0</span>
+                            <span class="rating-value">{{ number_format($averageReviews, 2) }}</span>
                             <div class="stars">
-                                <i class="fas fa-star rated"></i>
-                                <i class="fas fa-star rated"></i>
-                                <i class="fas fa-star rated"></i>
-                                <i class="fas fa-star rated"></i>
-                                <i class="fas fa-star"></i>
+                                @for ($i = 1; $i <= 5; $i++)
+                                    @if ($i <= floor($averageReviews))
+                                        <i class="fas fa-star rated"></i>
+                                    @elseif ($i - $averageReviews < 1)
+                                        <i class="fas fa-star-half-alt rated"></i>
+                                    @else
+                                        <i class="far fa-star"></i>
+                                    @endif
+                                @endfor
                             </div>
-                            <span>Based on 15 Reviews</span>
+                            <span>Based on {{ $totalReviews }} Reviews</span>
                         </div>
                         <div class="rating-breakdown">
                             <!-- Static Breakdown -->
-                            <span>5 Stars <progress value="60" max="100"></progress> (9)</span>
-                            <span>4 Stars <progress value="20" max="100"></progress> (3)</span>
-                            <span>3 Stars <progress value="13" max="100"></progress> (2)</span>
-                            <span>2 Stars <progress value="7" max="100"></progress> (1)</span>
-                            <span>1 Star <progress value="0" max="100"></progress> (0)</span>
+
+                            <span>5 Stars <progress value="{{ $fiveStars }}" max="{{ $totalReviews }}"></progress>
+                                ({{ $fiveStars }})</span>
+                            <span>4 Stars <progress value="{{ $fourStars }}" max="{{ $totalReviews }}"></progress>
+                                ({{ $fourStars }})</span>
+                            <span>3 Stars <progress value="{{ $threeStars }}" max="{{ $totalReviews }}"></progress>
+                                ({{ $threeStars }})</span>
+                            <span>2 Stars <progress value="{{ $twoStars }}" max="{{ $totalReviews }}"></progress>
+                                ({{ $twoStars }})</span>
+                            <span>1 Stars <progress value="{{ $oneStars }}" max="{{ $totalReviews }}"></progress>
+                                ({{ $oneStars }})</span>
+
+
                         </div>
                     </div>
+
                     <div class="write-review">
                         <h4>Have you used this product before?</h4>
-                        <form action="#" class="review-form"> <!-- Action points to backend route -->
+                        <form action="{{ route('product.review', $product->slug) }}" class="review-form" method="POST">
+                            @csrf
+                            @method('POST')
                             <div class="form-group">
                                 <label for="review-rating">Your Rating:</label>
-                                <!-- Simple static stars for display, real rating requires JS -->
-                                <div class="static-stars"> ★★★★★ </div>
+                                <div class="star-rating" id="star-rating">
+                                    <span class="star" data-value="1">&#9733;</span>
+                                    <span class="star" data-value="2">&#9733;</span>
+                                    <span class="star" data-value="3">&#9733;</span>
+                                    <span class="star" data-value="4">&#9733;</span>
+                                    <span class="star" data-value="5">&#9733;</span>
+                                </div>
+                                <input type="hidden" name="star" id="rating" value="0">
                             </div>
+
                             <div class="form-group">
                                 <label for="review-text">Your Review:</label>
                                 <textarea id="review-text" name="review" rows="4" placeholder="Tell us what you think..."></textarea>
                             </div>
+                            @if (Auth::user())
                             <button type="submit" class="btn btn-secondary">Submit Review</button>
+                            @else
+                            <button type="button" class="btn btn-secondary" onclick="event.preventDefault(); openLoginModal();">Submit Review</button>
+
+                            @endif
+
+                            
                         </form>
                     </div>
 
                     <div class="customer-reviews-list">
                         <h3>Customer Reviews</h3>
                         <!-- Static Review Examples -->
-                        <div class="review-item">
-                            <div class="review-header">
-                                <span class="review-author">Jane D.</span>
-                                <span class="review-date">July 22, 2024</span>
-                                <div class="review-rating-stars">★★★★☆</div>
-                            </div>
-                            <p class="review-text">Works really well on my kitchen counters. Smells great too!</p>
+
+                        @if ($reviews->isEmpty())
+                        <div class="no-reviews-message text-center p-4 border rounded bg-light">
+                            <p class="mb-0 text-muted">
+                                <i class="fas fa-comment-dots me-2 text-secondary"></i>
+                                No reviews yet. <strong>Be the first to review this product!</strong>
+                            </p>
                         </div>
-                        <div class="review-item">
-                            <div class="review-header">
-                                <span class="review-author">Mark S.</span>
-                                <span class="review-date">July 18, 2024</span>
-                                <div class="review-rating-stars">★★★★★</div>
-                            </div>
-                            <p class="review-text">My favorite all-purpose cleaner. Gets the job done.</p>
-                        </div>
-                        <!-- Add more static reviews -->
+                        @else
+                            @foreach ($reviews as $review)
+                                <div class="review-item">
+                                    <div class="review-header">
+                                        <span class="review-author">{{ $review->user->name }}</span>
+                                        <span
+                                            class="review-date">{{ \Carbon\Carbon::parse($review->created_at)->format('F j, Y') }}</span>
+                                        <div class="review-rating-stars">
+                                            @for ($i = 1; $i <= 5; $i++)
+                                                @if ($i <= $review->star)
+                                                    ★
+                                                @else
+                                                    ☆
+                                                @endif
+                                            @endfor
+                                        </div>
+                                    </div>
+                                    <p class="review-text">{{ $review->review }}</p>
+                                </div>
+                            @endforeach
+                             <!-- Add more static reviews -->
                         <a href="#" class="view-all-link">View All Reviews</a>
+                        @endif
+
+
+                       
                     </div>
+
                 </div>
 
                 <!-- Add more tabs/headers like Shipping & Returns if needed -->
@@ -263,5 +327,35 @@
             <span id="toast-message"></span>
         </div>
     </div>
+    <script>
+        const stars = document.querySelectorAll('.star-rating .star');
+        const ratingInput = document.getElementById('rating');
+
+        let selectedRating = 0;
+
+        stars.forEach(star => {
+            star.addEventListener('mouseover', () => {
+                const val = parseInt(star.getAttribute('data-value'));
+                highlightStars(val);
+            });
+
+            star.addEventListener('mouseout', () => {
+                highlightStars(selectedRating);
+            });
+
+            star.addEventListener('click', () => {
+                selectedRating = parseInt(star.getAttribute('data-value'));
+                ratingInput.value = selectedRating;
+                highlightStars(selectedRating);
+            });
+        });
+
+        function highlightStars(rating) {
+            stars.forEach(star => {
+                const val = parseInt(star.getAttribute('data-value'));
+                star.classList.toggle('selected', val <= rating);
+            });
+        }
+    </script>
 
 @endsection

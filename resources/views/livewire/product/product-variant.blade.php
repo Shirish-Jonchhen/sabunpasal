@@ -1,9 +1,14 @@
 <div>
-    @if (session()->has('message'))
-        <div class="alert alert-success">
-            {{ session('message') }}
-        </div>
-    @endif
+    <div>
+        <!-- Conditional Alert -->
+        @if (session()->has('message'))
+            <div id="success-alert" class="alert alert-success fade-in show" style="position: relative;">
+                {{ session('message') }}
+                <button wire:click="closeAlert"
+                    style="position: absolute; top: 0.5rem; right: 0.75rem; background: none; border: none; font-size: 1.25rem; cursor: pointer;">&times;</button>
+            </div>
+        @endif
+    </div>
     <section class="product-detail-layout">
         <!-- Product Image Gallery -->
         <div class="product-image-gallery">
@@ -15,11 +20,28 @@
                     <img src="{{ asset('storage/' . $variantImages->first()->image_path) }}" alt="Main Image"
                         id="main-product-image">
                 @endif
+
+
                 <!-- Wishlist button positioned absolutely inside gallery -->
+
+                @if (Auth::user())
+                    <button class="wishlist-button product-detail-wishlist" title="Add to Wishlist"
+                        aria-label="Toggle Wishlist" data-product-id="{{ $product->id }}" wire:click="addToWishlist">
+                        <i class="fas fa-heart" style = 'color: {{ $isInWishlist ? 'red' : '#666666' }} ;'></i>
+                    </button>
+                @else
                 <button class="wishlist-button product-detail-wishlist" title="Add to Wishlist"
-                    aria-label="Toggle Wishlist" data-product-id="prod_001">
-                    <i class="fas fa-heart"></i>
-                </button>
+                aria-label="Toggle Wishlist" data-product-id="{{ $product->id }}" onclick="event.preventDefault(); openLoginModal();">
+                {{-- <i class="fas fa-heart" style = 'color: {{ $isInWishlist ? 'red' : '#666666' }} ;'></i> --}}
+                <i class="fas fa-heart" style = 'color: {{ $isInWishlist ? 'red' : '#666666' }} ;'></i>
+
+            </button>
+
+                @endif
+                
+
+
+
             </div>
             <div class="thumbnail-images">
                 @foreach ($variantImages as $image)
@@ -30,7 +52,7 @@
             </div>
         </div>
         <script>
-            document.addEventListener("DOMContentLoaded", function () {
+            document.addEventListener("DOMContentLoaded", function() {
                 const firstThumbnail = document.querySelector('.thumbnail');
                 if (firstThumbnail) {
                     firstThumbnail.classList.add('selected');
@@ -45,7 +67,7 @@
 
                 // Remove the 'selected' class from all thumbnails
                 var thumbnails = document.querySelectorAll('.thumbnail');
-                thumbnails.forEach(function (thumb) {
+                thumbnails.forEach(function(thumb) {
                     thumb.classList.remove('selected');
                 });
 
@@ -176,9 +198,23 @@
             @endif
 
 
-            <a href="#" class="add-to-wishlist-link" data-product-id="{{ $product->id }}"><i class="fas fa-heart"></i>
-                Add
-                to Wishlist</a>
+            @if (Auth::user())
+                <a href="#" class="add-to-wishlist-link" data-product-id="{{ $product->id }}"
+                    wire:click="addToWishlist">
+                    <i class="fas fa-heart"></i>
+                    @if ($isInWishlist)
+                        Remove from Wishlist
+                    @else
+                        Add to Wishlist
+                    @endif
+                </a>
+            @else
+                <a href="#" class="add-to-wishlist-link" data-product-id="{{ $product->id }}" onclick="event.preventDefault(); openLoginModal();">
+                    <i class="fas fa-heart"></i>
+                    Add to Wishlist
+
+                </a>
+            @endif
 
 
             <!-- Optional Inquiry/Contact Section -->

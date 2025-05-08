@@ -880,7 +880,7 @@ ul {
 
 .wishlist-button {
     position: absolute;
-    top: 8px;
+    bottom: 8px;
     right: 8px;
     background: rgba(255, 255, 255, 0.8);
     border: none;
@@ -896,7 +896,7 @@ ul {
     line-height: 35px; /* Center icon */
     text-align: center;
     transition: color var(--transition-speed), background-color var(--transition-speed), transform var(--transition-speed);
-     z-index: 10; /* Ensure it's above image */
+     z-index: 100000; /* Ensure it's above image */
 }
 
 .wishlist-button:hover {
@@ -1278,7 +1278,7 @@ ul {
 .cart-item-image img {
     width: 80px;
     height: 80px;
-    object-fit: cover;
+    object-fit: contain;
     border-radius: var(--border-radius);
 }
 .cart-item-info h4 {
@@ -1288,8 +1288,14 @@ ul {
     color: var(--text-color);
 }
 .cart-item-info .price {
-    color: var(--muted-text-color);
+    color: var(--text-color);
     font-size: 0.9rem;
+}
+
+.cart-item-info .old-price {
+    color: var(--muted-text-color);
+    font-size: 0.7rem;
+    text-decoration: line-through;
 }
 .cart-item-quantity {
     display: flex;
@@ -2168,7 +2174,7 @@ ul {
 /* Reviews Section Specifics */
 .reviews-section {
     display: grid;
-    grid-template-columns: 1fr 1.5fr; /* Summary and Write Review/List */
+    grid-template-columns: 1fr 1.5fr;
     gap: 2rem;
     align-items: start;
 }

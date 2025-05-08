@@ -12,7 +12,7 @@
         integrity="sha384-DQvkBjpPgn7RC31MCQoOeC9TI2kdqa4+BSgNMNj8v77fdC77Kj5zpWFTJaaAoMbC" crossorigin="anonymous">
     --}}
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.4/dist/css/bootstrap.min.css" rel="stylesheet"
-    integrity="sha384-DQvkBjpPgn7RC31MCQoOeC9TI2kdqa4+BSgNMNj8v77fdC77Kj5zpWFTJaaAoMbC" crossorigin="anonymous">
+        integrity="sha384-DQvkBjpPgn7RC31MCQoOeC9TI2kdqa4+BSgNMNj8v77fdC77Kj5zpWFTJaaAoMbC" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css" />
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
@@ -23,96 +23,98 @@
 
 <body>
     @if ($errors->any())
-    <div id="errorAlert" class="alert alert-danger alert-dismissable show">
-        @foreach ($errors->all() as $error)
-            <p>* {{ $error }}</p>
-        @endforeach
-    </div>
+        <div id="errorAlert" class="alert alert-danger alert-dismissable show">
+            @foreach ($errors->all() as $error)
+                <p>* {{ $error }}</p>
+            @endforeach
+        </div>
 
-    <style>
-        #errorAlert {
-            position: fixed;
-            top: 20px;
-            /* right: 0; */
-            left: 50%;
-            transform: translateX(-50%);
-            background-color: rgba(220, 53, 69, 0.95); /* Bootstrap danger with transparency */
-            color: white;
-            padding: 16px 24px;
-            border-radius: 8px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-            z-index: 9999;
-            opacity: 1;
-            visibility: visible;
-            transition: opacity 0.5s ease, visibility 0.5s ease;
-            max-width: 90%;
-            width: fit-content;
-            text-align: left;
-        }
+        <style>
+            #errorAlert {
+                position: fixed;
+                top: 20px;
+                /* right: 0; */
+                left: 50%;
+                transform: translateX(-50%);
+                background-color: rgba(220, 53, 69, 0.95);
+                /* Bootstrap danger with transparency */
+                color: white;
+                padding: 16px 24px;
+                border-radius: 8px;
+                box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+                z-index: 9999;
+                opacity: 1;
+                visibility: visible;
+                transition: opacity 0.5s ease, visibility 0.5s ease;
+                max-width: 90%;
+                width: fit-content;
+                text-align: left;
+            }
 
-        #errorAlert.fade {
-            opacity: 0;
-            visibility: hidden;
-        }
+            #errorAlert.fade {
+                opacity: 0;
+                visibility: hidden;
+            }
 
-        #errorAlert p {
-            margin: 0;
-            padding: 2px 0;
-        }
-    </style>
+            #errorAlert p {
+                margin: 0;
+                padding: 2px 0;
+            }
+        </style>
 
-    <script>
-        setTimeout(function () {
-            const alert = document.getElementById('errorAlert');
-            if (alert) alert.classList.add('fade');
-        }, 2500);
-    </script>
-@endif
+        <script>
+            setTimeout(function() {
+                const alert = document.getElementById('errorAlert');
+                if (alert) alert.classList.add('fade');
+            }, 2500);
+        </script>
+    @endif
 
-@if (session("success"))
-<div id="successAlert" class="alert alert-success alert-dismissable show">
-    <p>{{ session("success") }}</p>
-</div>
+    @if (session('success'))
+        <div id="successAlert" class="alert alert-success alert-dismissable show">
+            <p>{{ session('success') }}</p>
+        </div>
 
-<style>
-    #successAlert {
-        position: fixed;
-        top: 20px;
-        /* right: 0; */
-        left: 50%;
-        transform: translateX(-50%);
-        background-color: rgba(6, 147, 20, 0.51); /* Bootstrap danger with transparency */
-        color: white;
-        padding: 16px 24px;
-        border-radius: 8px;
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-        z-index: 9999;
-        opacity: 1;
-        visibility: visible;
-        transition: opacity 0.5s ease, visibility 0.5s ease;
-        max-width: 90%;
-        width: fit-content;
-        text-align: left;
-    }
+        <style>
+            #successAlert {
+                position: fixed;
+                top: 20px;
+                /* right: 0; */
+                left: 50%;
+                transform: translateX(-50%);
+                background-color: rgba(6, 147, 20, 0.51);
+                /* Bootstrap danger with transparency */
+                color: white;
+                padding: 16px 24px;
+                border-radius: 8px;
+                box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+                z-index: 9999;
+                opacity: 1;
+                visibility: visible;
+                transition: opacity 0.5s ease, visibility 0.5s ease;
+                max-width: 90%;
+                width: fit-content;
+                text-align: left;
+            }
 
-    #successAlert.fade {
-        opacity: 0;
-        visibility: hidden;
-    }
+            #successAlert.fade {
+                opacity: 0;
+                visibility: hidden;
+            }
 
-    #successAlert p {
-        margin: 0;
-        padding: 2px 0;
-    }
-</style>
+            #successAlert p {
+                margin: 0;
+                padding: 2px 0;
+            }
+        </style>
 
-<script>
-    setTimeout(function () {
-        const alert = document.getElementById('successAlert');
-        if (alert) alert.classList.add('fade');
-    }, 2500);
-</script>
-@endif
+        <script>
+            setTimeout(function() {
+                const alert = document.getElementById('successAlert');
+                if (alert) alert.classList.add('fade');
+            }, 2500);
+        </script>
+    @endif
 
 
     <header class="header">
@@ -153,20 +155,41 @@
             </div>
 
             <div class="header-actions">
-                <a href="wishlist.html" class="header-action-link">
-                    <i class="fas fa-heart"></i>
-                    <span>Wishlist</span>
-                    <span class="count" id="wishlist-count">0</span>
-                </a>
-                <a href="cart.html" class="header-action-link cart-link">
-                    <i class="fas fa-shopping-cart"></i>
-                    <span>Cart</span>
-                    <span class="count cart-count" id="cart-count">0</span>
-                </a>
+                @if (Auth::user())
+                    <a href="{{ route('user.wishlist') }}" class="header-action-link">
+                        <i class="fas fa-heart"></i>
+                        <span>Wishlist</span>
+                        {{-- <span class="count" id="wishlist-count">0</span> --}}
+                    </a>
+                @else
+                    <a href="wishlist.html" class="header-action-link"  onclick="event.preventDefault(); openLoginModal();">
+                        {{-- <a href="{{ route('user.wishlist') }}" class="header-action-link"> --}}
+                        {{-- <a href="#" class="header-action-link" onclick="event.preventDefault(); openLoginModal();"> --}}
+                        <i class="fas fa-heart"></i>
+                        <span>Wishlist</span>
+                        {{-- <span class="count" id="wishlist-count">0</span> --}}
+                    </a>
+                @endif
+
+
+                @if (Auth::user())
+                    <a href="{{ route('user.cart') }}" class="header-action-link cart-link">
+                        <i class="fas fa-shopping-cart"></i>
+                        <span>Cart</span>
+                        {{-- <span class="count cart-count" id="cart-count">0</span> --}}
+                    </a>
+                @else
+                    <a href="#" class="header-action-link cart-link"
+                        onclick="event.preventDefault(); openLoginModal();">
+                        <i class="fas fa-shopping-cart"></i>
+                        <span>Cart</span>
+                        {{-- <span class="count cart-count" id="cart-count">0</span> --}}
+                @endif
+
                 <a href="#" class="header-action-link"> <!-- Link to account page -->
                     <i class="fas fa-user"></i>
                     @if (Auth::user())
-                        <span>{{  explode(' ', Auth::user()->name)[0] }}</span>
+                        <span>{{ explode(' ', Auth::user()->name)[0] }}</span>
                     @else
                         <span>Account</span>
                     @endif

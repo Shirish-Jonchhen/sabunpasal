@@ -50,6 +50,6 @@ class RoleManager
                 return redirect()->route('home');
         }
 
-        return redirect()->route('login');
+        return redirect()->back()->with('error', 'You do not have permission to access this page.');
     }
 }

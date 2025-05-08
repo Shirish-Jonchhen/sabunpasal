@@ -4,6 +4,7 @@ namespace App\Livewire\Product;
 
 use App\Models\CartItem;
 use App\Models\Product;
+use App\Models\WishlistItem;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 
@@ -22,6 +23,11 @@ class ProductVariant extends Component
     public $quantity = 1;
 
     public $stock = null;
+
+
+
+    public $showMessage = false;
+    public $isInWishlist = false;
 
 
     public function mount($slug)
@@ -44,8 +50,15 @@ class ProductVariant extends Component
             $this->price = $firstPrice?->price;
             $this->old_price = $firstPrice?->old_price;
             $this->stock = $firstPrice?->stock;
-
             $this->variantImages = $firstVariant->images;
+
+            if (Auth::check() && $this->product) {
+                $this->isInWishlist = WishlistItem::where('user_id', Auth::id())
+                    ->where('product_id', $this->product->id)
+                    ->exists();
+            } else {
+                $this->isInWishlist = false;
+            };
         }
     }
 
@@ -113,9 +126,11 @@ class ProductVariant extends Component
             ->where('variant_price_id', $this->selectedUnitID)
             ->first();
 
+
         if ($cartItem) {
             $cartItem->increment('quantity', $this->quantity);
-            session()->flash('message', 'Item(s) Quantity increased by '. $this->quantity .' in cart.');
+            session()->flash('message', 'Item(s) Quantity increased by ' . $this->quantity . ' in cart.');
+            $this->quantity = 1;
             return;
         }
 
@@ -123,17 +138,54 @@ class ProductVariant extends Component
             'selectedUnitID' => 'required|exists:variant_prices,id',
             'quantity' => 'required|integer|min:1',
         ]);
-    
+
         CartItem::create(
             [
-                'user_id'=> Auth::user()->id,
-                'variant_price_id'=> $this->selectedUnitID,
-                'quantity'=> $this->quantity,
+                'user_id' => Auth::user()->id,
+                'variant_price_id' => $this->selectedUnitID,
+                'quantity' => $this->quantity,
             ]
         );
 
-        session()->flash('message', $this->quantity . ' Item(s) added to cart.');
+        $this->quantity = 1; // Reset quantity after adding to cart
 
+        session()->flash('message', $this->quantity . ' Item(s) added to cart.');
+        $this->showMessage = true;
+    }
+
+    public function addToWishlist()
+    {
+        $wishlistItem = WishlistItem::where('user_id', Auth::user()->id)
+            ->where('product_id', $this->product->id)
+            ->first();
+
+        if ($wishlistItem) {
+            $wishlistItem->delete();
+            session()->flash('message', 'Item removed from wishlist.');
+            $this->isInWishlist = false;
+            $this->showMessage = true;
+            return;
+        } else {
+            $this->validate([
+                'product.id' => 'required|exists:products,id',
+            ]);
+
+            WishlistItem::create(
+                [
+                    'user_id' => Auth::user()->id,
+                    'product_id' => $this->product->id,
+                ]
+            );
+            session()->flash('message', 'Item added to wishlist.');
+            $this->isInWishlist = true;
+            $this->showMessage = true;
+            return;
+        }
+    }
+
+    public function closeAlert()
+    {
+        $this->showMessage = false;
     }
 
 

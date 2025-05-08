@@ -8,6 +8,7 @@ use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\ProductDiscountController;
 use App\Http\Controllers\Admin\SubCategoryController;
 use App\Http\Controllers\BrandController;
+use App\Http\Controllers\CartController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Vendor\VendorMainController;
 use App\Http\Controllers\Vendor\VendorProductController;
@@ -18,6 +19,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\MasterBrandContoller;
 use App\Http\Controllers\MasterCategoryController;
 use App\Http\Controllers\MasterSubCategoryController;
+use App\Http\Controllers\WishlistController;
 use App\Models\HomePageSetting;
 use Illuminate\Support\Facades\Route;
 
@@ -33,7 +35,22 @@ Route::controller(HomeController::class)->group(function () {
 
 Route::controller(CustomerProductController::class)->group(function () {
     Route::get('/product/{slug}', 'index')->name('product.show');
+    Route::post('/product/review/{slug}', 'addReview')->name('product.review');
 });
+
+
+Route::controller(CartController::class)->group(function () {
+    Route::get('/cart', 'index')->name('user.cart');
+    // Route::post('/product/review/{slug}', 'addReview')->name('product.review');
+});
+
+Route::controller(WishlistController::class)->group(function () {
+    Route::get('/wishlist', 'index')->name('user.wishlist');
+    // Route::post('/product/review/{slug}', 'addReview')->name('product.review');
+});
+
+
+
 
 // Route::get('/home', function () {
 //     return view('home.index');
@@ -61,14 +78,14 @@ Route::middleware(['auth', 'verified', 'rolemanager:admin'])->group(function () 
             // Route::put('/home/banner/update/{id}', 'update_home_banner')->name('update.home.banner');
             Route::delete('/home/banner/delete/{id}', 'delete_home_banner')->name('delete.home.banner');
         });
-        
+
 
         Route::controller(CategoryController::class)->group(function () {
 
             Route::get('/category/create', 'index')->name('category.create');
             Route::get('/category/manage', 'manage')->name('category.manage');
         });
-        
+
 
         Route::controller(SubCategoryController::class)->group(function () {
 
@@ -97,7 +114,6 @@ Route::middleware(['auth', 'verified', 'rolemanager:admin'])->group(function () 
             Route::get('/defaultattribute/{id}', 'show_single_attribute')->name('show.attribute');
             Route::put('/defaultattribute/update/{id}', 'update_attribute')->name('update.attribute');
             Route::delete('/defaultattribute/delete/{id}', 'delete_attribute')->name('delete.attribute');
-
         });
 
         Route::controller(ProductDiscountController::class)->group(function () {
@@ -139,13 +155,12 @@ Route::middleware(['auth', 'verified', 'rolemanager:vendor'])->group(function ()
         Route::controller(VendorMainController::class)->group(function () {
             Route::get('/dashboard', 'index')->name('vendor');
             Route::get('/order/history', 'order_history')->name('vendor.order.history');
-
         });
 
         Route::controller(VendorProductController::class)->group(function () {
             Route::get('/product/create', 'index')->name('vendor.product');
             Route::get('/product/manage', 'manage')->name('vendor.product.manage');
-            Route::post('/product/store','store_product')->name('vendor.product.store');
+            Route::post('/product/store', 'store_product')->name('vendor.product.store');
             Route::get('/product/{id}', 'show_single_product')->name('vendor.product.show');
             Route::put('/product/update/{id}', 'update_product')->name('vendor.update.product');
             Route::delete('/product/delete/{id}', 'delete_product')->name('vendor.product.delete');
@@ -184,10 +199,11 @@ Route::middleware(['auth', 'verified', 'rolemanager:customer'])->group(function 
             Route::get('/order/history', 'history')->name('customer.history');
             Route::get('/setting/payment', 'payment')->name('customer.payment');
             Route::get('/affiliate', 'affiliate')->name('customer.affiliate');
-
         });
-
     });
+
+
+  
 });
 
 Route::middleware('auth')->group(function () {
