@@ -11,7 +11,7 @@
                 <ul id="category-sidebar-list" class="category-sidebar-list">
                     @foreach ($categories as $category)
                         <li class="has-sub">
-                            <a href="#">{{ $category->category_name }}</a>
+                            <a href="{{ route('user.show.category', $category->slug) }}">{{ $category->category_name }}</a>
                             <ul class="subcategory-dropdown">
                                 @foreach ($category->subcategories as $subcategory)
                                     <li><a href="#">{{ $subcategory->subcategory_name }}</a></li>
@@ -161,10 +161,10 @@
                             </div>
 
                             {{-- <div class="product-actions">
-                            <button class="btn btn-primary add-to-cart-button">
-                                <i class="fas fa-cart-plus"></i> Add to Cart
-                            </button>
-                        </div> --}}
+                                <button class="btn btn-primary add-to-cart-button">
+                                    <i class="fas fa-cart-plus"></i> Add to Cart
+                                </button>
+                            </div> --}}
                         </div>
                     </a>
                 @endforeach
@@ -207,8 +207,7 @@
 
                 <div class="section-header">
                     <h2>{{ $category->category_name }}</h2>
-                    <a href="/category/kitchen-cleaners" class="view-all-link">Shop more <i
-                            class="fas fa-arrow-right"></i></a>
+                    <a href="/category/kitchen-cleaners" class="view-all-link">Shop more <i class="fas fa-arrow-right"></i></a>
                 </div>
                 <div class="product-grid product-grid-horizontal" id="product-grid-featured-2">
                     <!-- Static Example Product Cards -->
@@ -265,10 +264,10 @@
                                         </p>
                                     </div>
                                     {{-- <div class="product-actions">
-                                    <button class="btn btn-primary add-to-cart-button">
-                                        <i class="fas fa-cart-plus"></i> Add to Cart
-                                    </button>
-                                </div> --}}
+                                        <button class="btn btn-primary add-to-cart-button">
+                                            <i class="fas fa-cart-plus"></i> Add to Cart
+                                        </button>
+                                    </div> --}}
                                 </div>
                             </a>
                         @endforeach
@@ -339,7 +338,7 @@
     </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             new Swiper('.heroSwiper', {
                 loop: true,
                 autoplay: {

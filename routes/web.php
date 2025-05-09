@@ -20,6 +20,7 @@ use App\Http\Controllers\MasterBrandContoller;
 use App\Http\Controllers\MasterCategoryController;
 use App\Http\Controllers\MasterSubCategoryController;
 use App\Http\Controllers\WishlistController;
+use App\Http\Controllers\CustomerCategoryController;
 use App\Models\HomePageSetting;
 use Illuminate\Support\Facades\Route;
 
@@ -38,6 +39,9 @@ Route::controller(CustomerProductController::class)->group(function () {
     Route::post('/product/review/{slug}', 'addReview')->name('product.review');
 });
 
+Route::controller(CustomerCategoryController::class)->group(function () {
+    Route::get('/category/{slug}', 'index')->name('user.show.category');
+});
 
 Route::controller(CartController::class)->group(function () {
     Route::get('/cart', 'index')->name('user.cart');
@@ -201,9 +205,6 @@ Route::middleware(['auth', 'verified', 'rolemanager:customer'])->group(function 
             Route::get('/affiliate', 'affiliate')->name('customer.affiliate');
         });
     });
-
-
-  
 });
 
 Route::middleware('auth')->group(function () {

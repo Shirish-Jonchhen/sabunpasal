@@ -1,5 +1,5 @@
 @extends('layouts.user')
-@section('user_page_title', 'Sabun Pasal - {{ $product->name }}')
+@section('user_page_title', 'Sabun Pasal - ' . $product->name)
 
 @section('user_content')
     <style>
@@ -64,7 +64,7 @@
                 <h2 id="reviews" class="info-tab-header">Reviews</h2>
                 <div class="info-tab-content reviews-section">
 
-                    <div class="reviews-summary" >
+                    <div class="reviews-summary">
                         <h4>Overall Rating</h4>
                         <div class="average-rating">
                             <span class="rating-value">{{ number_format($averageReviews, 2) }}</span>
@@ -118,16 +118,18 @@
 
                             <div class="form-group">
                                 <label for="review-text">Your Review:</label>
-                                <textarea id="review-text" name="review" rows="4" placeholder="Tell us what you think..."></textarea>
+                                <textarea id="review-text" name="review" rows="4"
+                                    placeholder="Tell us what you think..."></textarea>
                             </div>
                             @if (Auth::user())
-                            <button type="submit" class="btn btn-secondary">Submit Review</button>
+                                <button type="submit" class="btn btn-secondary">Submit Review</button>
                             @else
-                            <button type="button" class="btn btn-secondary" onclick="event.preventDefault(); openLoginModal();">Submit Review</button>
+                                <button type="button" class="btn btn-secondary"
+                                    onclick="event.preventDefault(); openLoginModal();">Submit Review</button>
 
                             @endif
 
-                            
+
                         </form>
                     </div>
 
@@ -136,12 +138,12 @@
                         <!-- Static Review Examples -->
 
                         @if ($reviews->isEmpty())
-                        <div class="no-reviews-message text-center p-4 border rounded bg-light">
-                            <p class="mb-0 text-muted">
-                                <i class="fas fa-comment-dots me-2 text-secondary"></i>
-                                No reviews yet. <strong>Be the first to review this product!</strong>
-                            </p>
-                        </div>
+                            <div class="no-reviews-message text-center p-4 border rounded bg-light">
+                                <p class="mb-0 text-muted">
+                                    <i class="fas fa-comment-dots me-2 text-secondary"></i>
+                                    No reviews yet. <strong>Be the first to review this product!</strong>
+                                </p>
+                            </div>
                         @else
                             @foreach ($reviews as $review)
                                 <div class="review-item">
@@ -162,12 +164,12 @@
                                     <p class="review-text">{{ $review->review }}</p>
                                 </div>
                             @endforeach
-                             <!-- Add more static reviews -->
-                        <a href="#" class="view-all-link">View All Reviews</a>
+                            <!-- Add more static reviews -->
+                            <a href="#" class="view-all-link">View All Reviews</a>
                         @endif
 
 
-                       
+
                     </div>
 
                 </div>
