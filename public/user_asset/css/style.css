@@ -2330,7 +2330,7 @@ ul {
     .search-bar {
         order: 3; /* Move search below logo/actions on wrap */
         width: 100%;
-        margin: 0.5rem 0 0 0; /* Adjust margin when wrapped */
+        margin: 0.5rem 0 0.5rem 0; /* Adjust margin when wrapped */
     }
     .header-actions { order: 2; } /* Keep actions on right */
     .logo { order: 1; }
@@ -2498,7 +2498,7 @@ ul {
 
      .logo { font-size: 1.5rem; }
      .logo-icon { font-size: 1.7rem; }
-     .search-bar { margin: 0.5rem 0 0 0; }
+     .search-bar { margin: 0.5rem 0 0.5rem 0; }
 
      .header-actions { gap: 0.8rem; }
      .header-action-link i { font-size: 1.1rem; }
