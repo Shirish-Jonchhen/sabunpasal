@@ -11,10 +11,13 @@
                 <ul id="category-sidebar-list" class="category-sidebar-list">
                     @foreach ($categories as $category)
                         <li class="has-sub">
-                            <a href="{{ route('user.show.category', $category->slug) }}">{{ $category->category_name }}</a>
+                            <a href="#" onclick="event.preventDefault();">
+                                {{ $category->category_name }}
+                            </a>
                             <ul class="subcategory-dropdown">
+                                <li><a href="{{ route('user.show.category', $category->slug) }}" class="fw-bold border-bottom pb-2 mb-1">{{ $category->category_name }}</a></li>
                                 @foreach ($category->subcategories as $subcategory)
-                                    <li><a href="#">{{ $subcategory->subcategory_name }}</a></li>
+                                    <li><a href="{{ route('user.show.subcategory', $subcategory->slug) }}">{{ $subcategory->subcategory_name }}</a></li>
                                 @endforeach
                             </ul>
                         </li>
@@ -124,7 +127,8 @@
                             <div class="product-info">
                                 <span class="product-category">{{ $product->category->category_name }} -
                                     {{ $product->subcategory->subcategory_name }}</span>
-                                <h3 class="product-name" title="Sparkle All-Purpose Cleaner">Sparkle All-Purpose Cleaner
+                                <h3 class="product-name" title="Sparkle All-Purpose Cleaner">
+                                    {{ $product->name }}
                                 </h3>
                                 <p class="product-old-price">
                                     @php
@@ -278,19 +282,6 @@
             </section>
             <!-- Category Wise Peoduct -->
         @endforeach
-
-
-
-
-
-
-
-
-
-
-
-
-
 
         <!-- Brands Section (Static Example) -->
         <section class="brands-section container">

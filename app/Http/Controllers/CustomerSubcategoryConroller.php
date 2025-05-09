@@ -3,16 +3,16 @@
 namespace App\Http\Controllers;
 
 use App\Models\Brand;
-use App\Models\Category;
 use App\Models\ProductVariant;
+use App\Models\SubCategory;
 use Illuminate\Http\Request;
 
-class CustomerCategoryController extends Controller
+class CustomerSubcategoryConroller extends Controller
 {
     public function index(Request $request, $slug)
     {
-        $category = Category::where('slug', $slug)->firstOrFail();
-        $query = $category->products()->with(['variants.prices', 'subcategory', 'category']);
+            $subcategory = SubCategory::where('slug', $slug)->firstOrFail();
+        $query = $subcategory->products()->with(['variants.prices', 'subcategory', 'category']);
 
         // Subcategory Filter
         if ($request->has('subcategories')) {
@@ -78,6 +78,7 @@ class CustomerCategoryController extends Controller
         $products = $query->paginate(9)->appends($request->query());
         $brands = Brand::all();
 
-        return view('customer.category.category', compact('category', 'products', 'brands'));
+        return view('customer.subcategory.subcategory', compact('subcategory', 'products', 'brands'));
+
     }
 }

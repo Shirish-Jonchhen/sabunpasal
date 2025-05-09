@@ -11,7 +11,10 @@ class CartController extends Controller
     public function index()
     {
 
-
-        return view('customer.cart.cart');
+        if (Auth::check()) {
+            return view('customer.cart.cart');
+        }else{
+            return redirect()->route('home')->withErrors('Please login to view your cart.');
+        }
     }
 }

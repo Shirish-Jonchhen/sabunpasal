@@ -1,25 +1,25 @@
 @extends('layouts.user')
-@section('user_page_title', 'Sabun Pasal - ' . $category->category_name)
+@section('user_page_title', 'Sabun Pasal - ' . $subcategory->subcategory_name)
 
 @section('user_content')
-
     <div class='container'>
         <!-- Breadcrumbs -->
         <nav aria-label="breadcrumb" class="breadcrumbs">
             <ol>
                 <li><a href="{{ route('home') }}">Home</a></li>
-                <li aria-current="page">{{ $category->category_name }}</li>
+                <li> <a href="{{ route('user.show.category', $subcategory->category->slug) }}">{{$subcategory->category->category_name }}</a></li>
+                <li aria-current="page">{{ $subcategory->subcategory_name }}</li>
             </ol>
         </nav>
 
-        <form method="GET" action="{{ route('user.show.category', $category->slug) }}">
+        <form method="GET" action="{{ route('user.show.subcategory', $subcategory->slug) }}">
             <div class="category-page-layout">
 
                 <aside class="filter-sidebar">
                     <button class="sidebar-toggle-off-btn" type="button" onclick="toggleSidebar()">X</button>
                     <h3>Filter By</h3>
 
-                    <!-- Subcategories -->
+                    {{-- <!-- Subcategories -->
                     <div class="filter-group">
                         <h4>Sub Categories</h4>
                         <ul class="filter-list">
@@ -34,7 +34,7 @@
                                 </li>
                             @endforeach
                         </ul>
-                    </div>
+                    </div> --}}
 
                     <!-- Price Range -->
                     <div class="filter-group">
@@ -77,7 +77,7 @@
                 <section class="product-listing-content">
 
                     <div class="category-content-header">
-                        <h1>{{ $category->category_name }}</h1>
+                        <h1>{{ $subcategory->subcategory_name }}</h1>
                         <div class="sidebar-toggle-btn" onclick="toggleSidebar()">
                             <i class="fas fa-filter"></i>
                         </div>

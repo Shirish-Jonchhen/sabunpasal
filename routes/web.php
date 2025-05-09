@@ -21,6 +21,7 @@ use App\Http\Controllers\MasterCategoryController;
 use App\Http\Controllers\MasterSubCategoryController;
 use App\Http\Controllers\WishlistController;
 use App\Http\Controllers\CustomerCategoryController;
+use App\Http\Controllers\CustomerSubcategoryConroller;
 use App\Models\HomePageSetting;
 use Illuminate\Support\Facades\Route;
 
@@ -41,6 +42,10 @@ Route::controller(CustomerProductController::class)->group(function () {
 
 Route::controller(CustomerCategoryController::class)->group(function () {
     Route::get('/category/{slug}', 'index')->name('user.show.category');
+});
+
+Route::controller(CustomerSubcategoryConroller::class)->group(function () {
+    Route::get('/subcategory/{slug}', 'index')->name('user.show.subcategory');
 });
 
 Route::controller(CartController::class)->group(function () {

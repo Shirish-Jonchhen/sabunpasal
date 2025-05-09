@@ -25,8 +25,8 @@
         <nav aria-label="breadcrumb" class="breadcrumbs">
             <ol>
                 <li><a href="{{ route('home') }}">Home</a></li>
-                <li><a href="#">{{ $product->category->category_name }}</a></li>
-                <li><a href="#">{{ $product->subcategory->subcategory_name }}</a></li>
+                <li><a href="{{ route('user.show.category',$product->category->slug) }}">{{ $product->category->category_name }}</a></li>
+                <li><a href="{{ route('user.show.subcategory',$product->subcategory->slug) }}">{{ $product->subcategory->subcategory_name }}</a></li>
                 <li aria-current="page">{{ $product->name }}</li>
             </ol>
         </nav>

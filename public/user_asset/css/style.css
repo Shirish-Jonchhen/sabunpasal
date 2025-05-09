@@ -784,6 +784,8 @@ ul {
 
 /* Product Card */
 .product-card {
+    height: 100%;
+    min-height: 0px;
     background-color: var(--card-background);
     border: 1px solid var(--border-color);
     border-radius: var(--border-radius);
@@ -1700,7 +1702,7 @@ ul {
     color: var(--accent-color);
 }
 .breadcrumbs li::after {
-    content: '/';
+    content: '>';
     margin-left: 0.5rem;
     color: var(--muted-text-color);
 }
@@ -2372,6 +2374,8 @@ ul {
 
         flex-direction: column;
         /* display: none; */
+
+
     }
     .filter-sidebar, .product-listing-content {
         width: 100%;
@@ -2652,14 +2656,15 @@ ul {
 
 /* Filter Sidebar */
 .filter-sidebar {
-    width: 25%; /* Adjust as needed */
-    min-width: 240px;
+    /* width: 60%;  */
+    min-width: 290px;
     background-color: var(--card-background);
     padding: 1.5rem;
     border-radius: var(--border-radius);
     box-shadow: var(--shadow-sm);
     border: 1px solid var(--border-color);
     align-self: flex-start; /* Stick to top */
+    position: relative;
 }
 
 .filter-sidebar h3 {
@@ -2819,6 +2824,91 @@ ul {
     background-color: var(--primary-color);
     color: white;
     border-color: var(--primary-color);
+}
+
+/* Responsive: Hide sidebar below 992px */
+@media (max-width: 992px) {
+    .filter-sidebar {
+        /* REMOVE display: none */
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 100vh;
+        width: 80%;
+        max-width: 300px;
+        background-color: var(--card-background);
+        z-index: 1000;
+        overflow-y: auto;
+        transform: translateX(-100%);
+        transition: transform 0.3s ease-in-out;
+    }
+
+    .filter-sidebar.active {
+        transform: translateX(0);
+    }
+
+    .category-page-layout {
+        flex-direction: column;
+    }
+
+    .product-listing-content {
+        width: 100%;
+    }
+
+    .sidebar-toggle-btn {
+        display: block !important;
+        background-color: var(--primary-color);
+        color: white;
+        padding: 0.5rem 1rem;
+        border: none;
+        border-radius: var(--border-radius);
+        cursor: pointer;
+        width: fit-content;
+        height: fit-content;
+        margin-bottom: 1rem;
+        z-index: 1001;
+        top: 10px;
+        left: 10px;
+    }
+
+    .sidebar-toggle-off-btn {
+        display: block !important;
+        position: fixed;
+        top: 10px;
+        right: 10px;
+        background-color: var(--card-background);
+        color: var(--accent-color);
+        padding: 0.5rem 1rem;
+        border: none;
+        border-radius: 50%;
+        cursor: pointer;
+        z-index: 1002;
+    }
+}
+
+.sidebar-toggle-off-btn{
+    position: absolute;
+    top: 0;
+    right: 0;
+    display: none;
+    background-color: var(--card-background);
+    color: var(--accent-color);
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    margin-bottom: 1rem;
+}
+/* Default hidden toggle button */
+.sidebar-toggle-btn {
+    display: none;
+    background-color: var(--primary-color);
+    color: white;
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    margin-bottom: 1rem;
 }
 
 /* Checkbox */
