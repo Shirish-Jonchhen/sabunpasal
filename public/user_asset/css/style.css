@@ -1229,6 +1229,11 @@ ul {
     bottom: 30px; /* Slide up */
 }
 
+.list-group-item:hover {
+    background-color: var(--light-background);
+    color: var(--primary-color);
+}
+
 
 /* --- Adjustments for Pages Other than Home --- */
 /* (Keep existing styles for cart, checkout, etc., ensure they don't conflict heavily) */

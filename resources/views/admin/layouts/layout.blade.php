@@ -108,6 +108,38 @@
                     </li>
 
                     <li class="sidebar-header">
+                        District
+                    </li>
+
+                    <li class="sidebar-item {{ request()->routeIs('district.create') ? 'active' : '' }}">
+                        <a class="sidebar-link" href="{{ route('district.create') }}">
+                            <i class="align-middle" data-feather="plus-circle"></i> <span
+                                class="align-middle">Create</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-item {{ request()->routeIs('district.manage') ? 'active' : '' }}">
+                        <a class="sidebar-link" href="{{ route('district.manage') }}">
+                            <i class="align-middle" data-feather="sliders"></i> <span class="align-middle">Manage</span>
+                        </a>
+                    </li>
+
+                    <li class="sidebar-header">
+                        Municipality
+                    </li>
+
+                    <li class="sidebar-item {{ request()->routeIs('subcategory.create') ? 'active' : '' }}">
+                        <a class="sidebar-link" href="{{ route('subcategory.create') }}">
+                            <i class="align-middle" data-feather="plus-circle"></i> <span
+                                class="align-middle">Create</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-item {{ request()->routeIs('subcategory.manage') ? 'active' : '' }}">
+                        <a class="sidebar-link" href="{{ route('subcategory.manage') }}">
+                            <i class="align-middle" data-feather="sliders"></i> <span class="align-middle">Manage</span>
+                        </a>
+                    </li>
+
+                    <li class="sidebar-header">
                         Attribute
                     </li>
 

@@ -144,15 +144,17 @@
                 <span class="logo-text">CleanSweep Mart</span>
             </a>
 
-            <div class="search-bar">
+            <livewire:customer.search-bar />
+
+            {{-- <div class="search-bar">
                 <!-- Basic search form - point action to your Laravel search route -->
-                <form action="/search" method="GET" style="display: flex; width: 100%;">
+                <form action="" style="display: flex; width: 100%;">
                     <input type="text" name="query" placeholder="Search for products..." class="search-input-main"
-                        aria-label="Search products">
+                        aria-label="Search products" wire:model.live="search">
                     <button type="submit" class="search-button" aria-label="Submit search"><i
                             class="fas fa-search"></i></button>
                 </form>
-            </div>
+            </div> --}}
 
             <div class="header-actions">
                 @if (Auth::user())

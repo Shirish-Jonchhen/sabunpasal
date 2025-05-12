@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AddressController;
 use App\Http\Controllers\Admin\AdminMainController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\HomePageSettingController;
@@ -22,6 +23,7 @@ use App\Http\Controllers\MasterSubCategoryController;
 use App\Http\Controllers\WishlistController;
 use App\Http\Controllers\CustomerCategoryController;
 use App\Http\Controllers\CustomerSubcategoryConroller;
+use App\Http\Controllers\SearchController;
 use App\Models\HomePageSetting;
 use Illuminate\Support\Facades\Route;
 
@@ -58,6 +60,10 @@ Route::controller(WishlistController::class)->group(function () {
     // Route::post('/product/review/{slug}', 'addReview')->name('product.review');
 });
 
+Route::controller(SearchController::class)->group(function () {
+    Route::get('/all', 'index')->name('user.all.product');
+    // Route::post('/product/review/{slug}', 'addReview')->name('product.review');
+});
 
 
 
@@ -124,6 +130,18 @@ Route::middleware(['auth', 'verified', 'rolemanager:admin'])->group(function () 
             Route::put('/defaultattribute/update/{id}', 'update_attribute')->name('update.attribute');
             Route::delete('/defaultattribute/delete/{id}', 'delete_attribute')->name('delete.attribute');
         });
+
+
+        Route::controller(AddressController::class)->group(function () {
+
+            Route::get('/district/create', 'index')->name('district.create');
+            Route::get('/district/manage', 'manage')->name('district.manage');
+            Route::post('/district/store', 'create_district')->name('district.store');
+            // Route::get('/district/{id}', 'show_single_district')->name('show.district');
+            // Route::put('/district/update/{id}', 'update_attribute')->name('update.attribute');
+            Route::delete('/district/delete/{id}', 'delete_district')->name('delete.district');
+        });
+
 
         Route::controller(ProductDiscountController::class)->group(function () {
 
