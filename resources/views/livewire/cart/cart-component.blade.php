@@ -53,12 +53,12 @@
                         <div class="cart-item-quantity">
                             <button class="quantity-decrease" title="Decrease quantity"
                                 aria-label="Decrease quantity of Sparkle All-Purpose Cleaner"
-                                wire:click = 'subtractQuantity({{ $item->id }})'>-</button>
+                                wire:click='subtractQuantity({{ $item->id }})'>-</button>
                             <input type="number" value="{{ $item->quantity }}" min="1" class="quantity-input"
                                 aria-label="Quantity for Sparkle All-Purpose Cleaner" readonly>
                             <button class="quantity-increase" title="Increase quantity"
                                 aria-label="Increase quantity of Sparkle All-Purpose Cleaner"
-                                wire:click = 'addQuantity({{ $item->id }})'>+</button>
+                                wire:click='addQuantity({{ $item->id }})'>+</button>
                         </div>
                         <div class="cart-item-subtotal">
                             <span>NRs.{{ $item->variantPrice->price * $item->quantity }}</span>
@@ -97,7 +97,7 @@
 
             <div class="summary-row total">
                 <span>Total:</span>
-                <span id="cart-total">NRs.{{ $totalPrice }}</span> <!-- JS updates this -->
+                <span id="cart-total">NRs. {{ $totalPrice }}</span> <!-- JS updates this -->
             </div>
             <div class="cart-actions">
                 <button class="btn btn-danger" id="clear-cart-button">Clear Cart</button>
@@ -123,32 +123,32 @@
     <script>
         let itemToRemove = null;
         let clearCartFlag = false;
-    
+
         function confirmRemoveItem(itemId) {
             itemToRemove = itemId;
             clearCartFlag = false;
-    
+
             document.getElementById('modal-title').innerText = "Remove Item from Cart?";
             document.getElementById('modal-message').innerText = "Are you sure you want to remove this item?";
             document.getElementById('confirmation-modal').style.display = 'flex';
         }
-    
+
         document.addEventListener('DOMContentLoaded', function () {
             const clearCartButton = document.getElementById('clear-cart-button');
             const confirmationModal = document.getElementById('confirmation-modal');
             const confirmActionButton = document.getElementById('confirm-action');
             const cancelActionButton = document.getElementById('cancel-action');
-    
+
             // Clear cart setup
             clearCartButton.addEventListener('click', function () {
                 clearCartFlag = true;
                 itemToRemove = null;
-    
+
                 document.getElementById('modal-title').innerText = "Clear Cart?";
                 document.getElementById('modal-message').innerText = "Are you sure you want to clear your cart?";
                 confirmationModal.style.display = 'flex';
             });
-    
+
             // Confirm action
             confirmActionButton.addEventListener('click', function () {
                 if (clearCartFlag) {
@@ -156,12 +156,12 @@
                 } else if (itemToRemove !== null) {
                     @this.call('removeItem', itemToRemove);
                 }
-    
+
                 confirmationModal.style.display = 'none';
                 itemToRemove = null;
                 clearCartFlag = false;
             });
-    
+
             // Cancel action
             cancelActionButton.addEventListener('click', function () {
                 confirmationModal.style.display = 'none';
@@ -170,5 +170,5 @@
             });
         });
     </script>
-    
+
 </div>

@@ -28,11 +28,13 @@ class ProductVariant extends Component
 
     public $showMessage = false;
     public $isInWishlist = false;
+    public $averageReviews = 0;
 
 
-    public function mount($slug)
+    public function mount($slug, $averageReviews)
     {
         $this->slug = $slug;
+        $this->averageReviews = $averageReviews;
         $this->product = Product::where('slug', $this->slug)->with('variants.prices', 'variants.images')->first();
 
         if ($this->product && $this->product->variants->isNotEmpty()) {

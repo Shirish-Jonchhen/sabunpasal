@@ -919,7 +919,7 @@ ul {
 .product-name {
     font-size: 1rem; /* Slightly smaller name */
     font-weight: 600;
-    margin-bottom: 0.5rem;
+    /* margin-bottom: 0rem; */
     color: var(--text-color);
      /* Clamp text to 2 lines */
     display: -webkit-box;
@@ -927,8 +927,8 @@ ul {
     -webkit-box-orient: vertical;
     overflow: hidden;
     text-overflow: ellipsis;
-    height: 2.6em; /* Adjust based on line-height */
-    line-height: 1.3em;
+    /* height: 2.6em; Adjust based on line-height */
+    /* line-height: 1.3em; */
 }
 
 .product-description {
@@ -1467,9 +1467,6 @@ ul {
     margin-top: 2rem;
 }
 /* Re-use product-card styles */
-.wishlist-grid .product-card .product-actions .btn-primary {
-    /* Style "Move to Cart" button if needed */
-}
 .remove-sale-tag { /* Explicit remove button on wishlist */
     margin-top: 0.5rem;
     background-color: var(--danger-color);
@@ -2226,7 +2223,7 @@ ul {
 
 
 .write-review {
-    margin-bottom: 2rem;
+    margin-bottom: 0rem;
     padding-bottom: 1.5rem;
     border-bottom: 1px solid var(--border-color);
 }
@@ -2450,6 +2447,7 @@ ul {
      .icon-nav-item i { font-size: 1.8rem; }
 
     .product-grid { grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 1rem; }
+    .wishlist-grid { grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 1rem; }
     .product-grid-horizontal { grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 1rem; }
     .product-name { font-size: 0.9rem; height: 2.4em; line-height: 1.2em; }
     .product-price { font-size: 1rem; }
@@ -2521,6 +2519,7 @@ ul {
      .icon-nav-item i { font-size: 1.6rem; width: 45px; height: 45px; line-height: 45px;}
 
     .product-grid { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); }
+    .wishlist-grid { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); }
     .product-grid-horizontal { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); }
 
     .full-width-banner-content h3 { font-size: 1.2rem; }

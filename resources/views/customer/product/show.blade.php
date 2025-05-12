@@ -25,8 +25,12 @@
         <nav aria-label="breadcrumb" class="breadcrumbs">
             <ol>
                 <li><a href="{{ route('home') }}">Home</a></li>
-                <li><a href="{{ route('user.show.category',$product->category->slug) }}">{{ $product->category->category_name }}</a></li>
-                <li><a href="{{ route('user.show.subcategory',$product->subcategory->slug) }}">{{ $product->subcategory->subcategory_name }}</a></li>
+                <li><a
+                        href="{{ route('user.show.category', $product->category->slug) }}">{{ $product->category->category_name }}</a>
+                </li>
+                <li><a
+                        href="{{ route('user.show.subcategory', $product->subcategory->slug) }}">{{ $product->subcategory->subcategory_name }}</a>
+                </li>
                 <li aria-current="page">{{ $product->name }}</li>
             </ol>
         </nav>
@@ -34,7 +38,8 @@
         <!-- Product Display Area -->
 
         <!-- Product Display Area -->
-        <livewire:product.product-variant :slug="$product->slug" />
+        <livewire:product.product-variant :slug="$product->slug" :averageReviews="$averageReviews" />
+
 
         <!-- Offer Section (Static Example) -->
         <section class="offer-banner-section container">
@@ -165,7 +170,11 @@
                                 </div>
                             @endforeach
                             <!-- Add more static reviews -->
-                            <a href="#" class="view-all-link">View All Reviews</a>
+                            @if($reviews->count() > 2)
+                                <a href="#" class="view-all-link">View All Reviews</a>
+                            @else
+                                <div class="view-all-link">No More Reviews</div>
+                            @endif
                         @endif
 
 
@@ -301,25 +310,68 @@
             </div>
             <div class="product-grid product-grid-horizontal" id="product-grid-viewed">
                 <!-- Static Example - In a real app, JS populates this -->
-                <div class="product-card" data-product-id="prod_006">
-                    <div class="product-image-container">
-                        <img src="https://picsum.photos/seed/prod_006/300/300" alt="Shine Bright Floor Cleaner"
-                            class="product-image">
-                        <button class="wishlist-button" title="Add to Wishlist"><i class="fas fa-heart"></i></button>
+                @foreach ($recentViews as $item)
+                    <a href="{{ route('product.show', $item->product->slug) }}" class="product-link">
+                        <div class="product-card" data-product-id="prod_001">
+                            <div class="product-image-container">
+                                <img src="{{ asset('storage/' . $item->product->variants->first()->images->first()?->image_path) }}"
+                                    alt="Sparkle All-Purpose Cleaner" class="product-image ">
+                                @if ($item->product->is_on_sale)
+                                    <div class="sale-tag">
+                                        SALE 🔥
+                                    </div>
+                                @endif
+
+                            </div>
+                            <div class="product-info">
+                                <span class="product-category">{{ $item->product->category->category_name }} -
+                                    {{ $item->product->subcategory->subcategory_name }}</span>
+                                <h3 class="product-name" title="Sparkle All-Purpose Cleaner">
+                                    {{ $item->product->name }}
+                                </h3>
+                                <p class="product-old-price">
+                                    @php
+                                        $lowestOldPrice =
+                                            $item->product->variants->flatMap->prices->sortBy('old_price')->first()
+                                                ->old_price ?? '0.00';
+                                        $highestOldPrice =
+                                            $item->product->variants->flatMap->prices->sortByDesc('old_price')->first()
+                                                ->old_price ?? '0.00';
+                                    @endphp
+
+                                    @if ($lowestOldPrice == $highestOldPrice)
+                                        NRs.{{ $lowestOldPrice }}
+                                    @else
+                                        NRs.{{ $lowestOldPrice }} - NRs.{{ $highestOldPrice }}
+                                    @endif
+                                </p>
+                                <p class="product-price">
+                                    @php
+                                        $lowestPrice =
+                                            $item->product->variants->flatMap->prices->sortBy('price')->first()->price ??
+                                            '0.00';
+                                        $highestPrice =
+                                            $item->product->variants->flatMap->prices->sortByDesc('price')->first()->price ??
+                                            '0.00';
+                                    @endphp
+
+                                    @if ($lowestPrice == $highestPrice)
+                                        NRs.{{ $lowestPrice }}
+                                    @else
+                                        NRs.{{ $lowestPrice }} - NRs.{{ $highestPrice }}
+                                    @endif
+                                </p>
+                            </div>
+                        </div>
+                    </a>
+
+                @endforeach
+
+                @if($recentViews->count() < 4)
+                    <div class="product-card-placeholder" style="min-height: 350px;">
+                        <p>Your recently viewed items will appear here.</p>
                     </div>
-                    <div class="product-info">
-                        <span class="product-category">Floor Care</span>
-                        <h3 class="product-name">Shine Bright Floor Cleaner</h3>
-                        <p class="product-price">$9.99</p>
-                    </div>
-                    <div class="product-actions">
-                        <button class="btn btn-primary add-to-cart-button"><i class="fas fa-cart-plus"></i> Add to
-                            Cart</button>
-                    </div>
-                </div>
-                <div class="product-card-placeholder" style="min-height: 350px;">
-                    <p>Your recently viewed items will appear here.</p>
-                </div>
+                @endif
                 <!-- JS would add more cards here -->
             </div>
         </section>

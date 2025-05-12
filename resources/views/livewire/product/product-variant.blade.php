@@ -27,18 +27,19 @@
                 @if (Auth::user())
                     <button class="wishlist-button product-detail-wishlist" title="Add to Wishlist"
                         aria-label="Toggle Wishlist" data-product-id="{{ $product->id }}" wire:click="addToWishlist">
-                        <i class="fas fa-heart" style = 'color: {{ $isInWishlist ? 'red' : '#666666' }} ;'></i>
+                        <i class="fas fa-heart" style='color: {{ $isInWishlist ? 'red' : '#666666' }} ;'></i>
                     </button>
                 @else
-                <button class="wishlist-button product-detail-wishlist" title="Add to Wishlist"
-                aria-label="Toggle Wishlist" data-product-id="{{ $product->id }}" onclick="event.preventDefault(); openLoginModal();">
-                {{-- <i class="fas fa-heart" style = 'color: {{ $isInWishlist ? 'red' : '#666666' }} ;'></i> --}}
-                <i class="fas fa-heart" style = 'color: {{ $isInWishlist ? 'red' : '#666666' }} ;'></i>
+                    <button class="wishlist-button product-detail-wishlist" title="Add to Wishlist"
+                        aria-label="Toggle Wishlist" data-product-id="{{ $product->id }}"
+                        onclick="event.preventDefault(); openLoginModal();">
+                        {{-- <i class="fas fa-heart" style='color: {{ $isInWishlist ? ' red' : '#666666' }} ;'></i> --}}
+                        <i class="fas fa-heart" style='color: {{ $isInWishlist ? 'red' : '#666666' }} ;'></i>
 
-            </button>
+                    </button>
 
                 @endif
-                
+
 
 
 
@@ -52,7 +53,7 @@
             </div>
         </div>
         <script>
-            document.addEventListener("DOMContentLoaded", function() {
+            document.addEventListener("DOMContentLoaded", function () {
                 const firstThumbnail = document.querySelector('.thumbnail');
                 if (firstThumbnail) {
                     firstThumbnail.classList.add('selected');
@@ -67,7 +68,7 @@
 
                 // Remove the 'selected' class from all thumbnails
                 var thumbnails = document.querySelectorAll('.thumbnail');
-                thumbnails.forEach(function(thumb) {
+                thumbnails.forEach(function (thumb) {
                     thumb.classList.remove('selected');
                 });
 
@@ -112,12 +113,16 @@
             <h1 class="product-title">{{ $product->name }}</h1>
             <div class="product-rating">
                 <!-- Static Stars Example -->
-                <i class="fas fa-star rated"></i>
-                <i class="fas fa-star rated"></i>
-                <i class="fas fa-star rated"></i>
-                <i class="fas fa-star rated"></i>
-                <i class="fas fa-star"></i>
-                <a href="#reviews" class="review-link">(15 Reviews)</a>
+                @for ($i = 1; $i <= 5; $i++)
+                    @if ($i <= floor($averageReviews))
+                        <i class="fas fa-star rated"></i>
+                    @elseif ($i - $averageReviews < 1)
+                        <i class="fas fa-star-half-alt rated"></i>
+                    @else
+                        <i class="far fa-star"></i>
+                    @endif
+                @endfor
+                <a href="#reviews" class="review-link">({{ $product->reviews->count() }} Reviews)</a>
                 <span class="separator">|</span>
                 <a href="#reviews" class="write-review-link">Write a Review</a>
             </div>
@@ -199,8 +204,7 @@
 
 
             @if (Auth::user())
-                <a href="#" class="add-to-wishlist-link" data-product-id="{{ $product->id }}"
-                    wire:click="addToWishlist">
+                <a href="#" class="add-to-wishlist-link" data-product-id="{{ $product->id }}" wire:click="addToWishlist">
                     <i class="fas fa-heart"></i>
                     @if ($isInWishlist)
                         Remove from Wishlist
@@ -209,7 +213,8 @@
                     @endif
                 </a>
             @else
-                <a href="#" class="add-to-wishlist-link" data-product-id="{{ $product->id }}" onclick="event.preventDefault(); openLoginModal();">
+                <a href="#" class="add-to-wishlist-link" data-product-id="{{ $product->id }}"
+                    onclick="event.preventDefault(); openLoginModal();">
                     <i class="fas fa-heart"></i>
                     Add to Wishlist
 
