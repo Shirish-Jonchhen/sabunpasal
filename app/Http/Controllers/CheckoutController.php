@@ -147,7 +147,7 @@ class CheckoutController extends Controller
             'order_id' => $order->id,
             'amount' => $order->total_amount,
             'method' => $request->payment_method,
-            'payment_status' => 'unpaid', // Set payment status if applicable
+            'payment_status' => 'pending', // Set payment status if applicable
             'payment_reference' => null, // Set payment reference if applicable
             // 'notes' => $request->note,
             'status' => 'pending',
