@@ -127,14 +127,14 @@
                         Municipality
                     </li>
 
-                    <li class="sidebar-item {{ request()->routeIs('subcategory.create') ? 'active' : '' }}">
-                        <a class="sidebar-link" href="{{ route('subcategory.create') }}">
+                    <li class="sidebar-item {{ request()->routeIs('municipality.create') ? 'active' : '' }}">
+                        <a class="sidebar-link" href="{{ route('municipality.create') }}">
                             <i class="align-middle" data-feather="plus-circle"></i> <span
                                 class="align-middle">Create</span>
                         </a>
                     </li>
-                    <li class="sidebar-item {{ request()->routeIs('subcategory.manage') ? 'active' : '' }}">
-                        <a class="sidebar-link" href="{{ route('subcategory.manage') }}">
+                    <li class="sidebar-item {{ request()->routeIs('municipality.manage') ? 'active' : '' }}">
+                        <a class="sidebar-link" href="{{ route('municipality.manage') }}">
                             <i class="align-middle" data-feather="sliders"></i> <span class="align-middle">Manage</span>
                         </a>
                     </li>

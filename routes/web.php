@@ -140,6 +140,15 @@ Route::middleware(['auth', 'verified', 'rolemanager:admin'])->group(function () 
             // Route::get('/district/{id}', 'show_single_district')->name('show.district');
             // Route::put('/district/update/{id}', 'update_attribute')->name('update.attribute');
             Route::delete('/district/delete/{id}', 'delete_district')->name('delete.district');
+
+
+
+            Route::get('/municipality/create', 'index_m')->name('municipality.create');
+            Route::get('/municipality/manage', 'manage_m')->name('municipality.manage');
+            Route::post('/municipality/store', 'create_municipality')->name('municipality.store');
+            Route::get('/municipality/{id}', 'show_single_municipality')->name('show.municipality');
+            Route::put('/municipality/update/{id}', 'update_municipality')->name('update.municipality');
+            Route::delete('/municipality/delete/{id}', 'delete_municipality')->name('delete.municipality');
         });
 
 
