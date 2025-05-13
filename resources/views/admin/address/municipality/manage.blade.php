@@ -45,7 +45,8 @@
                                         <td>{{ $m->municipality_name }}</td>
                                         <td>{{ $m->wards->count() }}</td>
                                         <td>
-
+                                            <a href="{{ route('show.municipality', $m->id) }}"
+                                                class="btn btn-primary btn-sm">Edit</a>
                                             <form action="{{ route('delete.municipality', $m->id) }}" method="POST"
                                                 style="display: inline-block;">
 

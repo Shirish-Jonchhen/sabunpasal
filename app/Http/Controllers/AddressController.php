@@ -104,8 +104,9 @@ class AddressController extends Controller
     public function show_single_municipality($id)
     {
         $municipality = Municipality::find($id);
-        if ($municipality) {
-            return view('admin.address.municipality.edit', compact('municipality'));
+        $districts = District::all();
+                if ($municipality) {
+            return view('admin.address.municipality.edit', compact('municipality', 'districts'));
         } else {
             return redirect()->back()->with('error', 'Municipality not found.');
         }

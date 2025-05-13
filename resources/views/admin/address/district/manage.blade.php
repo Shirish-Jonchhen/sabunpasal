@@ -41,6 +41,7 @@
                                         <td> {{$d->id}}</td>
                                         <td>{{ $d->district_name }}</td>
                                         <td>
+                                            
                                         
                                             <form action="{{ route('delete.district', $d->id) }}" method="POST"
                                                 style="display: inline-block;">

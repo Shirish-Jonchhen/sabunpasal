@@ -11,4 +11,9 @@ class District extends Model
     protected $fillable = [
         'district_name',
     ];
+
+    public function municipalities()
+    {
+        return $this->hasMany(Municipality::class);
+    }
 }

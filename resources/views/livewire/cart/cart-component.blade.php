@@ -102,7 +102,7 @@
             <div class="cart-actions">
                 <button class="btn btn-danger" id="clear-cart-button">Clear Cart</button>
                 <!-- Link to checkout page -->
-                <a href="checkout.html" class="btn btn-secondary" id="checkout-button">Proceed to Checkout</a>
+                <a href="{{ route('user.checkout') }}" class="btn btn-secondary" id="checkout-button">Proceed to Checkout</a>
             </div>
         </div>
     </div>

@@ -1,5 +1,5 @@
 @extends('admin.layouts.layout')
-@section('admin_page_title', 'Create Default Attribute - Admin Panel')
+@section('admin_page_title', 'Edit Default Attribute - Admin Panel')
 @section('admin_layout')
     <div class="row">
         <div class="col-12">

@@ -10,6 +10,7 @@ use App\Http\Controllers\Admin\ProductDiscountController;
 use App\Http\Controllers\Admin\SubCategoryController;
 use App\Http\Controllers\BrandController;
 use App\Http\Controllers\CartController;
+use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Vendor\VendorMainController;
 use App\Http\Controllers\Vendor\VendorProductController;
@@ -62,6 +63,13 @@ Route::controller(WishlistController::class)->group(function () {
 
 Route::controller(SearchController::class)->group(function () {
     Route::get('/all', 'index')->name('user.all.product');
+    // Route::post('/product/review/{slug}', 'addReview')->name('product.review');
+});
+
+
+Route::controller(CheckoutController::class)->group(function () {
+    Route::get('/checkout', 'index')->name('user.checkout');
+    Route::post('/checkout/create', 'create_order')->name('user.create.order');
     // Route::post('/product/review/{slug}', 'addReview')->name('product.review');
 });
 
