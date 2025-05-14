@@ -21,7 +21,7 @@
     @livewireStyles
 </head>
 
-<body>
+<body class="relative">
     @if ($errors->any())
         <div id="errorAlert" class="alert alert-danger alert-dismissable show">
             @foreach ($errors->all() as $error)
@@ -117,6 +117,53 @@
     @endif
 
 
+    @if (session('error'))
+        <div id="errorAlerts" class="alert alert-danger alert-dismissable show">
+            <p>{{ session('error') }}</p>
+        </div>
+
+        <style>
+            #errorAlerts {
+                position: fixed;
+                top: 20px;
+                /* right: 0; */
+                left: 50%;
+                transform: translateX(-50%);
+                background-color: rgba(220, 53, 69, 0.95);
+                /* Bootstrap danger with transparency */
+                color: white;
+                padding: 16px 24px;
+                border-radius: 8px;
+                box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+                z-index: 9999;
+                opacity: 1;
+                visibility: visible;
+                transition: opacity 0.5s ease, visibility 0.5s ease;
+                max-width: 90%;
+                width: fit-content;
+                text-align: left;
+            }
+
+            #errorAlerts.fade {
+                opacity: 0;
+                visibility: hidden;
+            }
+
+            #errorAlerts p {
+                margin: 0;
+                padding: 2px 0;
+            }
+        </style>
+
+        <script>
+            setTimeout(function() {
+                const alert = document.getElementById('errorAlerts');
+                if (alert) alert.classList.add('fade');
+            }, 2500);
+        </script>
+    @endif
+
+
     <header class="header">
         <div class="container header-top-bar">
             <span class="announcement"></span>
@@ -187,16 +234,35 @@
                         <span>Cart</span>
                         {{-- <span class="count cart-count" id="cart-count">0</span> --}}
                 @endif
-
-                <a href="#" class="header-action-link"> <!-- Link to account page -->
-                    <i class="fas fa-user"></i>
-                    @if (Auth::user())
-                        <span>{{ explode(' ', Auth::user()->name)[0] }}</span>
-                    @else
-                        <span>Account</span>
-                    @endif
-                    {{-- <span>Account</span> --}}
-                </a>
+                <div x-data="{ open: false }" style="position: relative;">
+                    <a href="#" @click.prevent="open = !open" class="header-action-link ">
+                        <i class="fas fa-user"></i>
+                        @if (Auth::check())
+                            <span>{{ explode(' ', Auth::user()->name)[0] }}</span>
+                        @else
+                            <span>Account</span>
+                        @endif
+                    </a>
+                
+                    <!-- Dropdown -->
+                    <div x-show="open" @click.outside="open = false"
+                         class="bg-white border rounded"
+                         style="position: absolute; width:120px; right: 0; z-index: 10;"
+                         x-transition>
+                        @if (Auth::check())
+                            <a href="" class=" px-2 py-2 hover:bg-gray-100 block">My Account</a><br>
+                            <a href="{{ route('user.orders') }}" class="px-2 py-2 hover:bg-gray-100 block">My Orders</a>
+                            {{-- <form method="POST" action="{{ route('logout') }}">
+                                @csrf
+                                <button type="submit" class="w-full text-left px-4 py-2 hover:bg-gray-100">Logout</button>
+                            </form> --}}
+                        {{-- @else
+                            <a href="{{ route('login') }}" class="px-4 py-2 hover:bg-gray-100 block">Login</a>
+                            <a href="{{ route('register') }}" class="px-4 py-2 hover:bg-gray-100 block">Register</a> --}}
+                        @endif
+                    </div>
+                </div>
+                
             </div>
         </div>
     </header>

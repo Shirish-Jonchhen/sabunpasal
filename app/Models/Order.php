@@ -20,7 +20,7 @@ class Order extends Model
 
     public function user() { return $this->belongsTo(User::class); }
     public function payments() { return $this->hasMany(Payment::class); }
-    public function vendorOrders() { return $this->hasMany(StoreOrder::class); }
+    public function storeOrders() { return $this->hasMany(StoreOrder::class); }
     
     public static function generateTrackingNumber($userId)
     {

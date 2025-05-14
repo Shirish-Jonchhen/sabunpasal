@@ -24,6 +24,7 @@ use App\Http\Controllers\MasterSubCategoryController;
 use App\Http\Controllers\WishlistController;
 use App\Http\Controllers\CustomerCategoryController;
 use App\Http\Controllers\CustomerSubcategoryConroller;
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\SearchController;
 use App\Models\HomePageSetting;
 use Illuminate\Support\Facades\Route;
@@ -70,6 +71,13 @@ Route::controller(SearchController::class)->group(function () {
 Route::controller(CheckoutController::class)->group(function () {
     Route::get('/checkout', 'index')->name('user.checkout');
     Route::post('/checkout/create', 'create_order')->name('user.create.order');
+    // Route::post('/product/review/{slug}', 'addReview')->name('product.review');
+});
+
+
+Route::controller(OrderController::class)->group(function () {
+    Route::get('/orders', 'index')->name('user.orders');
+    Route::get('/orders/{id}', 'show_single_order')->name('user.show.order');
     // Route::post('/product/review/{slug}', 'addReview')->name('product.review');
 });
 

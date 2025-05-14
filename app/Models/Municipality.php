@@ -12,6 +12,7 @@ class Municipality extends Model
     protected $fillable = [
         'district_id',
         'municipality_name',
+        'delivery_charge',
     ];
     public function district()
     {

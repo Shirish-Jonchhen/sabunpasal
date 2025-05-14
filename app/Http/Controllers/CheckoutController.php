@@ -25,15 +25,8 @@ class CheckoutController extends Controller
             $municipalities = Municipality::all();
 
             $cartItems = CartItem::where('user_id', Auth::user()->id)->get();
-            $subtotal = 0;
-            foreach ($cartItems as $item) {
-                $subtotal += $item->variantPrice->price * $item->quantity;
-            }
-            $totalTax = 0;
-            foreach ($cartItems as $item) {
-                $totalTax += (($item->variantPrice->variant->product->tax_rate / 100) * $item->variantPrice->price) * $item->quantity;
-            }
-            return view('customer.checkout.checkout', compact('districts', 'municipalities', 'cartItems', 'subtotal', 'totalTax'));
+           
+            return view('customer.checkout.checkout', compact('districts', 'municipalities', 'cartItems'));
         }
     }
 
@@ -53,6 +46,7 @@ class CheckoutController extends Controller
             'payment_method' => 'required|string|max:255',
             'shipping_method' => 'required|string|max:255',
             'note' => 'nullable|string|max:255',
+            'delivery_charge' => 'nullable|numeric',
         ]);
 
         // Create the order
@@ -85,7 +79,7 @@ class CheckoutController extends Controller
             'ward' => Ward::find($request->ward)->ward_name,
             'street' => $request->address,
             'additional_info' => $request->note,
-            'delivery_charge' => 0, // Set delivery charge if applicable
+            'delivery_charge' => $request->delivery_charge, // Set delivery charge if applicable
             'subtotal' => $subtotal,
             'discount' => $discountAmount,
             'tax' => $totalTax,

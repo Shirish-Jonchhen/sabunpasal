@@ -16,5 +16,6 @@ class StoreOrder extends Model
 
     public function order() { return $this->belongsTo(Order::class); }
     public function store() { return $this->belongsTo(Store::class); }
+    public function storeOrederProducts() { return $this->hasMany(StoreOrderProduct::class); }
 
 }

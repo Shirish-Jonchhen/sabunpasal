@@ -32,6 +32,7 @@
                                     <th scope="col">#</th>
                                     <th scope="col">District</th>
                                     <th scope="col">Municipality</th>
+                                    <th scope="col">Delivery Charge</th>
                                     <th scope="col">No. of Wards</th>
                                     <th scope="col">Action</th>
                                 </tr>
@@ -43,6 +44,7 @@
                                         <td> {{$m->id}}</td>
                                         <td>{{ $m->district->district_name }}</td>
                                         <td>{{ $m->municipality_name }}</td>
+                                        <td>{{ $m->delivery_charge }}</td>
                                         <td>{{ $m->wards->count() }}</td>
                                         <td>
                                             <a href="{{ route('show.municipality', $m->id) }}"

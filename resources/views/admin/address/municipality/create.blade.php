@@ -42,6 +42,9 @@
                         <label for="attribute_value" class="form-label fw-bold mb-2">Number of Wards</label>
                         <input type="number" class="form-control mb-2" name="number_of_wards" placeholder="32">
 
+                        <label for="delivery_charge" class="form-label fw-bold mb-2">Delivery Charge</label>
+                        <input type="number" class="form-control mb-2" name="delivery_charge" placeholder="100">
+
                         <button type="submit" class="btn btn-primary w-100">Add District</button>
 
                     </form>

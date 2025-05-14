@@ -73,11 +73,13 @@ class AddressController extends Controller
             'municipality_name' => 'required|string|max:255|unique:municipalities,municipality_name',
             'district_id' => 'required|exists:districts,id',
             'number_of_wards' => 'required|integer|min:1',
+            'delivery_charge' => 'numeric|min:0',
         ]);
 
         $municipality = Municipality::create([
             'municipality_name' => $request->municipality_name,
             'district_id' => $request->district_id,
+            'delivery_charge' => $request->delivery_charge,
         ]);
 
         for ($i = 1; $i <= $request->number_of_wards; $i++) {
@@ -117,6 +119,7 @@ class AddressController extends Controller
         $request->validate([
             'municipality_name' => 'required|string|max:255|unique:municipalities,municipality_name,' . $id,
             'district_id' => 'required|exists:districts,id',
+            'delivery_charge' => 'numeric|min:0',
             'number_of_wards' => 'required|integer|min:1',
         ]);
 
@@ -125,6 +128,7 @@ class AddressController extends Controller
             $municipality->update([
                 'municipality_name' => $request->municipality_name,
                 'district_id' => $request->district_id,
+                'delivery_charge' => $request->delivery_charge,
             ]);
             return redirect()->back()->with('success', 'Municipality updated successfully.');
         } else {
