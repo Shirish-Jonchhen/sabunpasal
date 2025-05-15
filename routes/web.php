@@ -78,6 +78,7 @@ Route::controller(CheckoutController::class)->group(function () {
 Route::controller(OrderController::class)->group(function () {
     Route::get('/orders', 'index')->name('user.orders');
     Route::get('/orders/{id}', 'show_single_order')->name('user.show.order');
+    Route::put('/orders/cancel/{trackingNumber}', 'cancel_order')->name('user.cancel.order');
     // Route::post('/product/review/{slug}', 'addReview')->name('product.review');
 });
 
@@ -198,6 +199,16 @@ Route::middleware(['auth', 'verified', 'rolemanager:admin'])->group(function () 
             Route::put('/brand/update/{id}', 'update_brand')->name('update.brand');
             Route::delete('/brand/delete/{id}', 'delete_brand')->name('delete.brand');
         });
+
+
+        Route::controller(OrderController::class)->group(function () {
+            Route::get('/orders', 'get_all_orders')->name('admin.orders');
+            Route::get('/orders/{trackingNumber}', 'show_one_order')->name('admin.order.show');
+
+        });
+
+
+
     });
 });
 

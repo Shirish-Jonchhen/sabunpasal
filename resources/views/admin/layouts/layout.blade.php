@@ -21,7 +21,9 @@
 
 
     <link href="{{ asset('admin_asset/css/app.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css" />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     @livewireStyles
 </head>
 
@@ -108,6 +110,16 @@
                     </li>
 
                     <li class="sidebar-header">
+                        Orders
+                    </li>
+
+                    <li class="sidebar-item {{ request()->routeIs('admin.orders') ? 'active' : '' }}">
+                        <a class="sidebar-link" href="{{ route('admin.orders') }}">
+                            <i class="align-middle" data-feather="package"></i> <span class="align-middle">orders</span>
+                        </a>
+                    </li>
+
+                    <li class="sidebar-header">
                         District
                     </li>
 
@@ -171,20 +183,12 @@
                         </a>
                     </li>
 
-                    <li class="sidebar-header">
-                        Product
-                    </li>
-
-                    <li class="sidebar-item {{ request()->routeIs('product.manage') ? 'active' : '' }}">
-                        <a class="sidebar-link" href="{{ route('product.manage') }}">
-                            <i class="align-middle" data-feather="sliders"></i> <span class="align-middle">Manage</span>
-                        </a>
-                    </li>
-                    <li class="sidebar-item {{ request()->routeIs('product.review.manage') ? 'active' : '' }}">
+               
+                    {{-- <li class="sidebar-item {{ request()->routeIs('product.review.manage') ? 'active' : '' }}">
                         <a class="sidebar-link" href="{{ route('product.review.manage') }}">
                             <i class="align-middle" data-feather="star"></i> <span class="align-middle">Review</span>
                         </a>
-                    </li>
+                    </li> --}}
 
                     <li class="sidebar-header">
                         History

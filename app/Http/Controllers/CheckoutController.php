@@ -49,11 +49,6 @@ class CheckoutController extends Controller
             'delivery_charge' => 'nullable|numeric',
         ]);
 
-        // Create the order
-        // 'user_id', 'user_address_id', 'delivery_method', 'place_name', 'municipality', 'ward', 'street',
-        // 'additional_info', 'delivery_charge', 'subtotal', 'discount', 'tax', 'total_amount',
-        // 'payment_status', 'order_status', 'notes', 'order_tracking_number'
-
         $cartItems = CartItem::where('user_id', Auth::user()->id)->get();
         $subtotal = 0;
         foreach ($cartItems as $item) {
@@ -148,16 +143,18 @@ class CheckoutController extends Controller
             // Add other payment-related fields as needed
         ]);
 
+        // Clear the cart after order creation
+        foreach ($cartItems as $item) {
+            $item->delete();
+        }
 
-        // create store order
-        // $store_order = StoreOrder::create([
-        //     'order_id' => $order->id,
-        //     'store_id' => 
-        //     'user_id' => Auth::user()->id,
-        //     'status' => 'pending',
-        // ]);
-        // Create the order logic here
+        //reduce variantPrice quantity by order quantity
+        foreach ($cartItems as $item) {
+            $variantPrice = $item->variantPrice;
+            $variantPrice->stock -= $item->quantity;
+            $variantPrice->save();
+        }
 
-        return redirect()->back()->with('success', 'Order created successfully.');
+        return redirect()->route("user.orders")->with('success', 'Order created successfully.');
     }
 }

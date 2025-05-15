@@ -3,7 +3,7 @@
 
 @section('user_content')
 
-    <div class="container page-content">
+    <div class="container">
         <nav aria-label="breadcrumb" class="breadcrumbs">
             <ol>
                 <li><a href="{{ route('home') }}">Home</a></li>

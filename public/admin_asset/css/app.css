@@ -122,7 +122,38 @@
     --bs-form-valid-color: #1cbb8c;
     --bs-form-valid-border-color: #1cbb8c;
     --bs-form-invalid-color: #dc3545;
-    --bs-form-invalid-border-color: #dc3545
+    --bs-form-invalid-border-color: #dc3545;
+
+
+
+
+    --primary-color: #007788; /* Teal/Turquoise */
+    --secondary-color: #F0A800; /* Orange/Gold Accent */
+    --accent-color: #005566; /* Darker Teal */
+    --background-color: #FFFFFF; /* White */
+    --light-background: #f8f9fa; /* Very light grey for sections */
+    --text-color: #333333;
+    --muted-text-color: #666666;
+    --dark-text-color: #ffffff; /* For dark backgrounds */
+    --border-color: #E0E0E0;
+    --card-background: #FFFFFF;
+    --footer-background: #212529; /* Dark Footer */
+    --footer-text-color: #adb5bd; /* Light grey text for footer */
+    --danger-color: #dc3545;
+    --success-color: #28a745;
+    --warning-color: #ffc107; /* Added Warning for ratings */
+    --toast-background: #333;
+    --toast-text: #fff;
+    --banner-overlay: rgba(0, 0, 0, 0.3); /* Overlay for text contrast */
+    --tag-background: var(--secondary-color);
+    --tag-text: var(--dark-text-color);
+    --link-color: var(--primary-color); /* Consistent link color */
+
+
+    --border-radius: 0.3rem; /* Slightly less rounded */
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+    --transition-speed: 0.3s ease;
 }
 
 *,
@@ -672,6 +703,18 @@ progress {
     .container-sm {
         max-width: 720px
     }
+   
+}
+@media (max-width: 768px) {
+    .order-summary { margin-top: 1.5rem; }
+    .order-header { flex-direction: column; align-items: flex-start; }
+    .order-detail-header { flex-direction: column; align-items: flex-start; }
+    .order-detail-header .order-status { margin-top: 0.5rem; }
+    .order-summary-item { grid-template-columns: auto 1fr; grid-template-rows: auto auto auto; gap: 0.5rem 1rem; }
+    .order-summary-item .item-image { grid-row: 1 / 4; }
+    .order-summary-item .item-info { grid-column: 2 / 3; grid-row: 1 / 2; }
+    .order-summary-item .item-price-qty { grid-column: 2 / 3; grid-row: 2 / 3; text-align: left; }
+    .order-summary-item .item-subtotal { grid-column: 2 / 3; grid-row: 3 / 4; text-align: left; }
 }
 
 @media(min-width:992px) {
@@ -684,6 +727,11 @@ progress {
     }
 }
 
+
+@media(max-width:992px){
+    .order-detail-layout { grid-template-columns: 1fr; }
+    .order-sidebar-details { margin-top: 1.5rem; }
+}
 @media(min-width:1200px) {
 
     .container,
@@ -16096,5 +16144,251 @@ span.flatpickr-weekday {
     top: 0;
     width: 260px
 }
+
+
+
+.order-list {
+    margin-top: 2rem;
+}
+.order-item {
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    margin-bottom: 1.5rem;
+    background-color: var(--background-color);
+    overflow: hidden; /* Ensure consistent styling */
+}
+.order-header {
+    background-color: var(--light-background);
+    padding: 0.8rem 1.2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--border-color);
+    flex-wrap: wrap;
+    gap: 0.5rem 1rem;
+}
+.order-header h3 {
+    margin: 0;
+    font-size: 1.1rem;
+    color: var(--primary-color);
+}
+.order-header span {
+    font-size: 0.85rem;
+    color: var(--muted-text-color);
+}
+.order-header .status {
+     font-weight: 600;
+     padding: 0.2rem 0.5rem;
+     border-radius: var(--border-radius);
+     font-size: 0.8rem;
+}
+
+.order-details .status {
+    font-weight: 600;
+    padding: 0.2rem 0.5rem;
+    border-radius: var(--border-radius);
+    font-size: 0.8rem;
+}
+
+
+/* status states */
+.status-pending {
+    background-color: #e2e3e5;
+    color: #41464b;
+}
+
+.status-processing {
+    background-color: #fff3cd;
+    color: #664d03;
+}
+
+.status-shipped {
+    background-color: #cfe2ff;
+    color: #084298;
+}
+
+.status-delivered {
+    background-color: #d1e7dd;
+    color: #0f5132;
+}
+
+.status-cancelled {
+    background-color: #f8d7da;
+    color: #842029;
+}
+
+
+.order-details {
+    padding: 1rem 1.2rem;
+    font-size: 0.9rem;
+}
+.order-details h4 {
+    font-size: 0.95rem;
+    margin-bottom: 0.5rem;
+    color: var(--text-color);
+    font-weight: 600;
+}
+.order-details ul {
+    list-style: disc;
+    padding-left: 1.2rem;
+    margin-bottom: 1rem;
+}
+.order-details li {
+    font-size: 0.9rem;
+    color: var(--muted-text-color);
+    margin-bottom: 0.2rem;
+}
+.order-actions-list {
+    margin-top: 1rem;
+    display: flex;
+    gap: 0.5rem;
+}
+#no-orders-message {
+    text-align: center;
+    padding: 3rem 1rem;
+    color: var(--muted-text-color);
+    border: 1px dashed var(--border-color);
+    border-radius: var(--border-radius);
+    margin-top: 1rem;
+}
+
+/* --- Order Detail Page --- */
+.order-detail-layout {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 2rem;
+    margin: 1.5rem 0;
+    width: 90%;
+    align-self: center;
+}
+.order-main-details {
+    background-color: var(--background-color);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    padding: 1.5rem;
+}
+.order-detail-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.5rem;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 0.75rem;
+}
+.order-detail-header h2 {
+    margin: 0;
+    font-size: 1.6rem;
+}
+.order-status { /* Reuse from order list */
+    font-size: 0.9rem;
+    padding: 0.3rem 0.7rem;
+}
+.order-date {
+    font-size: 0.9rem;
+    color: var(--muted-text-color);
+    margin-bottom: 1.5rem;
+}
+.order-items-summary h3, .order-totals-summary h3 {
+    font-size: 1.2rem;
+    margin-bottom: 1rem;
+    color: var(--text-color);
+}
+.order-item-list {
+    margin-bottom: 1.5rem;
+}
+.order-summary-item {
+    display: grid;
+    grid-template-columns: auto 1fr auto auto;
+    gap: 1rem;
+    align-items: center;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid var(--border-color);
+    font-size: 0.9rem;
+}
+.order-summary-item:last-child {
+    border-bottom: none;
+}
+.order-summary-item .item-image {
+    width: 60px;
+    height: 60px;
+    object-fit: contain;
+    border-radius: var(--border-radius);
+    border: 1px solid var(--border-color);
+}
+.order-summary-item .item-info {
+    display: flex;
+    flex-direction: column;
+}
+.order-summary-item .item-name {
+    font-weight: 600;
+    color: var(--text-color);
+}
+.order-summary-item .item-sku {
+    font-size: 0.8rem;
+    color: var(--muted-text-color);
+}
+.order-summary-item .item-price-qty {
+    color: var(--muted-text-color);
+    text-align: right;
+}
+.order-summary-item .item-subtotal {
+    font-weight: 600;
+    text-align: right;
+}
+
+.order-totals-summary {
+    margin-top: 1.5rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border-color);
+}
+.order-totals-summary .summary-line {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+    font-size: 0.95rem;
+}
+.order-totals-summary .summary-line span:first-child {
+    color: var(--muted-text-color);
+}
+.order-totals-summary .summary-line.total {
+    font-size: 1.1rem;
+    margin-top: 0.75rem;
+    color: var(--primary-color);
+}
+.order-totals-summary .summary-line.total strong {
+    color: var(--primary-color);
+}
+
+
+.order-sidebar-details {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+.order-sidebar-details .detail-card {
+    background-color: var(--light-background);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    padding: 1rem;
+}
+.order-sidebar-details .detail-card h4 {
+    font-size: 1.05rem;
+    margin: 0 0 0.75rem 0;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--border-color);
+    color: var(--text-color);
+}
+.order-sidebar-details .detail-card p {
+    font-size: 0.9rem;
+    color: var(--muted-text-color);
+    line-height: 1.5;
+    margin: 0;
+}
+.order-actions-detail .btn {
+    font-size: 0.95rem;
+    padding: 0.5rem 1rem;
+    width: 100%;
+}
+
 
 /*# sourceMappingURL=app.css.map*/

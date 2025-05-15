@@ -4,7 +4,7 @@
 @section('user_content')
 
 
-    <div class="container page-content">
+    <div class="container">
         <!-- Breadcrumbs -->
         <nav aria-label="breadcrumb" class="breadcrumbs">
             <ol>
@@ -105,9 +105,10 @@
                 <div class="order-actions-detail">
                     <button class="btn btn-secondary btn-block">Print Invoice</button>
                     @if ($order->order_status == 'pending' || $order->order_status == 'processing')
-                        <button class="btn btn-primary btn-block" style="margin-top: 0.5rem;">Cancel Order</button>
+                        <button id="cancel-order-btn" class="btn btn-primary btn-block" style="margin-top: 0.5rem;">Cancel
+                            Order</button>
                     @else
-                        <button class="btn btn-block bg-gray-300 text-gray-600"
+                        <button class="order-action-detail btn btn-block bg-gray-300 text-gray-600"
                             style="margin-top: 0.5rem; cursor: not-allowed; " disabled>
                             Cancel order
                         </button>
@@ -117,4 +118,62 @@
         </div>
     </div>
 
+    <div id="confirmation-modal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <h4 id="modal-title">Are you sure?</h4>
+            <p id="modal-message">This action cannot be undone.</p>
+            <div class="modal-actions">
+                <form action='{{ route('user.cancel.order', $order->order_tracking_number) }}' method='POST'>
+                    @csrf
+                    @method('PUT')
+                    <button id="confirm-action" onclick='event.form.submit()' class="btn btn-danger">Yes</button>
+                </form>
+                <button id="cancel-action" class="btn btn-secondary">Cancel</button>
+            </div>
+        </div>
+    </div>
+    <script>
+        let itemToRemove = null;
+        let clearCartFlag = false;
+
+        function confirmRemoveItem(itemId) {
+            itemToRemove = itemId;
+            clearCartFlag = false;
+
+            document.getElementById('modal-title').innerText = "Remove Item from Cart?";
+            document.getElementById('modal-message').innerText = "Are you sure you want to remove this item?";
+            document.getElementById('confirmation-modal').style.display = 'flex';
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const clearCartButton = document.getElementById('cancel-order-btn');
+            const confirmationModal = document.getElementById('confirmation-modal');
+            const confirmActionButton = document.getElementById('confirm-action');
+            const cancelActionButton = document.getElementById('cancel-action');
+
+            // Clear cart setup
+            clearCartButton.addEventListener('click', function () {
+                clearCartFlag = true;
+                itemToRemove = null;
+
+                document.getElementById('modal-title').innerText = "Cancel Order?";
+                document.getElementById('modal-message').innerText = "This Action cannot be undone.";
+                confirmationModal.style.display = 'flex';
+            });
+
+            // Confirm action
+            confirmActionButton.addEventListener('click', function () {
+                    confirmationModal.style.display = 'none';
+                itemToRemove = null;
+                clearCartFlag = false;
+            });
+
+            // Cancel action
+            cancelActionButton.addEventListener('click', function () {
+                confirmationModal.style.display = 'none';
+                itemToRemove = null;
+                clearCartFlag = false;
+            });
+        });
+    </script>
 @endsection

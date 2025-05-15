@@ -175,7 +175,7 @@
                     </div>
                     {{-- <span class="stock-status">In Stock {{ $stock}}</span> --}}
                     @if ($stock != null && $stock > 0)
-                        <span class="stock-status">In Stock</span>
+                        <span class="stock-status">In Stock {{$stock}}</span>
                     @else
                         <span class="stock-status out-of-stock">Out of Stock</span>
                     @endif
