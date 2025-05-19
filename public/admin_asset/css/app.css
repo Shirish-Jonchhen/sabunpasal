@@ -725,11 +725,12 @@ progress {
     .container-sm {
         max-width: 960px
     }
+
 }
 
 
 @media(max-width:992px){
-    .order-detail-layout { grid-template-columns: 1fr; }
+    .order-detail-layout { grid-template-columns: 1fr !important; }
     .order-sidebar-details { margin-top: 1.5rem; }
 }
 @media(min-width:1200px) {

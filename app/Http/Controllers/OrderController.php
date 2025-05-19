@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Order;
+use App\Models\StoreOrder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -65,21 +66,27 @@ class OrderController extends Controller
 
 
     //admin
-    public function get_all_orders(Request $request){
+    public function get_all_orders(Request $request)
+    {
         $search = $request->input('search');
         $status = $request->input('status');
+        $paymentStatus = $request->input('payment_status');
         $sort = $request->input('sort');
-    
+
         $query = Order::with('storeOrders.store', 'storeOrders.storeOrederProducts.variantPrice.variant.product');
-    
+
         if (!empty($search)) {
             $query->where('order_tracking_number', 'like', "%{$search}%");
         }
-    
+
         if (!empty($status)) {
             $query->where('order_status', $status);
         }
-    
+
+        if (!empty($paymentStatus)) {
+            $query->where('payment_status', $paymentStatus);
+        }
+
         if (!empty($sort)) {
             switch ($sort) {
                 case 'price_asc':
@@ -98,11 +105,11 @@ class OrderController extends Controller
         } else {
             $query->orderBy('created_at', 'desc');
         }
-    
+
         $orders = $query->paginate(10);
 
 
-        return view('admin.order.history', compact('orders', 'search', 'status', 'sort'));
+        return view('admin.order.history', compact('orders', 'search', 'status', 'sort', 'paymentStatus'));
     }
 
     public function show_one_order($trackingNumber)
@@ -112,6 +119,79 @@ class OrderController extends Controller
             ->first();
         if ($order) {
             return view('admin.order.view', compact('order'));
+        } else {
+            return redirect()->back()->with('error', 'Order not found.');
+        }
+    }
+
+
+    //vendor 
+    public function get_all_store_orders(Request $request)
+    {
+        $search = $request->input('search');
+        $status = $request->input('status');
+        $sort = $request->input('sort');
+        $adminStatus = $request->input('admin_status');
+
+        $query = StoreOrder::with('storeOrederProducts.variantPrice.variant.product')
+            ->whereHas('store', function ($query) {
+                $query->where('user_id', Auth::user()->id);
+            });
+
+
+        if (!empty($search)) {
+            $query->whereHas('order', function ($q) use ($search) {
+                $q->where('order_tracking_number', 'like', "%{$search}%");
+            });
+        }
+
+        if (!empty($status)) {
+            $query->where('status', $status);
+        }
+        if (!empty($adminStatus)) {
+            $query->whereHas('order', function ($q) use ($adminStatus) {
+                $q->where('order_status', $adminStatus);
+            });
+        }
+
+        if (!empty($sort)) {
+            switch ($sort) {
+                case 'price_asc':
+                    $query->orderBy('total', 'asc');
+                    break;
+                case 'price_desc':
+                    $query->orderBy('total', 'desc');
+                    break;
+                case 'date_latest':
+                    $query->orderBy('created_at', 'desc');
+                    break;
+                case 'date_oldest':
+                    $query->orderBy('created_at', 'asc');
+                    break;
+            }
+        } else {
+            $query->orderBy('created_at', 'desc');
+        }
+
+        $orders = $query->paginate(10);
+
+        return view('vendor.order.history', compact('orders', 'search', 'status', 'sort', 'adminStatus'));
+    }
+
+
+    public function show_one_store_order($trackingNumber)
+    {
+        $order = StoreOrder::with('storeOrederProducts.variantPrice.variant.product')
+            ->whereHas('order', function ($query) use ($trackingNumber) {
+                $query->where('order_tracking_number', $trackingNumber);
+            })
+            ->whereHas('store', function ($query) {
+                $query->where('user_id', Auth::id());
+            })
+            ->first();
+
+        if ($order) {
+            return view('vendor.order.view', compact('order'));
         } else {
             return redirect()->back()->with('error', 'Order not found.');
         }

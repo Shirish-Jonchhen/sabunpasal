@@ -28,6 +28,7 @@
                             'shipped' => 'status-shipped',
                             'delivered' => 'status-delivered',
                             'cancelled' => 'status-cancelled',
+                            'returned' => 'status-cancelled',
                             default => '',
                         };
                     @endphp
@@ -35,6 +36,22 @@
                     <span class="status {{ $statusClass }}">
                         Status: {{ $order->order_status }}
                     </span>
+
+                    @php
+                    $statusClass = match ($order->payment_status) {
+                        'unpaid' => 'status-pending',
+                        'partial' => 'status-processing',
+                        // 'shipped' => 'status-shipped',
+                        'paid' => 'status-delivered',
+                        'refunded' => 'status-delivered',
+                        // 'cancelled' => 'status-cancelled',
+                        default => '',
+                    };
+                @endphp
+                
+                <span class="status {{ $statusClass }}">
+                    Payment: {{ $order->payment_status }}
+                </span>
                     </div>
                     <div class="order-details">
                         <h4>Items:</h4>

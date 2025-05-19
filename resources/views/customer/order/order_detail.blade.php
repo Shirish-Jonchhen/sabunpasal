@@ -21,16 +21,31 @@
                 <div class="order-detail-header">
                     <h2>{{ $order->order_tracking_number }}</h2>
                     @php
+                    $statusClass = match ($order->payment_status) {
+                        'unpaid' => 'status-pending',
+                        'partial' => 'status-processing',
+                        // 'shipped' => 'status-shipped',
+                        'paid' => 'status-delivered',
+                        'refunded' => 'status-delivered',
+                        // 'cancelled' => 'status-cancelled',
+                        default => '',
+                    };
+                @endphp
+                <span class="order-status rounded {{ $statusClass }}">{{ $order->payment_status }}</span>
+                    @php
                         $statusClass = match ($order->order_status) {
                             'pending' => 'status-pending',
                             'processing' => 'status-processing',
                             'shipped' => 'status-shipped',
                             'delivered' => 'status-delivered',
                             'cancelled' => 'status-cancelled',
+                            'returned' => 'status-cancelled',
                             default => '',
                         };
                     @endphp
                     <span class="order-status rounded {{ $statusClass }}">{{ $order->order_status }}</span>
+
+                   
                 </div>
                 <p class="order-date">Placed on: {{ \Carbon\Carbon::parse($order->created_at)->format('F j, Y') }}</p>
 
@@ -104,7 +119,7 @@
                 </div>
                 <div class="order-actions-detail">
                     <button class="btn btn-secondary btn-block">Print Invoice</button>
-                    @if ($order->order_status == 'pending' || $order->order_status == 'processing')
+                    @if ($order->order_status == 'pending')
                         <button id="cancel-order-btn" class="btn btn-primary btn-block" style="margin-top: 0.5rem;">Cancel
                             Order</button>
                     @else

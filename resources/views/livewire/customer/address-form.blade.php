@@ -107,8 +107,8 @@
                             {{ $item->variantPrice->variant->size }}</small>
                     </span>
                     <span class="item-qty">x{{ $item->quantity }}</span>
-                    <span class="item-old-price">NRs.{{ $item->variantPrice->old_price * $item->quantity }}</span>
-                    <span class="item-price">NRs.{{ $item->variantPrice->price * $item->quantity }}</span>
+                    <small class="item-old-price" style='text-decoration:line-through;'>NRs.{{ $item->variantPrice->old_price * $item->quantity }} </small>
+                    <span class="item-price"> NRs.{{ $item->variantPrice->price * $item->quantity }}</span>
                 </div>
             @endforeach
         </div>

@@ -1,6 +1,6 @@
-@extends('admin.layouts.layout')
-@section('admin_page_title', 'Order History - Admin Panel')
-@section('admin_layout')
+@extends('vendor.layouts.layout')
+@section('vendor_page_title', 'Order History - Vendor Panel')
+@section('vendor_layout')
     <div class="row">
         <div class="col-12">
             <div class="card">
@@ -29,7 +29,7 @@
                         <div
                             style="margin-bottom: 1rem; padding: 1rem; border: 1px solid #dee2e6; border-radius: 0.375rem; background-color: #fff; box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05); display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 1rem;">
                             <!-- Search Bar -->
-                            <form method="GET"
+                            <form method="GET" action='{{ route('vendor.orders') }}'
                                 style="display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center; width: 100%; max-width: 100%;">
 
 
@@ -37,7 +37,7 @@
                                     value="{{ $search ?? '' }}"
                                     style="width: 20%; padding: 0.375rem 0.75rem; border: 1px solid #ccc; border-radius: 0.375rem; box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);" />
 
-                                <!-- Filter payment Dropdown -->
+                                <!-- Filter Dropdown -->
                                 <select name="status"
                                     style="width: 20%; padding: 0.375rem 0.75rem; border: 1px solid #ccc; border-radius: 0.375rem;">
                                     <option value="">All Status</option>
@@ -54,16 +54,21 @@
                                 </select>
 
                                 <!-- Filter Dropdown -->
-                                <select name="payment_status"
+                                <select name="admin_status"
                                     style="width: 20%; padding: 0.375rem 0.75rem; border: 1px solid #ccc; border-radius: 0.375rem;">
-                                    <option value="">Payment Status</option>
-                                    <option value="unpaid" {{ ($paymentStatus ?? '') == 'unpaid' ? 'selected' : '' }}>Unpaid
+                                    <option value="">Admin Status</option>
+                                    <option value="pending" {{ ($adminStatus ?? '') == 'pending' ? 'selected' : '' }}>Pending
                                     </option>
-                                    <option value="partial" {{ ($paymentStatus ?? '') == 'partial' ? 'selected' : '' }}>
-                                        Partially Paid</option>
-                                    <option value="paid" {{ ($paymentStatus ?? '') == 'paid' ? 'selected' : '' }}>paid
+                                    <option value="processing" {{ ($adminStatus ?? '') == 'processing' ? 'selected' : '' }}>
+                                        Processing</option>
+                                    <option value="shipped" {{ ($adminStatus ?? '') == 'shipped' ? 'selected' : '' }}>Shipped
                                     </option>
+                                    <option value="delivered" {{ ($adminStatus ?? '') == 'delivered' ? 'selected' : '' }}>
+                                        Delivered</option>
+                                    <option value="cancelled" {{ ($staadminStatusus ?? '') == 'cancelled' ? 'selected' : '' }}>
+                                        Cancelled</option>
                                 </select>
+
 
                                 <!-- Sort Dropdown -->
                                 <select name="sort"
@@ -78,13 +83,15 @@
                                     <option value="date_oldest" {{ ($sort ?? '') == 'date_oldest' ? 'selected' : '' }}>
                                         Date: Oldest</option>
                                 </select>
+                                
+                            
 
                                 <button type="submit"
                                     style="padding: 0.375rem 0.75rem; background-color: #0d6efd; color: white; border: none; border-radius: 0.375rem; cursor: pointer;">
                                     Apply
                                 </button>
 
-                                <a href="{{ route('admin.orders') }}"
+                                <a href="{{ route('vendor.orders') }}"
                                     style="padding: 0.375rem 0.75rem; border: 1px solid #6c757d; color: #6c757d; border-radius: 0.375rem; text-decoration: none; display: inline-block;">
                                     Reset
                                 </a>
@@ -93,14 +100,15 @@
 
 
 
-                        @foreach ($orders as $order)
+                        @foreach ($orders as $storeOrder)
                             <div class="order-item">
                                 <div class="order-header">
-                                    <h3>{{ $order->order_tracking_number }}</h3>
-                                    <span>Date: {{ \Carbon\Carbon::parse($order->created_at)->format('F j, Y') }}</span>
-                                    <span>Total: NRs. {{ $order->total_amount }}</span>
+                                    <h3>{{ $storeOrder->order->order_tracking_number }}</h3>
+                                    <span>Date:
+                                        {{ \Carbon\Carbon::parse($storeOrder->created_at)->format('F j, Y') }}</span>
+                                    <span>Total: NRs. {{ $storeOrder->total }}</span>
                                     @php
-                                        $statusClass = match ($order->order_status) {
+                                        $statusClass = match ($storeOrder->status) {
                                             'pending' => 'status-pending',
                                             'processing' => 'status-processing',
                                             'shipped' => 'status-shipped',
@@ -112,65 +120,60 @@
                                     @endphp
 
                                     <span class="status {{ $statusClass }}">
-                                        Status: {{ $order->order_status }}
+                                        Store-Status: {{ $storeOrder->status }}
                                     </span>
+
+
                                     @php
-                                        $statusClass = match ($order->payment_status) {
-                                            'unpaid' => 'status-pending',
-                                            'partial' => 'status-processing',
-                                            // 'shipped' => 'status-shipped',
-                                            'paid' => 'status-delivered',
-                                            'refunded' => 'status-cancelled',
-                                            // 'cancelled' => 'status-cancelled',
+                                        $statusClass = match ($storeOrder->order->order_status) {
+                                            'pending' => 'status-pending',
+                                            'processing' => 'status-processing',
+                                            'shipped' => 'status-shipped',
+                                            'delivered' => 'status-delivered',
+                                            'cancelled' => 'status-cancelled',
+                                            'returned' => 'status-cancelled',
                                             default => '',
                                         };
                                     @endphp
 
                                     <span class="status {{ $statusClass }}">
-                                        Payment: {{ $order->payment_status }}
+                                        Admin-Status: {{ $storeOrder->order->order_status}}
                                     </span>
+
+
                                 </div>
                                 <div class="order-details">
                                     <h4>Items:</h4>
                                     <ul>
-                                        @foreach ($order->storeOrders as $store_order)
-                                            <li> <strong>{{ $store_order->store->store_name }} </strong>
-                                                @php
-                                                    $storeStatusClass = match ($store_order->status) {
-                                                        'pending' => 'status-pending',
-                                                        'processing' => 'status-processing',
-                                                        'shipped' => 'status-shipped',
-                                                        'delivered' => 'status-delivered',
-                                                        'cancelled' => 'status-cancelled',
-                                                        default => '',
-                                                    };
-                                                @endphp
-
-                                                <span class="status {{ $storeStatusClass }}">
-                                                    Status: {{ $store_order->status }}
-                                                </span>
 
 
-                                                <ol>
-
-                                                    @foreach ($store_order->storeOrederProducts as $product)
-                                                        <li>{{ $product->variantPrice->variant->product->name }} |
-                                                            {{ $product->variantPrice->variant->variant_name }} |
-                                                            {{ $product->variantPrice->variant->size }}
-                                                            (x{{ $product->quantity }}
-                                                            {{ $product->variantPrice->unit->attribute_value }})
-                                                        </li>
-                                                    @endforeach
-                                                </ol>
-
+                                        @foreach ($storeOrder->storeOrederProducts as $product)
+                                            <li>{{ $product->variantPrice->variant->product->name }} |
+                                                {{ $product->variantPrice->variant->variant_name }} |
+                                                {{ $product->variantPrice->variant->size }}
+                                                (x{{ $product->quantity }}
+                                                {{ $product->variantPrice->unit->attribute_value }})
                                             </li>
                                         @endforeach
+                                        {{-- </ol>
+
+                                            </li>
+                                        @endforeach --}}
 
                                     </ul>
-                                    <div class="order-actions-list">
-                                        <a href="{{ route('admin.order.show', $order->order_tracking_number) }}"
+                                    @if ($storeOrder->order->order_status == 'processing')
+                                        <div class="order-actions">
+            
+                                            <a href="{{ route('vendor.order.show', $storeOrder->order->order_tracking_number) }}"
+                                                class="btn btn-secondary btn-sm">View Details</a>
+              
+                                        </div>
+                                        
+                                    @endif
+                                    {{-- <div class="order-actions-list">
+                                        <a href="{{ route('vendor.order.show', $storeOrder->order->order_tracking_number) }}"
                                             class="btn btn-secondary btn-sm">View Details</a>
-                                    </div>
+                                    </div> --}}
                                 </div>
                             </div>
                         @endforeach

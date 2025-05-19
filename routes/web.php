@@ -245,6 +245,12 @@ Route::middleware(['auth', 'verified', 'rolemanager:vendor'])->group(function ()
             Route::put('/store/update/{id}', 'update_store')->name('update.store');
             Route::delete('/store/delete/{id}', 'delete_store')->name('delete.store');
         });
+
+        Route::controller(OrderController::class)->group(function () {
+            Route::get('/orders', 'get_all_store_orders')->name('vendor.orders');
+            Route::get('/orders/{trackingNumber}', 'show_one_store_order')->name('vendor.order.show');
+
+        });
     });
 });
 

@@ -95,8 +95,8 @@
                         Order
                     </li>
 
-                    <li class="sidebar-item {{ request()->routeIs('vendor.order.history') ? 'active' : '' }}">
-                        <a class="sidebar-link" href="{{ route('vendor.order.history') }}">
+                    <li class="sidebar-item {{ request()->routeIs('vendor.orders') ? 'active' : '' }}">
+                        <a class="sidebar-link" href="{{ route('vendor.orders') }}">
                             <i class="align-middle" data-feather="clock"></i> <span class="align-middle">History</span>
                         </a>
                     </li>
