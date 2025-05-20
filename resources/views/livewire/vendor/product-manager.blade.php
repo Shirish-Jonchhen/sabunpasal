@@ -20,7 +20,7 @@
                             $imagePath = $firstVariant?->images->first()?->image_path;
                         @endphp
                             @if ($imagePath)
-                                <img src="{{ asset('storage/' . $imagePath) }}" alt="Icon" width="40" height="40" class="rounded">
+                                <img src="{{ asset('storage/' . $imagePath) }}" alt="Icon" style="width: 40px; height: 40px; object-fit: contain;" class="rounded">
                             @else
                                 <div style="width: 40px; height: 40px; background-color: #eee;" class="rounded text-center d-flex align-items-center justify-content-center">N/A</div>
                             @endif

@@ -210,7 +210,7 @@
             <div class="card flex-fill w-100">
                 <div class="card-header">
 
-                    <h5 class="card-title mb-0">Recent Movement</h5>
+                    <h5 class="card-title mb-0">Monthly Orders</h5>
                 </div>
                 <div class="card-body py-3">
                     <div class="chart chart-sm">
@@ -226,7 +226,7 @@
             <div class="card flex-fill w-100">
                 <div class="card-header">
 
-                    <h5 class="card-title mb-0">Browser Usage</h5>
+                    <h5 class="card-title mb-0">Shipping Method</h5>
                 </div>
                 <div class="card-body d-flex">
                     <div class="align-self-center w-100">
@@ -238,18 +238,13 @@
 
                         <table class="table mb-0">
                             <tbody>
+                                @for ($i = 0; $i < $deliveryMethodLabels->count(); $i++)
                                 <tr>
-                                    <td>Chrome</td>
-                                    <td class="text-end">4306</td>
+                                    <td>{{ $deliveryMethodLabels[$i] }}</td>
+                                    <td class="text-end">{{ $deliveryMethodCountsData[$i] }}</td>
                                 </tr>
-                                <tr>
-                                    <td>Firefox</td>
-                                    <td class="text-end">3801</td>
-                                </tr>
-                                <tr>
-                                    <td>IE</td>
-                                    <td class="text-end">1689</td>
-                                </tr>
+                                @endfor
+                                
                             </tbody>
                         </table>
                     </div>
@@ -289,75 +284,55 @@
             <div class="card flex-fill">
                 <div class="card-header">
 
-                    <h5 class="card-title mb-0">Latest Projects</h5>
+                    <h5 class="card-title mb-0">Latest Orders</h5>
                 </div>
                 <table class="table table-hover my-0">
                     <thead>
                         <tr>
-                            <th>Name</th>
-                            <th class="d-none d-xl-table-cell">Start Date</th>
-                            <th class="d-none d-xl-table-cell">End Date</th>
-                            <th>Status</th>
-                            <th class="d-none d-md-table-cell">Assignee</th>
+                            <th>#</th>
+                            <th class="d-none d-xl-table-cell">Order Date</th>
+                            <th class="d-none d-xl-table-cell">SubTotal</th>
+                            <th class="d-none d-xl-table-cell">Discount</th>
+                            <th class="d-none d-xl-table-cell">Tax Amount</th>
+                            <th class="d-none d-xl-table-cell">Delivery Charge</th>
+                            <th class="d-none d-xl-table-cell">Total Amount</th>
+                            <th class="d-none d-xl-table-cell">Shipping Method</th>
+                            <th class="d-none d-md-table-cell">Status</th>
                         </tr>
                     </thead>
                     <tbody>
+                        @foreach (Order::latest()->take(5)->get() as $order )
                         <tr>
-                            <td>Project Apollo</td>
-                            <td class="d-none d-xl-table-cell">01/01/2023</td>
-                            <td class="d-none d-xl-table-cell">31/06/2023</td>
-                            <td><span class="badge bg-success">Done</span></td>
-                            <td class="d-none d-md-table-cell">Vanessa Tucker</td>
+                            <td>{{$order->order_tracking_number}}</td>
+                            <td class="d-none d-xl-table-cell">{{$order->created_at}}</td>
+                            <td class="d-none d-xl-table-cell">{{$order->subtotal}}</td>
+                            <td class="d-none d-xl-table-cell">{{$order->discount}}</td>
+                            <td class="d-none d-xl-table-cell">{{$order->tax}}</td>
+                            <td class="d-none d-xl-table-cell">{{$order->delivery_charge}}</td>
+                            <td class="d-none d-xl-table-cell">{{$order->total_amount}}</td>
+                            <td class="d-none d-xl-table-cell">{{$order->delivery_method}}</td>
+                            @php
+                                $statusClass = '';
+                                if ($order->order_status == 'pending') {
+                                    $statusClass = 'bg-secondary';
+                                } elseif ($order->order_status == 'processing') {
+                                    $statusClass = 'bg-warning';
+                                } elseif ($order->order_status == 'shipped') {
+                                    $statusClass = 'bg-primary';
+                                }elseif ($order->order_status == 'delivered') {
+                                    $statusClass = 'bg-success';
+                                }elseif ($order->order_status == 'cancelled') {
+                                    $statusClass = 'bg-danger';
+                                }elseif ($order->order_status == 'returned') {
+                                    $statusClass = 'bg-danger';
+                                }
+                            @endphp
+                            <td><span class="badge {{ $statusClass }}">{{$order->order_status}}</span></td>
+
                         </tr>
-                        <tr>
-                            <td>Project Fireball</td>
-                            <td class="d-none d-xl-table-cell">01/01/2023</td>
-                            <td class="d-none d-xl-table-cell">31/06/2023</td>
-                            <td><span class="badge bg-danger">Cancelled</span></td>
-                            <td class="d-none d-md-table-cell">William Harris</td>
-                        </tr>
-                        <tr>
-                            <td>Project Hades</td>
-                            <td class="d-none d-xl-table-cell">01/01/2023</td>
-                            <td class="d-none d-xl-table-cell">31/06/2023</td>
-                            <td><span class="badge bg-success">Done</span></td>
-                            <td class="d-none d-md-table-cell">Sharon Lessman</td>
-                        </tr>
-                        <tr>
-                            <td>Project Nitro</td>
-                            <td class="d-none d-xl-table-cell">01/01/2023</td>
-                            <td class="d-none d-xl-table-cell">31/06/2023</td>
-                            <td><span class="badge bg-warning">In progress</span></td>
-                            <td class="d-none d-md-table-cell">Vanessa Tucker</td>
-                        </tr>
-                        <tr>
-                            <td>Project Phoenix</td>
-                            <td class="d-none d-xl-table-cell">01/01/2023</td>
-                            <td class="d-none d-xl-table-cell">31/06/2023</td>
-                            <td><span class="badge bg-success">Done</span></td>
-                            <td class="d-none d-md-table-cell">William Harris</td>
-                        </tr>
-                        <tr>
-                            <td>Project X</td>
-                            <td class="d-none d-xl-table-cell">01/01/2023</td>
-                            <td class="d-none d-xl-table-cell">31/06/2023</td>
-                            <td><span class="badge bg-success">Done</span></td>
-                            <td class="d-none d-md-table-cell">Sharon Lessman</td>
-                        </tr>
-                        <tr>
-                            <td>Project Romeo</td>
-                            <td class="d-none d-xl-table-cell">01/01/2023</td>
-                            <td class="d-none d-xl-table-cell">31/06/2023</td>
-                            <td><span class="badge bg-success">Done</span></td>
-                            <td class="d-none d-md-table-cell">Christina Mason</td>
-                        </tr>
-                        <tr>
-                            <td>Project Wombat</td>
-                            <td class="d-none d-xl-table-cell">01/01/2023</td>
-                            <td class="d-none d-xl-table-cell">31/06/2023</td>
-                            <td><span class="badge bg-warning">In progress</span></td>
-                            <td class="d-none d-md-table-cell">William Harris</td>
-                        </tr>
+                        @endforeach
+                        
+                        
                     </tbody>
                 </table>
             </div>
@@ -388,28 +363,13 @@
             new Chart(document.getElementById("chartjs-dashboard-line"), {
                 type: "line",
                 data: {
-                    labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov",
-                        "Dec"
-                    ],
+                    labels: @json($months),
                     datasets: [{
-                        label: "Sales ($)",
+                        label: "Orders",
                         fill: true,
                         backgroundColor: gradient,
                         borderColor: window.theme.primary,
-                        data: [
-                            2115,
-                            1562,
-                            1584,
-                            1892,
-                            1587,
-                            1923,
-                            2566,
-                            2448,
-                            2805,
-                            3438,
-                            2917,
-                            3327
-                        ]
+                        data: @json($ordersData),
                     }]
                 },
                 options: {
@@ -456,9 +416,9 @@
             new Chart(document.getElementById("chartjs-dashboard-pie"), {
                 type: "pie",
                 data: {
-                    labels: ["Chrome", "Firefox", "IE"],
-                    datasets: [{
-                        data: [4306, 3801, 1689],
+                    labels: {!! json_encode($deliveryMethodLabels) !!},
+                datasets: [{
+                    data: {!! json_encode($deliveryMethodCountsData) !!},
                         backgroundColor: [
                             window.theme.primary,
                             window.theme.warning,
@@ -484,16 +444,14 @@
             new Chart(document.getElementById("chartjs-dashboard-bar"), {
                 type: "bar",
                 data: {
-                    labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov",
-                        "Dec"
-                    ],
+                    labels: @json($months),
                     datasets: [{
                         label: "This year",
                         backgroundColor: window.theme.primary,
                         borderColor: window.theme.primary,
                         hoverBackgroundColor: window.theme.primary,
                         hoverBorderColor: window.theme.primary,
-                        data: [54, 67, 41, 55, 62, 45, 55, 73, 60, 76, 48, 79],
+                        data: @json($orderSales),
                         barPercentage: .75,
                         categoryPercentage: .5
                     }]
@@ -510,7 +468,7 @@
                             },
                             stacked: false,
                             ticks: {
-                                stepSize: 20
+                                stepSize: 25000
                             }
                         }],
                         xAxes: [{
@@ -527,45 +485,42 @@
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             var markers = [{
-                    coords: [31.230391, 121.473701],
-                    name: "Shanghai"
+                    coords: [28.3949,  84.1240],
+                    name: "Nepal"
                 },
-                {
-                    coords: [28.704060, 77.102493],
-                    name: "Delhi"
-                },
-                {
-                    coords: [6.524379, 3.379206],
-                    name: "Lagos"
-                },
-                {
-                    coords: [35.689487, 139.691711],
-                    name: "Tokyo"
-                },
-                {
-                    coords: [23.129110, 113.264381],
-                    name: "Guangzhou"
-                },
-                {
-                    coords: [40.7127837, -74.0059413],
-                    name: "New York"
-                },
-                {
-                    coords: [34.052235, -118.243683],
-                    name: "Los Angeles"
-                },
-                {
-                    coords: [41.878113, -87.629799],
-                    name: "Chicago"
-                },
-                {
-                    coords: [51.507351, -0.127758],
-                    name: "London"
-                },
-                {
-                    coords: [40.416775, -3.703790],
-                    name: "Madrid "
-                }
+    
+                // {
+                //     coords: [6.524379, 3.379206],
+                //     name: "Lagos"
+                // },
+                // {
+                //     coords: [35.689487, 139.691711],
+                //     name: "Tokyo"
+                // },
+                // {
+                //     coords: [23.129110, 113.264381],
+                //     name: "Guangzhou"
+                // },
+                // {
+                //     coords: [40.7127837, -74.0059413],
+                //     name: "New York"
+                // },
+                // {
+                //     coords: [34.052235, -118.243683],
+                //     name: "Los Angeles"
+                // },
+                // {
+                //     coords: [41.878113, -87.629799],
+                //     name: "Chicago"
+                // },
+                // {
+                //     coords: [51.507351, -0.127758],
+                //     name: "London"
+                // },
+                // {
+                //     coords: [40.416775, -3.703790],
+                //     name: "Madrid "
+                // }
             ];
             var map = new jsVectorMap({
                 map: "world",

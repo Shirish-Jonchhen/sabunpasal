@@ -60,7 +60,7 @@
                                     <td>{{ $product->name }}</td>
                                     <td>
                                         @if ($imagePath)
-                                            <img src="{{ asset('storage/' . $imagePath) }}" alt="Product Image" width="50">
+                                            <img src="{{ asset('storage/' . $imagePath) }}" alt="Product Image" style="width: 50px; height: 50px; object-fit: contain;">
                                         @else
                                             No Image
                                         @endif
