@@ -16,13 +16,10 @@ class Store extends Model
         'user_id',
     ];
 
-    // public function user()
-    // {
-    //     return $this->belongsTo(User::class);
-    // }
-
-
-
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }
 
 // Run this in your terminal to generate models with migrations:
