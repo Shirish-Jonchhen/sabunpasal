@@ -102,7 +102,12 @@
             <div class="cart-actions">
                 <button class="btn btn-danger" id="clear-cart-button">Clear Cart</button>
                 <!-- Link to checkout page -->
-                <a href="{{ route('user.checkout') }}" class="btn btn-secondary" id="checkout-button">Proceed to Checkout</a>
+                @if ($cartItems && $cartItems->count() > 0)
+                    <a href="{{ route('user.checkout') }}" class="btn btn-secondary" id="checkout-button">Proceed to Checkout</a>
+                    
+                @else
+                <a href="#" class="btn btn-secondary disabled" tabindex="-1" aria-disabled="true">Proceed to Checkout</a>
+                @endif
             </div>
         </div>
     </div>

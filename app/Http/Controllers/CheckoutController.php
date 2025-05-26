@@ -7,8 +7,10 @@ use App\Models\District;
 use App\Models\Municipality;
 use App\Models\Order;
 use App\Models\Payment;
+use App\Models\Product;
 use App\Models\StoreOrder;
 use App\Models\StoreOrderProduct;
+use App\Models\VariantPrice;
 use App\Models\Ward;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -25,15 +27,17 @@ class CheckoutController extends Controller
             $municipalities = Municipality::all();
 
             $cartItems = CartItem::where('user_id', Auth::user()->id)->get();
-           
+
             return view('customer.checkout.checkout', compact('districts', 'municipalities', 'cartItems'));
         }
     }
 
 
+
+
+
     public function create_order(Request $request)
     {
-        // Validate the request data
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email|max:255',
@@ -98,20 +102,20 @@ class CheckoutController extends Controller
             $storeSubtotal = 0;
             $storeTax = 0;
             $storeDiscount = 0;
-        
+
             foreach ($items as $item) {
                 $price = $item->variantPrice->price;
                 $oldPrice = $item->variantPrice->old_price;
                 $quantity = $item->quantity;
                 $taxRate = $item->variantPrice->variant->product->tax_rate;
-        
+
                 $storeSubtotal += $oldPrice * $quantity;
                 $storeTax += (($taxRate / 100) * $price) * $quantity;
                 $storeDiscount += ($oldPrice - $price) * $quantity;
             }
-        
+
             $storeTotal = $storeSubtotal + $storeTax - $storeDiscount;
-        
+
             $storeOrder = StoreOrder::create([
                 'order_id' => $order->id,
                 'store_id' => $storeId,
@@ -123,7 +127,7 @@ class CheckoutController extends Controller
                 'status' => 'pending',
             ]);
             foreach ($items as $item) {
-               StoreOrderProduct::create([
+                StoreOrderProduct::create([
                     'store_order_id' => $storeOrder->id,
                     'variant_price_id' => $item->variant_price_id,
                     'quantity' => $item->quantity,
@@ -156,5 +160,120 @@ class CheckoutController extends Controller
         }
 
         return redirect()->route("user.orders")->with('success', 'Order created successfully.');
+    }
+
+
+    public function create_single_order(Request $request){
+        // <input type="hidden" name="product_variant_id" value="{{ $productVariantPriceId }}">
+        // <input type="hidden" name="quantity" value="{{ $quantity }}">
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|max:255',
+            'phone' => 'required|string|max:15',
+            'address' => 'required|string|max:255',
+            'district' => 'required|exists:districts,id',
+            'municipality' => 'required|exists:municipalities,id',
+            'ward' => 'required|exists:wards,id',
+            'country' => 'required|string|max:255',
+            'payment_method' => 'required|string|max:255',
+            'shipping_method' => 'required|string|max:255',
+            'note' => 'nullable|string|max:255',
+            'product_variant_price_id' => 'required|exists:variant_prices,id',
+            'quantity' => 'required|integer|min:1',
+            'delivery_charge' => 'nullable|numeric',
+        ]);
+
+        $variantPrice = VariantPrice::findOrFail($request->product_variant_price_id);
+        $subtotal = $variantPrice->old_price * $request->quantity;
+        $totalTax = (($variantPrice->variant->product->tax_rate / 100) * $variantPrice->price) * $request->quantity;
+        $discountAmount = ($variantPrice->old_price - $variantPrice->price) * $request->quantity;
+
+        $order = Order::create([
+
+            'user_id' => Auth::user()->id,
+            // 'user_address_id' => $request->address,
+            'delivery_method' => $request->shipping_method,
+            'place_name' => $request->address,
+            'municipality' => Municipality::find($request->municipality)->municipality_name,
+            'ward' => Ward::find($request->ward)->ward_name,
+            'street' => $request->address,
+            'additional_info' => $request->note,
+            'delivery_charge' => $request->delivery_charge, // Set delivery charge if applicable
+            'subtotal' => $subtotal,
+            'discount' => $discountAmount,
+            'tax' => $totalTax,
+            'total_amount' => $subtotal + $totalTax - $discountAmount,
+            'payment_status' => 'unpaid', // Set payment status if applicable
+            'order_status' => 'pending', // Set order status if applicable
+            'notes' => $request->note,
+            'order_tracking_number' => Order::generateTrackingNumber(Auth::user()->id),
+            'district' => District::find($request->district)->district_name,
+            'country' => $request->country,
+            'phone' => $request->phone,
+            'payment_method' => $request->payment_method,
+        ]);
+
+        $storeId = $variantPrice->variant->product->store->id ?? null;
+        if ($storeId) {
+            $storeSubtotal = $subtotal;
+            $storeTax = $totalTax;
+            $storeDiscount = $discountAmount;
+
+            $storeOrder = StoreOrder::create([
+                'order_id' => $order->id,
+                'store_id' => $storeId,
+                'user_id' => Auth::user()->id,
+                'subtotal' => $storeSubtotal,
+                'tax' => $storeTax,
+                'discount' => $storeDiscount,
+                'total' => $storeSubtotal + $storeTax - $storeDiscount,
+                'status' => 'pending',
+            ]);
+
+            StoreOrderProduct::create([
+                'store_order_id' => $storeOrder->id,
+                'variant_price_id' => $variantPrice->id,
+                'quantity' => $request->quantity,
+                'price_at_order_time' => $variantPrice->price,
+            ]);
+        }
+        Payment::create([
+            'order_id' => $order->id,
+            'amount' => $order->total_amount,
+            'method' => $request->payment_method,
+            'payment_status' => 'pending', // Set payment status if applicable
+            'payment_reference' => null, // Set payment reference if applicable
+            // 'notes' => $request->note,
+            'status' => 'pending',
+            // Add other payment-related fields as needed
+        ]);
+
+
+        return redirect()->route("user.orders")->with('success', 'Order created successfully.');
+
+
+
+    }
+
+
+
+
+
+    public function single_checkout($slug, Request $request)
+    {
+        if (!Auth::user()) {
+            return redirect()->route('home')->with('error', 'You are not allowed to access this page.');
+        }
+
+        $product = Product::where('slug', $slug)->firstOrFail();
+
+        $variantPrice = VariantPrice::where('id', $request->variant_price_id)
+            ->firstOrFail();
+
+        $quantity = $request->quantity ?? 1;
+
+
+
+        return view('customer.checkout.single_checkout', ['slug' => $slug, 'product' => $product, 'variantPrice' => $variantPrice, 'quantity' => $quantity]);
     }
 }

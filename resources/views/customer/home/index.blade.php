@@ -76,7 +76,7 @@
         <section class="icon-nav-section container">
             <!-- Static links to category pages -->
             @foreach ($featured_subcategories as $subcat)
-                <a href="#" class="icon-nav-item">
+                <a href="{{ route('user.show.subcategory', $subcat->slug) }}" class="icon-nav-item">
                     {{-- <i class="fas fa-{{ $subcat->icon }}"></i> --}}
                     <img src="{{ asset('storage/' . $subcat->icon_path) }}" alt="{{ $subcat->subcategory_name }} Icon"
                         class="icon">
@@ -107,8 +107,8 @@
         <!-- Featured Products Section 1 (Trending Now - Static Example) -->
         <section id="featured-products-1" class="products-section container">
             <div class="section-header">
-                <h2>Trending Now</h2>
-                <a href="/products?tag=trending" class="view-all-link">View All Trending <i
+                <h2>Hot Sale 🔥</h2>
+                <a href="{{ route('user.all.product', ['sale' => 1]) }}" class="view-all-link">View All Trending <i
                         class="fas fa-arrow-right"></i></a>
             </div>
 
@@ -156,7 +156,7 @@
 
                 <div class="section-header">
                     <h2>{{ $category->category_name }}</h2>
-                    <a href="/category/kitchen-cleaners" class="view-all-link">Shop more <i class="fas fa-arrow-right"></i></a>
+                    <a href="{{ route('user.show.category', $category->slug) }}" class="view-all-link">Shop more <i class="fas fa-arrow-right"></i></a>
                 </div>
                 <div class="product-grid product-grid-horizontal" id="product-grid-featured-2">
                     <!-- Static Example Product Cards -->

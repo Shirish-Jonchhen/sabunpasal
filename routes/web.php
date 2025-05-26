@@ -29,10 +29,12 @@ use App\Http\Controllers\SearchController;
 use App\Models\HomePageSetting;
 use Illuminate\Support\Facades\Route;
 
-// Route::get('/', function () {
-//     return view('welcome');
-// });
-
+Route::get('/privacy-policy', function () {
+    return view('privacy_terms.privacy');
+})->name('privacy.policy');
+Route::get('/terms-of-service', function () {
+    return view('privacy_terms.terms');
+})->name('terms.service');
 
 Route::controller(HomeController::class)->group(function () {
     Route::get('/', 'index')->name('home');
@@ -71,6 +73,8 @@ Route::controller(SearchController::class)->group(function () {
 Route::controller(CheckoutController::class)->group(function () {
     Route::get('/checkout', 'index')->name('user.checkout');
     Route::post('/checkout/create', 'create_order')->name('user.create.order');
+    Route::post('/checkout/create_single', 'create_single_order')->name('user.create.single.order');
+    Route::get('/product/{slug}/checkout', 'single_checkout')->name('user.single.checkout');
     // Route::post('/product/review/{slug}', 'addReview')->name('product.review');
 });
 

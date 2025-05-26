@@ -185,14 +185,17 @@
 
             @if ($stock != null && $stock > 0)
                 <div class="product-actions-detail">
-                    <button class="btn btn-primary btn-buy-now">Buy Now</button>
                     <!-- Add data-product-id to the add to cart button -->
 
                     @if (Auth::user())
+                    <button class="btn btn-primary btn-buy-now" wire:click="buyNow">Buy Now</button>
+
                         <button class="btn btn-secondary add-to-cart-button" wire:click="addToCart">
                             <i class="fas fa-cart-plus"></i> Add to Cart
                         </button>
                     @else
+                    <button class="btn btn-primary btn-buy-now"  onclick="event.preventDefault(); openLoginModal();">Buy Now</button>
+
                         <button class="btn btn-secondary add-to-cart-button"
                             onclick="event.preventDefault(); openLoginModal();">
                             <i class="fas fa-cart-plus"></i> Add to Cart

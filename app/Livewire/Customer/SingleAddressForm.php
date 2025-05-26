@@ -4,13 +4,13 @@ namespace App\Livewire\Customer;
 
 use App\Models\District;
 use App\Models\Municipality;
+use App\Models\VariantPrice;
 use Livewire\Component;
 
-class AddressForm extends Component
+class SingleAddressForm extends Component
 {
-
     public $districts = [];
-    public $cartItems = [];
+    // public $cartItems = [];
     public $municipalities = [];
     public $wards = [];
     public $district_id;
@@ -19,25 +19,26 @@ class AddressForm extends Component
     public $subtotal;
     public $totalTax;
     public $delivery_charge;
+    public $productVariantPriceId;
+    public $productVariantPrice;
+    public $quantity;
     public $shipping_method = 'delivery';
 
-    public function mount($cartItems)
+
+
+
+
+
+    public function mount($productVariantPriceId, $quantity)
     {
         $this->districts = District::all();
-        $this->cartItems = $cartItems;
-        $subtotal = 0;
-        foreach ($cartItems as $item) {
-            $subtotal += $item->variantPrice->price * $item->quantity;
-        }
-        $this->subtotal = $subtotal;
-        $totalTax = 0;
-        foreach ($cartItems as $item) {
-            $totalTax += (($item->variantPrice->variant->product->tax_rate / 100) * $item->variantPrice->price) * $item->quantity;
-        }
-        $this->totalTax = $totalTax;
+        $this->productVariantPriceId = $productVariantPriceId;
+        $this->productVariantPrice = VariantPrice::where("id",$productVariantPriceId)->firstOrFail();
+        $this->quantity = $quantity;
+        $this->subtotal = $this->productVariantPrice->price * $this->quantity;
+        $this->totalTax = $this->productVariantPrice->variant->product->tax_rate /100 * $this->subtotal;
         $this->delivery_charge = 0;
     }
-
 
     public function updatedDistrictId($district_id)
     {
@@ -49,9 +50,9 @@ class AddressForm extends Component
             $this->delivery_charge = 0;
             return;
         }
-        
         $this->municipalities = District::find($district_id)->municipalities;
         $this->wards = [];
+
         $this->municipality_id = null;
         $this->delivery_charge = 0;
         $this->ward_id = null;
@@ -85,10 +86,8 @@ class AddressForm extends Component
             $this->delivery_charge = $municipality ? $municipality->delivery_charge : 0;
         }
     }
-
-
     public function render()
     {
-        return view('livewire.customer.address-form');
+        return view('livewire.customer.single-address-form');
     }
 }

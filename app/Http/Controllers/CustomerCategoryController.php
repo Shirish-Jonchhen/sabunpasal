@@ -14,6 +14,8 @@ class CustomerCategoryController extends Controller
         $category = Category::where('slug', $slug)->firstOrFail();
         $query = $category->products()->with(['variants.prices', 'subcategory', 'category']);
 
+
+
         // Subcategory Filter
         if ($request->has('subcategories')) {
             $query->whereHas('subcategory', function ($q) use ($request) {
@@ -73,6 +75,12 @@ class CustomerCategoryController extends Controller
             default:
                 // No sorting (or maybe default by newest)
                 break;
+        }
+
+        if ($request->has('sale')) {
+
+                $query->where('is_on_sale', true);
+
         }
 
         $products = $query->paginate(9)->appends($request->query());

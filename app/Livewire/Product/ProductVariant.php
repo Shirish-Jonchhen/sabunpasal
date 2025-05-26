@@ -185,6 +185,16 @@ class ProductVariant extends Component
         }
     }
 
+    public function buyNow()
+    {
+        // Redirect to the checkout page
+        return redirect()->route('user.single.checkout', [
+            'slug' => $this->slug,
+            'variant_price_id' => $this->selectedUnitID,
+            'quantity' => $this->quantity,
+        ]);
+    }
+
     public function closeAlert()
     {
         $this->showMessage = false;

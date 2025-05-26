@@ -69,6 +69,19 @@
                         </ul>
                     </div>
 
+                    <div class="filter-group">
+                        <h4>Sale</h4>
+                        <ul class="filter-list">
+                            <li>
+                                <label>
+                                    <input type="checkbox" name="sale" value="1"
+                                        {{ request()->get('sale') ? 'checked' : '' }} onchange="this.form.submit()">
+                                    On Sale Only
+                                </label>
+                            </li>
+                        </ul>
+                    </div>
+
                     {{-- <button type="submit" class="btn btn-primary apply-filters-button">Apply Filters</button> --}}
                 </aside>
 

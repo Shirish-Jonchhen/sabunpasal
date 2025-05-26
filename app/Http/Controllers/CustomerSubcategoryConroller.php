@@ -75,6 +75,12 @@ class CustomerSubcategoryConroller extends Controller
                 break;
         }
 
+        if ($request->has('sale')) {
+
+            $query->where('is_on_sale', true);
+
+    }
+
         $products = $query->paginate(9)->appends($request->query());
         $brands = Brand::all();
 

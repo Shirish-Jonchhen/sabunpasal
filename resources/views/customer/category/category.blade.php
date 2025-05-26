@@ -69,6 +69,22 @@
                         </ul>
                     </div>
 
+                    <!-- Sale Filter -->
+                    <div class="filter-group">
+                        <h4>Sale</h4>
+                        <ul class="filter-list">
+                            <li>
+                                <label>
+                                    <input type="checkbox" name="sale" value="1"
+                                        {{ request()->get('sale') ? 'checked' : '' }} onchange="this.form.submit()">
+                                    On Sale Only
+                                </label>
+                            </li>
+                        </ul>
+                    </div>
+
+
+
                     {{-- <button type="submit" class="btn btn-primary apply-filters-button">Apply Filters</button> --}}
                 </aside>
 
@@ -117,18 +133,17 @@
                     <div class="product-grid" id="category-product-grid">
                         <!-- Product Card Example 1 -->
                         @if ($products->isEmpty())
-                        <div class="no-products-message">
-                            <h2 class="text-2xl font-semibold text-gray-600">No products found.</h2>
-                            <p class="mt-2 text-gray-500">Try adjusting your filters or explore other categories.</p>
-                        </div>
-                        
+                            <div class="no-products-message">
+                                <h2 class="text-2xl font-semibold text-gray-600">No products found.</h2>
+                                <p class="mt-2 text-gray-500">Try adjusting your filters or explore other categories.</p>
+                            </div>
                         @else
-                        @foreach ($products as $product)
-                        <x-product-card :product="$product" />
-                    @endforeach
+                            @foreach ($products as $product)
+                                <x-product-card :product="$product" />
+                            @endforeach
 
                         @endif
-                       
+
 
 
 

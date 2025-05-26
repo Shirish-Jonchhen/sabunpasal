@@ -305,8 +305,8 @@
                             <a href="" class=" px-2 py-2 hover:bg-gray-100 block" onclick="event.preventDefault(); openChangePasswordModal();">Change Password</a><br>
                             <a href="{{ route('user.orders') }}" class="px-2 py-2 hover:bg-gray-100 block">My Orders</a>
                         @endif
-                        <a href="" class=" px-2 py-2 hover:bg-gray-100 block">Privacy Policy</a><br>
-                        <a href="" class=" px-2 py-2 hover:bg-gray-100 block">Terms of Service</a><br>
+                        <a href="{{ route('privacy.policy') }}" class=" px-2 py-2 hover:bg-gray-100 block">Privacy Policy</a><br>
+                        <a href="{{ route('terms.service') }}" class=" px-2 py-2 hover:bg-gray-100 block">Terms of Service</a><br>
                     </div>
                 </div>
 
