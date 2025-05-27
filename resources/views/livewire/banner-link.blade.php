@@ -19,7 +19,7 @@
                     @elseif($selectedBannerType == 'subcategory')
                         {{ $link->subcategory_name }}
                     @elseif($selectedBannerType == 'product')
-                        {{ $link->product_name }} - {{ $link->store->store_name }} - {{ $link->vendor->name }}
+                        {{ $link->name }} - {{ $link->store->store_name }} - {{ $link->vendor->name }}
                     @endif
                 </option>
             @endforeach

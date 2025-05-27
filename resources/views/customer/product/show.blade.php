@@ -171,7 +171,7 @@
                             @endforeach
                             <!-- Add more static reviews -->
                             @if($reviews->count() > 2)
-                                <a href="#" class="view-all-link">View All Reviews</a>
+                                <a href="{{ route('product.reviews.show', $product->slug) }}" class="view-all-link">View All Reviews</a>
                             @else
                                 <div class="view-all-link">No More Reviews</div>
                             @endif
@@ -190,39 +190,17 @@
             <aside class="similar-products-sidebar">
                 <h3>Similar Products</h3>
                 <!-- Re-use product card styling -->
-                <div class="product-card similar-product" data-product-id="prod_007">
-                    <div class="product-image-container">
-                        <img loading="lazy" src="https://picsum.photos/seed/prod_007/200/200"
-                            alt="EcoClean All-Purpose Wipes" class="product-image">
-                        <button class="wishlist-button" title="Add to Wishlist"><i class="fas fa-heart"></i></button>
-                    </div>
-                    <div class="product-info">
-                        <h3 class="product-name">EcoClean Wipes</h3>
-                        <p class="product-price">$6.49</p>
-                    </div>
-                    <div class="product-actions">
-                        <!-- Link to the product detail page -->
-                        <a href="product-detail.html?id=prod_007" class="btn btn-outline-primary btn-sm">View</a>
-                    </div>
+                <div class="similar-products">
+                @foreach ($similarProducts as  $product)
+                <x-product-card :product="$product" />
+                {{-- <br> --}}
+                    
+                @endforeach
                 </div>
 
-                <div class="product-card similar-product" data-product-id="prod_014">
-                    <div class="product-image-container">
-                        <img loading="lazy" src="https://picsum.photos/seed/prod_014/200/200"
-                            alt="Glass Gleam Window Cleaner" class="product-image">
-                        <button class="wishlist-button" title="Add to Wishlist"><i class="fas fa-heart"></i></button>
-                    </div>
-                    <div class="product-info">
-                        <h3 class="product-name">Glass Gleam</h3>
-                        <p class="product-price">$5.29</p>
-                    </div>
-                    <div class="product-actions">
-                        <a href="product-detail.html?id=prod_014" class="btn btn-outline-primary btn-sm">View</a>
-                    </div>
-                </div>
                 <!-- Add more similar products -->
-                <a href="/category/all-purpose-cleaners" class="view-all-link">View More Similar <i
-                        class="fas fa-arrow-right"></i></a>
+                {{-- <a href="/category/all-purpose-cleaners" class="view-all-link">View More Similar <i
+                        class="fas fa-arrow-right"></i></a> --}}
             </aside>
         </section>
 
@@ -230,74 +208,14 @@
         <section id="related-products" class="products-section container">
             <div class="section-header">
                 <h2>You Might Also Like</h2>
-                <a href="/products" class="view-all-link">View All <i class="fas fa-arrow-right"></i></a>
+                {{-- <a href="/products" class="view-all-link">View All <i class="fas fa-arrow-right"></i></a> --}}
             </div>
             <div class="product-grid product-grid-horizontal" id="product-grid-related">
                 <!-- Static Example Product Cards (Use same structure as index) -->
-                <div class="product-card" data-product-id="prod_003">
-                    <div class="product-image-container">
-                        <img loading="lazy" src="https://picsum.photos/seed/prod_003/300/300"
-                            alt="Scrub Free Kitchen Degreaser" class="product-image">
-                        <button class="wishlist-button" title="Add to Wishlist"><i class="fas fa-heart"></i></button>
-                    </div>
-                    <div class="product-info">
-                        <span class="product-category">Kitchen Cleaners</span>
-                        <h3 class="product-name">Scrub Free Degreaser</h3>
-                        <p class="product-price">$6.99</p>
-                    </div>
-                    <div class="product-actions">
-                        <button class="btn btn-primary add-to-cart-button"><i class="fas fa-cart-plus"></i> Add to
-                            Cart</button>
-                    </div>
-                </div>
-                <div class="product-card" data-product-id="prod_002">
-                    <div class="product-image-container">
-                        <img loading="lazy" src="https://picsum.photos/seed/prod_002/300/300" alt="Gleam Bathroom Cleaner"
-                            class="product-image">
-                        <button class="wishlist-button" title="Add to Wishlist"><i class="fas fa-heart"></i></button>
-                    </div>
-                    <div class="product-info">
-                        <span class="product-category">Bathroom Cleaners</span>
-                        <h3 class="product-name">Gleam Bathroom Cleaner</h3>
-                        <p class="product-price">$5.49</p>
-                    </div>
-                    <div class="product-actions">
-                        <button class="btn btn-primary add-to-cart-button"><i class="fas fa-cart-plus"></i> Add to
-                            Cart</button>
-                    </div>
-                </div>
-                <div class="product-card" data-product-id="prod_005">
-                    <div class="product-image-container">
-                        <img loading="lazy" src="https://picsum.photos/seed/prod_005/300/300"
-                            alt="PureGuard Disinfectant Spray" class="product-image">
-                        <button class="wishlist-button" title="Add to Wishlist"><i class="fas fa-heart"></i></button>
-                    </div>
-                    <div class="product-info">
-                        <span class="product-category">Disinfectants</span>
-                        <h3 class="product-name">PureGuard Spray</h3>
-                        <p class="product-price">$7.99</p>
-                    </div>
-                    <div class="product-actions">
-                        <button class="btn btn-primary add-to-cart-button"><i class="fas fa-cart-plus"></i> Add to
-                            Cart</button>
-                    </div>
-                </div>
-                <div class="product-card" data-product-id="prod_011">
-                    <div class="product-image-container">
-                        <img loading="lazy" src="https://picsum.photos/seed/prod_011/300/300"
-                            alt="GermAway Disinfecting Wipes" class="product-image">
-                        <button class="wishlist-button" title="Add to Wishlist"><i class="fas fa-heart"></i></button>
-                    </div>
-                    <div class="product-info">
-                        <span class="product-category">Disinfectants</span>
-                        <h3 class="product-name">GermAway Wipes</h3>
-                        <p class="product-price">$5.99</p>
-                    </div>
-                    <div class="product-actions">
-                        <button class="btn btn-primary add-to-cart-button"><i class="fas fa-cart-plus"></i> Add to
-                            Cart</button>
-                    </div>
-                </div>
+               @foreach ( $youMayAlsoLike as $product )
+               <x-product-card :product="$product" />
+                   
+               @endforeach
                 <!-- Add more static related products -->
             </div>
         </section>

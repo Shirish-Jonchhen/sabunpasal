@@ -241,7 +241,7 @@
         <div class="container header-main">
             <a href="{{ route('home') }}" class="logo">
                 <i class="fas fa-soap logo-icon"></i> <!-- Example icon -->
-                <span class="logo-text">CleanSweep Mart</span>
+                <span class="logo-text">SabunPasal.com</span>
             </a>
 
             <livewire:customer.search-bar />
@@ -326,7 +326,7 @@
             <div class="footer-column about-column">
                 <a href="index.html" class="logo footer-logo">
                     <i class="fas fa-soap logo-icon"></i>
-                    <span class="logo-text">CleanSweep Mart</span>
+                    <span class="logo-text">SabunPasal.com</span>
                 </a>
                 <p>Your one-stop shop for quality cleaning supplies. We provide effective solutions for a sparkling
                     clean home and business.</p>
@@ -340,22 +340,22 @@
             <div class="footer-column">
                 <h4>Quick Links</h4>
                 <ul>
-                    <li><a href="index.html">Home</a></li>
-                    <li><a href="/products">All Products</a></li> <!-- Link to products page -->
-                    <li><a href="orders.html">Order History</a></li>
-                    <li><a href="wishlist.html">Wishlist</a></li>
-                    <li><a href="contact.html">Contact Us</a></li>
+                    <li><a href="{{ route('home') }}">Home</a></li>
+                    <li><a href="{{ route('user.all.product') }}">All Products</a></li> <!-- Link to products page -->
+                    <li><a href="{{ route('user.orders') }}">Order History</a></li>
+                    <li><a href="{{ route('user.wishlist') }}">Wishlist</a></li>
+                    <li><a href="{{ route('contact.us') }}">Contact Us</a></li>
                     <li><a href="#">FAQs</a></li>
                 </ul>
             </div>
             <div class="footer-column">
                 <h4>Customer Service</h4>
                 <ul>
-                    <li><a href="#">Track Your Order</a></li>
-                    <li><a href="terms.html">Terms of Service</a></li>
-                    <li><a href="privacy.html">Privacy Policy</a></li>
-                    <li><a href="#">Returns & Exchanges</a></li>
-                    <li><a href="#">Shipping Information</a></li>
+                    {{-- <li><a href="#">Track Your Order</a></li> --}}
+                    <li><a href="{{ route('terms.service') }}">Terms of Service</a></li>
+                    <li><a href="{{ route('privacy.policy') }}">Privacy Policy</a></li>
+                    {{-- <li><a href="#">Returns & Exchanges</a></li> --}}
+                    {{-- <li><a href="#">Shipping Information</a></li> --}}
                 </ul>
             </div>
             <div class="footer-column newsletter-column">
@@ -368,18 +368,18 @@
                         aria-label="Email for newsletter">
                     <button type="submit" class="btn btn-primary">Subscribe</button>
                 </form>
-                <div class="payment-methods">
+                {{-- <div class="payment-methods">
                     <span>We Accept:</span>
                     <i class="fab fa-cc-visa" title="Visa"></i>
                     <i class="fab fa-cc-mastercard" title="Mastercard"></i>
                     <i class="fab fa-cc-amex" title="American Express"></i>
                     <i class="fab fa-cc-paypal" title="PayPal"></i>
-                </div>
+                </div> --}}
             </div>
         </div>
         <div class="footer-bottom">
             <div class="container">
-                <p>&copy; <span id="current-year"></span> CleanSweep Mart. All rights reserved. </p>
+                <p>&copy; <span id="current-year"></span> SabunPasal.com. All rights reserved. </p>
             </div>
         </div>
     </footer>

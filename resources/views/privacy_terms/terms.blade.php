@@ -14,7 +14,7 @@
 
     <p>
       Please read these Terms of Service ("Terms", "Terms of Service")
-      carefully before using the CleanSweep Mart website (the "Service")
+      carefully before using the SabunPasal.com website (the "Service")
       operated by [Your Company Name - **REPLACE THIS**] ("us", "we", or "our").
     </p>
 

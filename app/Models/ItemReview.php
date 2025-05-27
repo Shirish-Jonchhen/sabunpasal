@@ -26,4 +26,22 @@ class ItemReview extends Model
     {
         return $this->belongsTo(Product::class);
     }
+
+    public function isVerifiedPurchase(): bool
+{
+    $user = $this->user;
+
+    // Get all variant IDs of this product
+    $productVariantIds = $this->product->variants->pluck('id');
+
+    // Get all variant price IDs of this product
+    $variantPriceIds = VariantPrice::whereIn('product_variant_id', $productVariantIds)->pluck('id');
+
+    // Check if this user's orders contain any of those variant_price_ids
+    return StoreOrderProduct::whereIn('variant_price_id', $variantPriceIds)
+        ->whereHas('storeOrder.order', function ($q) use ($user) {
+            $q->where('user_id', $user->id);
+        })
+        ->exists();
+}
 }

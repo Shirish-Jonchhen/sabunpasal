@@ -13,7 +13,7 @@
     <p>Last updated: <span id="last-updated-date"></span></p>
 
     <p>
-      Welcome to CleanSweep Mart! We are committed to protecting your privacy.
+      Welcome to SabunPasal.com! We are committed to protecting your privacy.
       This Privacy Policy explains how we collect, use, disclose, and safeguard
       your information when you visit our website. Please read this privacy
       policy carefully. If you do not agree with the terms of this privacy

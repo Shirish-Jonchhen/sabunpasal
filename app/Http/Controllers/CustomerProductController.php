@@ -20,7 +20,7 @@ class CustomerProductController extends Controller
 
         $reviews = $reviewsQuery->with('user')
             ->latest()
-            ->take(2)
+            ->take(4)
             ->get();
 
         $allReviews = $product->reviews();
@@ -32,6 +32,19 @@ class CustomerProductController extends Controller
         $starCounts = $allReviews->select('star', DB::raw('count(*) as count'))
             ->groupBy('star')
             ->pluck('count', 'star');
+
+
+        $similarProducts = Product::where('category_id', $product->category_id)
+            ->where('id', '!=', $product->id)
+            ->take(2)
+            ->get();
+
+        $youMayAlsoLike = Product::where('id', '!=', $product->id)
+            ->inRandomOrder()
+            ->take(4)
+            ->get();
+
+
 
 
         // Delete the existing view of same product for same user
@@ -80,6 +93,8 @@ class CustomerProductController extends Controller
             'twoStars' => $starCounts->get(2, 0),
             'oneStars' => $starCounts->get(1, 0),
             'recentViews' => $recentViews,
+            'similarProducts' => $similarProducts,
+            'youMayAlsoLike' => $youMayAlsoLike,
         ]);
     }
 
@@ -102,5 +117,65 @@ class CustomerProductController extends Controller
         ]);
 
         return redirect()->back()->with('success', 'Review added successfully!');
+    }
+
+    public function get_all_reviews($slug, Request $request){
+        $product = Product::where('slug', $slug)->firstOrFail();
+
+        // Load reviews and user relationships once
+        $reviewsQuery = $product->reviews();
+
+        // Apply filters if any
+        if($request->has('sort-reviews')){
+            $sortOption = $request->input('sort-reviews');
+
+            switch ($sortOption) {
+                case 'newest':
+                    $reviewsQuery->latest();
+                    break;
+                case 'oldest':
+                    $reviewsQuery->oldest();
+                    break;
+                case 'rating-high':
+                    $reviewsQuery->orderBy('star', 'desc');
+                    break;
+                case 'rating-low':
+                    $reviewsQuery->orderBy('star', 'asc');
+                    break;
+                default:
+                    // Default to newest if no valid option is provided
+                    $reviewsQuery->latest();
+            }
+        }
+
+
+        $reviews = $reviewsQuery->with('user')
+            ->latest()
+            ->paginate(10); // Use pagination for all review
+            // ->get();
+
+        $allReviews = $product->reviews();
+
+        $averageReviews = round($allReviews->avg('star'), 2);
+        $totalReviews = $allReviews->count();
+
+        // Get count of each star rating in one query
+        $starCounts = $allReviews->select('star', DB::raw('count(*) as count'))
+            ->groupBy('star')
+            ->pluck('count', 'star');
+
+        return view('customer.product.reviews',[
+            'product' => $product,
+            'reviews' => $reviews,
+            'averageReviews' => $averageReviews,
+            'totalReviews' => $totalReviews,
+            'fiveStars' => $starCounts->get(5, 0),
+            'fourStars' => $starCounts->get(4, 0),
+            'threeStars' => $starCounts->get(3, 0),
+            'twoStars' => $starCounts->get(2, 0),
+            'oneStars' => $starCounts->get(1, 0),
+            'sortOption' => $request->input('sort-reviews', 'newest'),
+        ]);
+
     }
 }

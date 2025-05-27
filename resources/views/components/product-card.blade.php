@@ -17,6 +17,7 @@
             <h3 class="product-name" title="Sparkle All-Purpose Cleaner">
                 {{ $product->name }}
             </h3>
+
             <h6 class="" title="Sparkle All-Purpose Cleaner">
                 <i class="fas fa-star rated" style="color: #F0A800;"></i>
                 {{ $averageReviews }} ({{ $product->reviews->count() }})

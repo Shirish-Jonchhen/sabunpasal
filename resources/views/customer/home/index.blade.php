@@ -2,6 +2,11 @@
 @section('user_page_title', 'Sabun Pasal - Home')
 
 @section('user_content')
+    @php
+        use App\Models\Product;
+        use App\Models\SubCategory;
+        use App\Models\Brand;
+    @endphp
     <div>
         <!-- Hero Section with Category Sidebar -->
         <section class="hero-section container">
@@ -39,7 +44,7 @@
                                     <img loading="lazy" src="https://picsum.photos/seed/hero1/1200/400"
                                         alt="Main Promotion Banner">
                                     <div class="hero-banner-content">
-                                        <h2>Welcome to CleanSweep Mart</h2>
+                                        <h2>Welcome to SabunPasal.com</h2>
                                         <a href="/products" class="btn btn-primary">Shop Now</a>
                                     </div>
                                 </div>
@@ -54,7 +59,19 @@
                                             alt="{{ $banner->title }}">
                                         <div class="hero-banner-content">
                                             <h2>{{ $banner->title }}</h2>
-                                            <a href="/products" class="btn btn-primary">Shop Now</a>
+                                            @if ($banner->link_type == 'product')
+                                            <a href="{{ route('product.show', Product::where('id', $banner->link_id)->firstOrFail()->slug) }}"
+                                                class="btn btn-primary">Shop Now</a>
+                                        @elseif ($banner->link_type == 'subcategory')
+                                            <a href="{{ route('user.show.subcategory', SubCategory::where('id', $banner->link_id)->firstOrFail()->slug) }}"
+                                                class="btn btn-primary">Shop Now</a>
+                                        @elseif ($banner->link_type == 'brand')
+                                        <a href="{{ route('user.all.product', [
+                                            'brands' => [Brand::where('id', $banner->link_id)->firstOrFail()->slug],
+                                            'sort' => 'default',
+                                        ]) }}" class="btn btn-primary">Shop Now</a>
+                                        
+                                        @endif
                                         </div>
                                     </div>
                                 @endforeach
@@ -94,10 +111,24 @@
             <section class="full-width-banner-section container">
                 <div class="full-width-banner">
                     @foreach ($banners->where('position', 2) as $banner)
-                        <img loading="lazy" src="{{ asset('storage/' . $banner->image_path) }}" alt="{{ $banner->title }}">
+                        <img loading="lazy" src="{{ asset('storage/' . $banner->image_path) }}"
+                            alt="{{ $banner->title }}">
                         <div class="full-width-banner-content">
                             <h3>{{ $banner->title }}</h3>
-                            <a href="/category/all-purpose-cleaners/cleaning-wipes" class="btn btn-secondary">Shop Wipes</a>
+                            @if ($banner->link_type == 'product')
+                                <a href="{{ route('product.show', Product::where('id', $banner->link_id)->firstOrFail()->slug) }}"
+                                    class="btn btn-primary">Shop Now</a>
+                            @elseif ($banner->link_type == 'subcategory')
+                                <a href="{{ route('user.show.subcategory', SubCategory::where('id', $banner->link_id)->firstOrFail()->slug) }}"
+                                    class="btn btn-primary">Shop Now</a>
+                            @elseif ($banner->link_type == 'brand')
+                            <a href="{{ route('user.all.product', [
+                                'brands' => [Brand::where('id', $banner->link_id)->firstOrFail()->slug],
+                                'sort' => 'default',
+                            ]) }}" class="btn btn-primary">Shop Now</a>
+                            
+                            @endif
+
                         </div>
                     @endforeach
                 </div>
@@ -135,11 +166,24 @@
                     <div class="full-width-banner full-width-banner-dark">
 
                         @foreach ($banners->where('position', $position) as $banner)
-                            <img loading="lazy" src="{{ asset('storage/' . $banner->image_path) }}" alt="{{ $banner->title }}">
+                            <img loading="lazy" src="{{ asset('storage/' . $banner->image_path) }}"
+                                alt="{{ $banner->title }}">
                             <div class="full-width-banner-content">
                                 <h3>{{ $banner->title }}</h3>
                                 {{-- <p>{{ $banner->description }}</p> --}}
-                                <a href="/products?tag=new" class="btn btn-primary">See More</a>
+                                @if ($banner->link_type == 'product')
+                                <a href="{{ route('product.show', Product::where('id', $banner->link_id)->firstOrFail()->slug) }}"
+                                    class="btn btn-primary">Shop Now</a>
+                            @elseif ($banner->link_type == 'subcategory')
+                                <a href="{{ route('user.show.subcategory', SubCategory::where('id', $banner->link_id)->firstOrFail()->slug) }}"
+                                    class="btn btn-primary">Shop Now</a>
+                            @elseif ($banner->link_type == 'brand')
+                            <a href="{{ route('user.all.product', [
+                                'brands' => [Brand::where('id', $banner->link_id)->firstOrFail()->slug],
+                                'sort' => 'default',
+                            ]) }}" class="btn btn-primary">Shop Now</a>
+                            
+                            @endif
                             </div>
                         @endforeach
 
@@ -193,7 +237,7 @@
                 <h2>Explore All Our Products</h2>
             </div>
             <p style="margin-bottom: 1.5rem;">Find everything you need for a spotless space.</p>
-            <a href="/products" class="btn btn-secondary">View All Products</a>
+            <a href="{{ route('user.all.product') }}" class="btn btn-secondary">View All Products</a>
             <!-- Link to the dedicated products page -->
         </section>
 
@@ -202,7 +246,7 @@
         <section class="info-section container">
             <div class="info-content">
                 <h3>Your Partner in Cleanliness</h3>
-                <p>At CleanSweep Mart, we believe a clean space is a happy space. We offer a curated selection of
+                <p>At SabunPasal.com, we believe a clean space is a happy space. We offer a curated selection of
                     high-quality
                     cleaning supplies for every need, from everyday home cleaning to professional-grade solutions. We are
                     committed to providing effective products, excellent customer service, and fast shipping.</p>
@@ -221,7 +265,7 @@
     </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
+        document.addEventListener('DOMContentLoaded', function() {
             new Swiper('.heroSwiper', {
                 loop: true,
                 autoplay: {

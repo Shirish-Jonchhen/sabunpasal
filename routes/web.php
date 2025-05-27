@@ -36,6 +36,10 @@ Route::get('/terms-of-service', function () {
     return view('privacy_terms.terms');
 })->name('terms.service');
 
+Route::get('/contact-us', function () {
+    return view('privacy_terms.contact');
+})->name('contact.us');
+
 Route::controller(HomeController::class)->group(function () {
     Route::get('/', 'index')->name('home');
 });
@@ -43,6 +47,8 @@ Route::controller(HomeController::class)->group(function () {
 
 Route::controller(CustomerProductController::class)->group(function () {
     Route::get('/product/{slug}', 'index')->name('product.show');
+    Route::get('/product/{slug}/reviews', 'get_all_reviews')->name('product.reviews.show');
+    
     Route::post('/product/review/{slug}', 'addReview')->name('product.review');
 });
 
