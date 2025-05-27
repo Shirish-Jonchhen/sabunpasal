@@ -21,17 +21,17 @@
                 <div class="order-detail-header">
                     <h2>{{ $order->order_tracking_number }}</h2>
                     @php
-                    $statusClass = match ($order->payment_status) {
-                        'unpaid' => 'status-pending',
-                        'partial' => 'status-processing',
-                        // 'shipped' => 'status-shipped',
-                        'paid' => 'status-delivered',
-                        'refunded' => 'status-delivered',
-                        // 'cancelled' => 'status-cancelled',
-                        default => '',
-                    };
-                @endphp
-                <span class="order-status rounded {{ $statusClass }}">{{ $order->payment_status }}</span>
+                        $statusClass = match ($order->payment_status) {
+                            'unpaid' => 'status-pending',
+                            'partial' => 'status-processing',
+                            // 'shipped' => 'status-shipped',
+                            'paid' => 'status-delivered',
+                            'refunded' => 'status-delivered',
+                            // 'cancelled' => 'status-cancelled',
+                            default => '',
+                        };
+                    @endphp
+                    <span class="order-status rounded {{ $statusClass }}">{{ $order->payment_status }}</span>
                     @php
                         $statusClass = match ($order->order_status) {
                             'pending' => 'status-pending',
@@ -45,7 +45,7 @@
                     @endphp
                     <span class="order-status rounded {{ $statusClass }}">{{ $order->order_status }}</span>
 
-                   
+
                 </div>
                 <p class="order-date">Placed on: {{ \Carbon\Carbon::parse($order->created_at)->format('F j, Y') }}</p>
 
@@ -57,7 +57,8 @@
                         @foreach ($order->storeOrders as $store_order)
                             @foreach ($store_order->storeOrederProducts as $product)
                                 <div class="order-summary-item">
-                                    <img src="{{ asset('storage/' . $product->variantPrice->variant->images[0]->image_path) }}"
+                                    <img loading="lazy"
+                                        src="{{ asset('storage/' . $product->variantPrice->variant->images[0]->image_path) }}"
                                         alt="Sparkle All-Purpose Cleaner" class="item-image">
                                     <div class="item-info">
                                         <span class="item-name">{{ $product->variantPrice->variant->product->name }} </span>
@@ -178,7 +179,7 @@
 
             // Confirm action
             confirmActionButton.addEventListener('click', function () {
-                    confirmationModal.style.display = 'none';
+                confirmationModal.style.display = 'none';
                 itemToRemove = null;
                 clearCartFlag = false;
             });

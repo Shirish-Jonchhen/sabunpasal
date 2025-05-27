@@ -12,12 +12,12 @@
                     @if ($errors->any())
                         <div class="alert alert-danger alert-dismissable fade show">
                             {{-- <ul type="none"> --}}
-                            @foreach ($errors->all() as $error)
-                                {{-- <li> --}}
-                                *{{ $error }} <br>
-                                {{-- </li> --}}
-                            @endforeach
-                            {{-- </ul> --}}
+                                @foreach ($errors->all() as $error)
+                                    {{-- <li> --}}
+                                        *{{ $error }} <br>
+                                        {{-- </li> --}}
+                                @endforeach
+                                {{-- </ul> --}}
                         </div>
                     @endif
                     @if (session('success'))
@@ -25,7 +25,7 @@
                             {{ session('success') }}
                         </div>
                     @endif
-                    <div class = "table-responsive">
+                    <div class="table-responsive">
                         <table class="table">
                             <thead>
                                 <tr>
@@ -47,8 +47,8 @@
                                         <td>{{ $banner->title }}</td>
                                         <td>
                                             @if ($banner->image_path)
-                                                <img src="{{ asset('storage/' . $banner->image_path) }}" alt="Banner Image"
-                                                    width="150">
+                                                <img loading="lazy" src="{{ asset('storage/' . $banner->image_path) }}"
+                                                    alt="Banner Image" width="150">
                                             @else
                                                 No Image
                                             @endif
@@ -57,21 +57,23 @@
                                         <td>
                                             @if ($banner->link_type == 'product')
                                                 {{ $banner->link->product_name ?? 'N/AA' }}
-                                                @elseif ($banner->link_type == 'brand')
+                                            @elseif ($banner->link_type == 'brand')
                                                 {{ $banner->link->name ?? 'N/AAA' }}
-                                                @elseif ($banner->link_type == 'subcategory')
+                                            @elseif ($banner->link_type == 'subcategory')
                                                 {{ $banner->link->subcategory_name ?? 'N/AAAA' }}
                                             @endif
-                                           
-                                            {{-- {{ $banner->link_type == 'item' ? $banner->item->name : $banner->group->name }} --}}
-                                            
+
+                                            {{-- {{ $banner->link_type == 'item' ? $banner->item->name : $banner->group->name }}
+                                            --}}
+
                                         </td>
                                         <td>{{ $banner->position }}</td>
 
                                         <td>
                                             {{-- <a href="" class="btn btn-primary btn-sm">Edit</a> --}}
 
-                                            <form action="{{ route('delete.home.banner', $banner->id) }}" method="POST" style="display: inline-block;">
+                                            <form action="{{ route('delete.home.banner', $banner->id) }}" method="POST"
+                                                style="display: inline-block;">
 
                                                 @csrf
                                                 @method('DELETE')

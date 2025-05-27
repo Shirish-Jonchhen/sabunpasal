@@ -1,12 +1,7 @@
 @php use Illuminate\Support\Str; @endphp
 <div class="position-relative">
-    <input 
-        type="text"
-        wire:model.live="search" 
-        placeholder="Search brand..."
-        class="form-control mb-2"
-        autocomplete="off"
-    />
+    <input type="text" wire:model.live="search" placeholder="Search brand..." class="form-control mb-2"
+        autocomplete="off" />
 
     @if (!empty($search))
         @if (count($brands) > 0)
@@ -15,18 +10,22 @@
                     <li class="list-group-item">
                         <div class="d-flex align-items-center gap-3">
                             @if ($brand->logo_path)
-                                <img src="{{ asset('storage/' . $brand->logo_path) }}" alt="Icon" width="40" height="40" class="rounded">
+                                <img loading="lazy" src="{{ asset('storage/' . $brand->logo_path) }}" alt="Icon" width="40" height="40"
+                                    class="rounded">
                             @else
-                                <div style="width: 40px; height: 40px; background-color: #eee;" class="rounded text-center d-flex align-items-center justify-content-center">N/A</div>
+                                <div style="width: 40px; height: 40px; background-color: #eee;"
+                                    class="rounded text-center d-flex align-items-center justify-content-center">N/A</div>
                             @endif
-                            
+
                             <div>
                                 <strong>{!! preg_replace("/(" . preg_quote($search) . ")/i", "<span style='color:orange;'>$1</span>", $brand->name, 1) !!}</strong><br>
-                                <small>ID: {{ $brand->id }} | Slug: {{ $brand->slug }} | Featured: {{ $brand->is_featured ? 'Yes' : 'No' }}</small>
+                                <small>ID: {{ $brand->id }} | Slug: {{ $brand->slug }} | Featured:
+                                    {{ $brand->is_featured ? 'Yes' : 'No' }}</small>
                             </div>
 
                             <a href="{{ route('show.brand', $brand->id) }}" class="btn btn-sm btn-outline-primary ms-auto">Edit</a>
-                            <form action="{{ route('delete.brand', $brand->id) }}" method="POST" onsubmit="return confirm('Are you sure?')">
+                            <form action="{{ route('delete.brand', $brand->id) }}" method="POST"
+                                onsubmit="return confirm('Are you sure?')">
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit" class="btn btn-sm btn-danger ms-2">Delete</button>

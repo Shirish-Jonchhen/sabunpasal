@@ -36,7 +36,8 @@
                         <div class="swiper heroSwiper">
                             <div class="swiper-wrapper">
                                 <div class="swiper-slide">
-                                    <img src="https://picsum.photos/seed/hero1/1200/400" alt="Main Promotion Banner">
+                                    <img loading="lazy" src="https://picsum.photos/seed/hero1/1200/400"
+                                        alt="Main Promotion Banner">
                                     <div class="hero-banner-content">
                                         <h2>Welcome to CleanSweep Mart</h2>
                                         <a href="/products" class="btn btn-primary">Shop Now</a>
@@ -49,7 +50,8 @@
                             <div class="swiper-wrapper">
                                 @foreach ($banners->where('position', 1) as $banner)
                                     <div class="swiper-slide">
-                                        <img src="{{ asset('storage/' . $banner->image_path) }}" alt="{{ $banner->title }}">
+                                        <img loading="lazy" src="{{ asset('storage/' . $banner->image_path) }}"
+                                            alt="{{ $banner->title }}">
                                         <div class="hero-banner-content">
                                             <h2>{{ $banner->title }}</h2>
                                             <a href="/products" class="btn btn-primary">Shop Now</a>
@@ -78,8 +80,8 @@
             @foreach ($featured_subcategories as $subcat)
                 <a href="{{ route('user.show.subcategory', $subcat->slug) }}" class="icon-nav-item">
                     {{-- <i class="fas fa-{{ $subcat->icon }}"></i> --}}
-                    <img src="{{ asset('storage/' . $subcat->icon_path) }}" alt="{{ $subcat->subcategory_name }} Icon"
-                        class="icon">
+                    <img loading="lazy" src="{{ asset('storage/' . $subcat->icon_path) }}"
+                        alt="{{ $subcat->subcategory_name }} Icon" class="icon">
                     {{-- <i class="fas fa-{{ $subcat->icon }}"></i> --}}
                     <span>{{ $subcat->subcategory_name }}</span>
                 </a>
@@ -92,7 +94,7 @@
             <section class="full-width-banner-section container">
                 <div class="full-width-banner">
                     @foreach ($banners->where('position', 2) as $banner)
-                        <img src="{{ asset('storage/' . $banner->image_path) }}" alt="{{ $banner->title }}">
+                        <img loading="lazy" src="{{ asset('storage/' . $banner->image_path) }}" alt="{{ $banner->title }}">
                         <div class="full-width-banner-content">
                             <h3>{{ $banner->title }}</h3>
                             <a href="/category/all-purpose-cleaners/cleaning-wipes" class="btn btn-secondary">Shop Wipes</a>
@@ -133,7 +135,7 @@
                     <div class="full-width-banner full-width-banner-dark">
 
                         @foreach ($banners->where('position', $position) as $banner)
-                            <img src="{{ asset('storage/' . $banner->image_path) }}" alt="{{ $banner->title }}">
+                            <img loading="lazy" src="{{ asset('storage/' . $banner->image_path) }}" alt="{{ $banner->title }}">
                             <div class="full-width-banner-content">
                                 <h3>{{ $banner->title }}</h3>
                                 {{-- <p>{{ $banner->description }}</p> --}}
@@ -156,7 +158,8 @@
 
                 <div class="section-header">
                     <h2>{{ $category->category_name }}</h2>
-                    <a href="{{ route('user.show.category', $category->slug) }}" class="view-all-link">Shop more <i class="fas fa-arrow-right"></i></a>
+                    <a href="{{ route('user.show.category', $category->slug) }}" class="view-all-link">Shop more <i
+                            class="fas fa-arrow-right"></i></a>
                 </div>
                 <div class="product-grid product-grid-horizontal" id="product-grid-featured-2">
                     <!-- Static Example Product Cards -->
@@ -178,7 +181,7 @@
             <div class="brand-logos">
                 <!-- Static Brand Logos -->
                 @foreach ($brands as $brand)
-                    <img src="{{ asset('storage/' . $brand->logo_path) }}" alt="{{ $brand->name }} Logo">
+                    <img loading="lazy" src="{{ asset('storage/' . $brand->logo_path) }}" alt="{{ $brand->name }} Logo">
                 @endforeach
             </div>
         </section>

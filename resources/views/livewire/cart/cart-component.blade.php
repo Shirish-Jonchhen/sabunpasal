@@ -42,7 +42,8 @@
                 @foreach ($cartItems as $item)
                     <div class="cart-item">
                         <div class="cart-item-image">
-                            <img src="{{ asset('storage/' . $item->variantPrice->variant->images[0]->image_path) }}"
+                            <img loading="lazy"
+                                src="{{ asset('storage/' . $item->variantPrice->variant->images[0]->image_path) }}"
                                 alt="{{ $item->variantPrice->variant->product->name }}" class="cart-item-image">
                         </div>
                         <div class="cart-item-info">
@@ -103,10 +104,12 @@
                 <button class="btn btn-danger" id="clear-cart-button">Clear Cart</button>
                 <!-- Link to checkout page -->
                 @if ($cartItems && $cartItems->count() > 0)
-                    <a href="{{ route('user.checkout') }}" class="btn btn-secondary" id="checkout-button">Proceed to Checkout</a>
-                    
+                    <a href="{{ route('user.checkout') }}" class="btn btn-secondary" id="checkout-button">Proceed to
+                        Checkout</a>
+
                 @else
-                <a href="#" class="btn btn-secondary disabled" tabindex="-1" aria-disabled="true">Proceed to Checkout</a>
+                    <a href="#" class="btn btn-secondary disabled" tabindex="-1" aria-disabled="true">Proceed to
+                        Checkout</a>
                 @endif
             </div>
         </div>

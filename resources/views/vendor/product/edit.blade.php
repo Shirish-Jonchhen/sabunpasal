@@ -132,7 +132,7 @@
                                                 @foreach ($variant->images as $imageIndex => $image)
                                                     <div class="col-md-3 mb-2 existing-image-wrapper"
                                                         data-image-id="{{ $image->id }}">
-                                                        <img src="{{ asset('storage/' . $image->image_path) }}"
+                                                        <img  loading="lazy"  src="{{ asset('storage/' . $image->image_path) }}"
                                                             class="img-thumbnail"
                                                             style="height:100px; object-fit:contain;">
                                                         <input type="hidden"

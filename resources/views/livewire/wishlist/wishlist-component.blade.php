@@ -17,7 +17,7 @@
 
                 {{-- <div class="product-card" data-product-id="{{ $item->id }}">
                     <div class="product-image-container">
-                        <img src="{{ asset('storage/' . $item->variantPrice->variant->images[0]->image_path) }}"
+                        <img loading="lazy" src="{{ asset('storage/' . $item->variantPrice->variant->images[0]->image_path) }}"
                             alt="{{ $item->variantPrice->variant->product->name }}" class="product-image">
                         <button class="wishlist-button active" title="Remove from Wishlist"
                             aria-label="Remove {{ $item->variantPrice->variant->product->name }} from Wishlist">

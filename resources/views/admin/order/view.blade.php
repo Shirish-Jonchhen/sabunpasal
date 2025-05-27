@@ -1,10 +1,10 @@
 @extends('admin.layouts.layout')
 @section('admin_page_title', 'Order - Admin Panel')
 @section('admin_layout')
-@php
-    use App\Models\User;
+    @php
+        use App\Models\User;
 
-@endphp
+    @endphp
     <div class="row">
         <div class="col-12">
             <div class="card">
@@ -12,8 +12,8 @@
                     <h5 class="card-title mb-0">Order {{ $order->order_tracking_number }}</h5>
                 </div>
                 @if (session()->has('message'))
-                <span class="text-green-500 text-sm">{{ session('message') }}</span>
-            @endif
+                    <span class="text-green-500 text-sm">{{ session('message') }}</span>
+                @endif
                 <div class="order-detail-layout">
                     <section class="order-main-details">
                         <div class="order-detail-header">
@@ -21,7 +21,7 @@
 
 
                             <livewire:admin.order-status-updater :order="$order" />
-                        
+
                         </div>
                         <p class="order-date">Placed on: {{ \Carbon\Carbon::parse($order->created_at)->format('F j, Y') }}
                         </p>
@@ -34,7 +34,8 @@
                                 @foreach ($order->storeOrders as $store_order)
                                     @foreach ($store_order->storeOrederProducts as $product)
                                         <div class="order-summary-item">
-                                            <img src="{{ asset('storage/' . $product->variantPrice->variant->images[0]->image_path) }}"
+                                            <img loading="lazy"
+                                                src="{{ asset('storage/' . $product->variantPrice->variant->images[0]->image_path) }}"
                                                 alt="Sparkle All-Purpose Cleaner" class="item-image">
                                             <div class="item-info">
                                                 <span class="item-name">{{ $product->variantPrice->variant->product->name }}

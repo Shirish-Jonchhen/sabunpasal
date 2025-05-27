@@ -1,7 +1,8 @@
 <a href="{{ route('product.show', $product->slug) }}" class="product-link">
     <div class="product-card" data-product-id="prod_001">
         <div class="product-image-container">
-            <img src="{{ asset('storage/' . $product->variants->first()->images->first()?->image_path) }}"
+            <img loading="lazy"
+                src="{{ asset('storage/' . $product->variants->first()->images->first()?->image_path) }}"
                 alt="Sparkle All-Purpose Cleaner" class="product-image ">
             @if ($product->is_on_sale)
                 <div class="sale-tag">

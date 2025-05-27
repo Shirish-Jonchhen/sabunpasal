@@ -192,8 +192,8 @@
                 <!-- Re-use product card styling -->
                 <div class="product-card similar-product" data-product-id="prod_007">
                     <div class="product-image-container">
-                        <img src="https://picsum.photos/seed/prod_007/200/200" alt="EcoClean All-Purpose Wipes"
-                            class="product-image">
+                        <img loading="lazy" src="https://picsum.photos/seed/prod_007/200/200"
+                            alt="EcoClean All-Purpose Wipes" class="product-image">
                         <button class="wishlist-button" title="Add to Wishlist"><i class="fas fa-heart"></i></button>
                     </div>
                     <div class="product-info">
@@ -208,8 +208,8 @@
 
                 <div class="product-card similar-product" data-product-id="prod_014">
                     <div class="product-image-container">
-                        <img src="https://picsum.photos/seed/prod_014/200/200" alt="Glass Gleam Window Cleaner"
-                            class="product-image">
+                        <img loading="lazy" src="https://picsum.photos/seed/prod_014/200/200"
+                            alt="Glass Gleam Window Cleaner" class="product-image">
                         <button class="wishlist-button" title="Add to Wishlist"><i class="fas fa-heart"></i></button>
                     </div>
                     <div class="product-info">
@@ -236,8 +236,8 @@
                 <!-- Static Example Product Cards (Use same structure as index) -->
                 <div class="product-card" data-product-id="prod_003">
                     <div class="product-image-container">
-                        <img src="https://picsum.photos/seed/prod_003/300/300" alt="Scrub Free Kitchen Degreaser"
-                            class="product-image">
+                        <img loading="lazy" src="https://picsum.photos/seed/prod_003/300/300"
+                            alt="Scrub Free Kitchen Degreaser" class="product-image">
                         <button class="wishlist-button" title="Add to Wishlist"><i class="fas fa-heart"></i></button>
                     </div>
                     <div class="product-info">
@@ -252,7 +252,7 @@
                 </div>
                 <div class="product-card" data-product-id="prod_002">
                     <div class="product-image-container">
-                        <img src="https://picsum.photos/seed/prod_002/300/300" alt="Gleam Bathroom Cleaner"
+                        <img loading="lazy" src="https://picsum.photos/seed/prod_002/300/300" alt="Gleam Bathroom Cleaner"
                             class="product-image">
                         <button class="wishlist-button" title="Add to Wishlist"><i class="fas fa-heart"></i></button>
                     </div>
@@ -268,8 +268,8 @@
                 </div>
                 <div class="product-card" data-product-id="prod_005">
                     <div class="product-image-container">
-                        <img src="https://picsum.photos/seed/prod_005/300/300" alt="PureGuard Disinfectant Spray"
-                            class="product-image">
+                        <img loading="lazy" src="https://picsum.photos/seed/prod_005/300/300"
+                            alt="PureGuard Disinfectant Spray" class="product-image">
                         <button class="wishlist-button" title="Add to Wishlist"><i class="fas fa-heart"></i></button>
                     </div>
                     <div class="product-info">
@@ -284,8 +284,8 @@
                 </div>
                 <div class="product-card" data-product-id="prod_011">
                     <div class="product-image-container">
-                        <img src="https://picsum.photos/seed/prod_011/300/300" alt="GermAway Disinfecting Wipes"
-                            class="product-image">
+                        <img loading="lazy" src="https://picsum.photos/seed/prod_011/300/300"
+                            alt="GermAway Disinfecting Wipes" class="product-image">
                         <button class="wishlist-button" title="Add to Wishlist"><i class="fas fa-heart"></i></button>
                     </div>
                     <div class="product-info">
@@ -314,7 +314,8 @@
                     <a href="{{ route('product.show', $item->product->slug) }}" class="product-link">
                         <div class="product-card" data-product-id="prod_001">
                             <div class="product-image-container">
-                                <img src="{{ asset('storage/' . $item->product->variants->first()->images->first()?->image_path) }}"
+                                <img loading="lazy"
+                                    src="{{ asset('storage/' . $item->product->variants->first()->images->first()?->image_path) }}"
                                     alt="Sparkle All-Purpose Cleaner" class="product-image ">
                                 @if ($item->product->is_on_sale)
                                     <div class="sale-tag">

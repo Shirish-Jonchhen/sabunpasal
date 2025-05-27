@@ -13,10 +13,10 @@
                             {{-- <ul type="none"> --}}
                                 @foreach ($errors->all() as $error)
                                     {{-- <li> --}}
-                                         *{{ $error }} <br>
-                                    {{-- </li> --}}
+                                        *{{ $error }} <br>
+                                        {{-- </li> --}}
                                 @endforeach
-                            {{-- </ul> --}}
+                                {{-- </ul> --}}
                         </div>
                     @endif
                     @if (session("success"))
@@ -24,13 +24,15 @@
                             {{ session("success") }}
                         </div>
                     @endif
-                    <form action="{{ route('update.cat', $category_info->id) }}" method="POST" enctype="multipart/form-data">
+                    <form action="{{ route('update.cat', $category_info->id) }}" method="POST"
+                        enctype="multipart/form-data">
 
                         @csrf
                         @method('PUT')
                         <label for="category_name" class="form-label fw-bold mb-2">Category Name</label>
-                        <input type="text" class="form-control mb-2" name="category_name" placeholder="Eelctronics" value="{{ $category_info->category_name }}">
-                        
+                        <input type="text" class="form-control mb-2" name="category_name" placeholder="Eelctronics"
+                            value="{{ $category_info->category_name }}">
+
                         <label for="description" class="form-label fw-bold mb-2">Category Description</label>
                         <textarea class="form-control mb-2" name="description" placeholder="Describe your Brand"
                             rows="10"> {{ $category_info->description }}</textarea>
@@ -41,8 +43,8 @@
                             @if($category_info->icon_path)
                                 <div class="d-flex flex-wrap gap-3">
                                     <div class="position-relative image-wrapper" style="width: 150px;">
-                                        <img src="{{ asset('storage/' . $category_info->icon_path) }}" alt="Brand Logo"
-                                            class="img-thumbnail w-100 h-auto object-fit">
+                                        <img loading="lazy" src="{{ asset('storage/' . $category_info->icon_path) }}"
+                                            alt="Brand Logo" class="img-thumbnail w-100 h-auto object-fit">
                                         <button type="button"
                                             class="btn btn-danger btn-sm position-absolute top-0 end-0 remove-image"
                                             data-image-path="{{ $category_info->icon_path }}">✖</button>
@@ -126,7 +128,7 @@
             //                 imgWrapper.style.justifyContent = 'center';
 
             //                 imgWrapper.innerHTML = `
-            //                             <img src="${e.target.result}" class="img-thumbnail object-fit-contain" style="max-width: 100%; max-height: 100%;">
+            //                             <img  loading="lazy"  src="${e.target.result}" class="img-thumbnail object-fit-contain" style="max-width: 100%; max-height: 100%;">
             //                         `;
             //                 previewContainer.appendChild(imgWrapper);
             //             };

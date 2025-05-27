@@ -41,8 +41,8 @@
                             @if($brand_info->logo_path)
                                 <div class="d-flex flex-wrap gap-3">
                                     <div class="position-relative image-wrapper" style="width: 150px;">
-                                        <img src="{{ asset('storage/' . $brand_info->logo_path) }}" alt="Brand Logo"
-                                            class="img-thumbnail w-100 h-auto object-fit">
+                                        <img loading="lazy" src="{{ asset('storage/' . $brand_info->logo_path) }}"
+                                            alt="Brand Logo" class="img-thumbnail w-100 h-auto object-fit">
                                         <button type="button"
                                             class="btn btn-danger btn-sm position-absolute top-0 end-0 remove-image"
                                             data-image-path="{{ $brand_info->logo_path }}">✖</button>
@@ -132,7 +132,7 @@
             //                 imgWrapper.style.justifyContent = 'center';
 
             //                 imgWrapper.innerHTML = `
-            //                             <img src="${e.target.result}" class="img-thumbnail object-fit-contain" style="max-width: 100%; max-height: 100%;">
+            //                             <img  loading="lazy"  src="${e.target.result}" class="img-thumbnail object-fit-contain" style="max-width: 100%; max-height: 100%;">
             //                         `;
             //                 previewContainer.appendChild(imgWrapper);
             //             };

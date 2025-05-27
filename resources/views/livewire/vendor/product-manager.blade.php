@@ -1,12 +1,7 @@
 @php use Illuminate\Support\Str; @endphp
 <div class="position-relative">
-    <input 
-        type="text"
-        wire:model.live="search" 
-        placeholder="Search brand..."
-        class="form-control mb-2"
-        autocomplete="off"
-    />
+    <input type="text" wire:model.live="search" placeholder="Search brand..." class="form-control mb-2"
+        autocomplete="off" />
 
     @if (!empty($search))
         @if (count($products) > 0)
@@ -15,23 +10,28 @@
                     <li class="list-group-item">
                         <div class="d-flex align-items-center gap-3">
                             @php
-                            $firstVariant = $product->variants->first();
-                            $firstPrice = $firstVariant?->prices->first();
-                            $imagePath = $firstVariant?->images->first()?->image_path;
-                        @endphp
+                                $firstVariant = $product->variants->first();
+                                $firstPrice = $firstVariant?->prices->first();
+                                $imagePath = $firstVariant?->images->first()?->image_path;
+                            @endphp
                             @if ($imagePath)
-                                <img src="{{ asset('storage/' . $imagePath) }}" alt="Icon" style="width: 40px; height: 40px; object-fit: contain;" class="rounded">
+                                <img loading="lazy" src="{{ asset('storage/' . $imagePath) }}" alt="Icon"
+                                    style="width: 40px; height: 40px; object-fit: contain;" class="rounded">
                             @else
-                                <div style="width: 40px; height: 40px; background-color: #eee;" class="rounded text-center d-flex align-items-center justify-content-center">N/A</div>
+                                <div style="width: 40px; height: 40px; background-color: #eee;"
+                                    class="rounded text-center d-flex align-items-center justify-content-center">N/A</div>
                             @endif
-                            
+
                             <div>
                                 <strong>{!! preg_replace("/(" . preg_quote($search) . ")/i", "<span style='color:orange;'>$1</span>", $product->name, 1) !!}</strong><br>
-                                <small>ID: {{ $product->id }} | Slug: {{ $product->slug }} | On Sale: {{ $product->is_on_sale ? 'Yes' : 'No' }}</small>
+                                <small>ID: {{ $product->id }} | Slug: {{ $product->slug }} | On Sale:
+                                    {{ $product->is_on_sale ? 'Yes' : 'No' }}</small>
                             </div>
 
-                            <a href="{{ route('vendor.product.show', $product->id) }}" class="btn btn-sm btn-outline-primary ms-auto">Edit</a>
-                            <form action="{{ route('vendor.product.delete', $product->id) }}" method="POST" onsubmit="return confirm('Are you sure?')">
+                            <a href="{{ route('vendor.product.show', $product->id) }}"
+                                class="btn btn-sm btn-outline-primary ms-auto">Edit</a>
+                            <form action="{{ route('vendor.product.delete', $product->id) }}" method="POST"
+                                onsubmit="return confirm('Are you sure?')">
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit" class="btn btn-sm btn-danger ms-2">Delete</button>

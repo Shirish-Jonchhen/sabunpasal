@@ -98,9 +98,14 @@
                         </div>
 
                     </div> --}}
-                    <div style="margin-bottom: 20px;"> 
+                    <div style="margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center;"> 
                         Search Result for "{{ $search }}"
-                    <div>
+                        <div class="sidebar-toggle-btn" onclick="toggleSidebar()">
+                            <i class="fas fa-filter"></i>
+                        </div>
+              
+
+                    </div>
 
                     <div class="sort-view-options">
                         <div class="sort-options">

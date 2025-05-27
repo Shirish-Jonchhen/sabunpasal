@@ -300,10 +300,10 @@
 
                     <!-- Dropdown -->
                     <div x-show="open" @click.outside="open = false" class="bg-white border rounded"
-                        style="position: absolute; width:150px; right: 0; z-index: 10;" x-transition>
+                        style="position: absolute; width:200px; right: 0; z-index: 10;" x-transition>
                         @if (Auth::check())
                             <a href="" class=" px-2 py-2 hover:bg-gray-100 block" onclick="event.preventDefault(); openChangePasswordModal();">Change Password</a><br>
-                            <a href="{{ route('user.orders') }}" class="px-2 py-2 hover:bg-gray-100 block">My Orders</a>
+                            <a href="{{ route('user.orders') }}" class="px-2 py-2 hover:bg-gray-100 block">My Orders</a><br>
                         @endif
                         <a href="{{ route('privacy.policy') }}" class=" px-2 py-2 hover:bg-gray-100 block">Privacy Policy</a><br>
                         <a href="{{ route('terms.service') }}" class=" px-2 py-2 hover:bg-gray-100 block">Terms of Service</a><br>

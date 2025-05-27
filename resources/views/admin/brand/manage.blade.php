@@ -12,12 +12,12 @@
                     @if ($errors->any())
                         <div class="alert alert-danger alert-dismissable fade show">
                             {{-- <ul type="none"> --}}
-                            @foreach ($errors->all() as $error)
-                                {{-- <li> --}}
-                                *{{ $error }} <br>
-                                {{-- </li> --}}
-                            @endforeach
-                            {{-- </ul> --}}
+                                @foreach ($errors->all() as $error)
+                                    {{-- <li> --}}
+                                        *{{ $error }} <br>
+                                        {{-- </li> --}}
+                                @endforeach
+                                {{-- </ul> --}}
                         </div>
                     @endif
                     @if (session('success'))
@@ -30,7 +30,7 @@
 
                     <livewire:admin.brand-manager />
 
-                    <div class = "table-responsive">
+                    <div class="table-responsive">
                         <table class="table">
                             <thead>
                                 <tr>
@@ -52,8 +52,8 @@
                                         <td>{{ $brand->name }}</td>
                                         <td>
                                             @if ($brand->logo_path)
-                                                <img src="{{ asset('storage/' . $brand->logo_path) }}" alt="Product Image"
-                                                    width="50">
+                                                <img loading="lazy" src="{{ asset('storage/' . $brand->logo_path) }}"
+                                                    alt="Product Image" width="50">
                                             @else
                                                 No Image
                                             @endif
@@ -61,14 +61,16 @@
                                         <td>{{ $brand->slug }}</td>
                                         <td>
                                             {{ $brand->is_featured }}
-                                            
+
                                         </td>
                                         <td>{{ $brand->website_url }}</td>
 
                                         <td>
-                                            <a href="{{ route('show.brand', $brand->id) }}" class="btn btn-primary btn-sm">Edit</a>
+                                            <a href="{{ route('show.brand', $brand->id) }}"
+                                                class="btn btn-primary btn-sm">Edit</a>
 
-                                            <form action="{{ route('delete.brand', $brand->id) }}" method="POST" style="display: inline-block;">
+                                            <form action="{{ route('delete.brand', $brand->id) }}" method="POST"
+                                                style="display: inline-block;">
 
                                                 @csrf
                                                 @method('DELETE')
@@ -82,9 +84,9 @@
 
                         </table>
 
-                        <div class="d-flex justify-content-end mt-3"> 
+                        <div class="d-flex justify-content-end mt-3">
                             {{ $brands->links("vendor.pagination.default") }}
-                         </div> 
+                        </div>
                     </div>
 
                 </div>
