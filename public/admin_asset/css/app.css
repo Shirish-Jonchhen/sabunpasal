@@ -728,6 +728,20 @@ progress {
 
 }
 
+.order-note {
+    border: 1px solid var(--border-color);
+    padding: 0.5rem 1rem;
+}
+
+.order-note span{
+    font-weight: 600;
+    color: var(--text-color);
+}
+
+.order-note p{
+    font-weight: 400;
+    color: var(--muted-text-color);
+}
 
 @media(max-width:992px){
     .order-detail-layout { grid-template-columns: 1fr !important; }

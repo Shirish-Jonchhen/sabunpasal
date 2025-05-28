@@ -41,7 +41,7 @@
         <livewire:product.product-variant :slug="$product->slug" :averageReviews="$averageReviews" />
 
 
-        <!-- Offer Section (Static Example) -->
+        {{-- <!-- Offer Section (Static Example) -->
         <section class="offer-banner-section container">
             <div class="offer-banner">
                 <div class="offer-icon">
@@ -53,7 +53,7 @@
                 </div>
                 <a href="#" class="btn btn-primary btn-sm">Shop Sprays</a>
             </div>
-        </section>
+        </section> --}}
 
         <!-- Detailed Information Section -->
         <section class="product-detailed-info container">
@@ -170,7 +170,7 @@
                                 </div>
                             @endforeach
                             <!-- Add more static reviews -->
-                            @if($reviews->count() > 2)
+                            @if($totalReviews > 2)
                                 <a href="{{ route('product.reviews.show', $product->slug) }}" class="view-all-link">View All Reviews</a>
                             @else
                                 <div class="view-all-link">No More Reviews</div>

@@ -73,6 +73,12 @@
                             <div class="summary-line total"><strong>Grand Total:</strong> <strong>NRs.
                                     {{ $order->total_amount }}</strong></div>
                         </div>
+                        @if($order->notes)
+                        <div class="order-note">
+                            <span style="margin-right:1rem;">Order Note:</span>
+                            <p>{{ $order->notes }}</p>
+                        </div>
+                    @endif
                     </section>
 
                     <aside class="order-sidebar-details">

@@ -366,6 +366,13 @@ ul {
     font-weight: bold;
     line-height: 1;
 }
+.logo-image{
+    width: 12rem;
+
+    /* Adjust logo image size */
+    border-radius: var(--border-radius);
+    /* Rounded corners for logo */
+}
 
 .navigation-bar {
     background-color: var(--primary-color);
@@ -3721,6 +3728,8 @@ ul {
     border-radius: 8px;
     width: 90%;
     max-width: 400px;
+    /* justify-content: center; */
+    /* align-items: center; */
     box-shadow: 0 5px 25px rgba(0, 0, 0, 0.3);
     position: relative;
     animation: fadeIn 0.3s ease-in-out;
@@ -3745,6 +3754,12 @@ ul {
 /* Form Elements */
 .modal-content form div {
     margin-bottom: 1rem;
+}
+
+.modal-content form a {
+    /* margin-bottom: 1rem; */
+    align-self: center;
+    width: 100%;
 }
 
 .modal-content label {
@@ -3938,6 +3953,21 @@ ul {
     border: 1px solid var(--border-color);
 }
 
+.order-note {
+    border: 1px solid var(--border-color);
+    padding: 0.5rem 1rem;
+}
+
+.order-note span{
+    font-weight: 600;
+    color: var(--text-color);
+}
+
+.order-note p{
+    font-weight: 400;
+    color: var(--muted-text-color);
+}
+
 .sort-options label,
 .sort-options select {
     font-size: 0.95rem;
@@ -4105,6 +4135,23 @@ ul {
 
 .modal-content button[type="submit"]:hover {
     background-color: #0056b3;
+}
+
+.modal-content .modal-btn {
+    background-color: #ff0000;
+    color: #fff;
+    padding: 0.6rem 1.2rem;
+    border: none;
+    margin: 0px 5px;
+    border-radius: 6px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    width: 100%;
+}
+
+.modal-content .modal-btn:hover {
+    background-color: #b40404;
 }
 
 /* Animation */

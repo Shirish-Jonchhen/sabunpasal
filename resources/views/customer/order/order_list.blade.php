@@ -14,64 +14,72 @@
 
         <div class="order-list">
             <!-- Static Orders Example (Replace with Blade in Laravel) -->
-
+            @if ($orders->isEmpty())
+            <p
+            class="text-center text-xl font-semibold text-red-600 bg-red-100 p-4 rounded-lg border border-red-300 shadow-md">
+            Your orders are empty.
+        </p>
+            @else
             @foreach ($orders as $order)
-                <div class="order-item">
-                    <div class="order-header">
-                        <h3>{{ $order->order_tracking_number }}</h3>
-                        <span>Date: {{ \Carbon\Carbon::parse($order->created_at)->format('F j, Y') }}</span>
-                        <span>Total: NRs. {{ $order->total_amount }}</span>
-                        @php
-                        $statusClass = match ($order->order_status) {
-                            'pending' => 'status-pending',
-                            'processing' => 'status-processing',
-                            'shipped' => 'status-shipped',
-                            'delivered' => 'status-delivered',
-                            'cancelled' => 'status-cancelled',
-                            'returned' => 'status-cancelled',
-                            default => '',
-                        };
-                    @endphp
-                    
-                    <span class="status {{ $statusClass }}">
-                        Status: {{ $order->order_status }}
-                    </span>
-
+            <div class="order-item">
+                <div class="order-header">
+                    <h3>{{ $order->order_tracking_number }}</h3>
+                    <span>Date: {{ \Carbon\Carbon::parse($order->created_at)->format('F j, Y') }}</span>
+                    <span>Total: NRs. {{ $order->total_amount }}</span>
                     @php
-                    $statusClass = match ($order->payment_status) {
-                        'unpaid' => 'status-pending',
-                        'partial' => 'status-processing',
-                        // 'shipped' => 'status-shipped',
-                        'paid' => 'status-delivered',
-                        'refunded' => 'status-delivered',
-                        // 'cancelled' => 'status-cancelled',
+                    $statusClass = match ($order->order_status) {
+                        'pending' => 'status-pending',
+                        'processing' => 'status-processing',
+                        'shipped' => 'status-shipped',
+                        'delivered' => 'status-delivered',
+                        'cancelled' => 'status-cancelled',
+                        'returned' => 'status-cancelled',
                         default => '',
                     };
                 @endphp
                 
                 <span class="status {{ $statusClass }}">
-                    Payment: {{ $order->payment_status }}
+                    Status: {{ $order->order_status }}
                 </span>
-                    </div>
-                    <div class="order-details">
-                        <h4>Items:</h4>
-                        <ul>
-                            @foreach ($order->storeOrders as $store_order)
-                                @foreach ($store_order->storeOrederProducts as $product)
-                                    <li>{{ $product->variantPrice->variant->product->name }} |
-                                        {{ $product->variantPrice->variant->variant_name }} |
-                                        {{ $product->variantPrice->variant->size }} (x{{ $product->quantity }}
-                                        {{ $product->variantPrice->unit->attribute_value }})</li>
-                                @endforeach
-                            @endforeach
 
-                        </ul>
-                        <div class="order-actions-list">
-                            <a href="{{ route('user.show.order', $order->order_tracking_number) }}" class="btn btn-secondary btn-sm">View Details</a>
-                        </div>
+                @php
+                $statusClass = match ($order->payment_status) {
+                    'unpaid' => 'status-pending',
+                    'partial' => 'status-processing',
+                    // 'shipped' => 'status-shipped',
+                    'paid' => 'status-delivered',
+                    'refunded' => 'status-delivered',
+                    // 'cancelled' => 'status-cancelled',
+                    default => '',
+                };
+            @endphp
+            
+            <span class="status {{ $statusClass }}">
+                Payment: {{ $order->payment_status }}
+            </span>
+                </div>
+                <div class="order-details">
+                    <h4>Items:</h4>
+                    <ul>
+                        @foreach ($order->storeOrders as $store_order)
+                            @foreach ($store_order->storeOrederProducts as $product)
+                                <li>{{ $product->variantPrice->variant->product->name }} |
+                                    {{ $product->variantPrice->variant->variant_name }} |
+                                    {{ $product->variantPrice->variant->size }} (x{{ $product->quantity }}
+                                    {{ $product->variantPrice->unit->attribute_value }})</li>
+                            @endforeach
+                        @endforeach
+
+                    </ul>
+                    <div class="order-actions-list">
+                        <a href="{{ route('user.show.order', $order->order_tracking_number) }}" class="btn btn-secondary btn-sm">View Details</a>
                     </div>
                 </div>
-            @endforeach
+            </div>
+        @endforeach
+            @endif
+
+            
 
 
 

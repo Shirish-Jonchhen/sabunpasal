@@ -8,6 +8,7 @@ use App\Http\Controllers\Admin\ProductAttributeController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\ProductDiscountController;
 use App\Http\Controllers\Admin\SubCategoryController;
+use App\Http\Controllers\Auth\GoogleController;
 use App\Http\Controllers\BrandController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CheckoutController;
@@ -39,6 +40,12 @@ Route::get('/terms-of-service', function () {
 Route::get('/contact-us', function () {
     return view('privacy_terms.contact');
 })->name('contact.us');
+
+Route::controller(GoogleController::class)->group(function () {
+    Route::get('auth/google', 'redirectToGoogle')->name('google.login');
+    Route::get('auth/google/callback','handleGoogleCallback')->name('google.callback');
+});
+
 
 Route::controller(HomeController::class)->group(function () {
     Route::get('/', 'index')->name('home');

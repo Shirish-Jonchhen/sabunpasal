@@ -20,7 +20,7 @@ class CustomerProductController extends Controller
 
         $reviews = $reviewsQuery->with('user')
             ->latest()
-            ->take(4)
+            ->take(2)
             ->get();
 
         $allReviews = $product->reviews();
@@ -151,7 +151,7 @@ class CustomerProductController extends Controller
 
         $reviews = $reviewsQuery->with('user')
             ->latest()
-            ->paginate(10); // Use pagination for all review
+            ->paginate(5); // Use pagination for all review
             // ->get();
 
         $allReviews = $product->reviews();

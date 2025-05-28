@@ -24,52 +24,52 @@
 <body class="relative">
 
     @if ($errors->updatePassword->any())
-    <div id="errorPwAlert" class="alert alert-danger alert-dismissable show">
-        @foreach ($errors->updatePassword->all() as $error)
-            <p>* {{ $error }}</p>
-        @endforeach
-    </div>
+        <div id="errorPwAlert" class="alert alert-danger alert-dismissable show">
+            @foreach ($errors->updatePassword->all() as $error)
+                <p>* {{ $error }}</p>
+            @endforeach
+        </div>
 
-    <style>
-        #errorPwAlert {
-            position: fixed;
-            top: 20px;
-            /* right: 0; */
-            left: 50%;
-            transform: translateX(-50%);
-            background-color: rgba(220, 53, 69, 0.95);
-            /* Bootstrap danger with transparency */
-            color: white;
-            padding: 16px 24px;
-            border-radius: 8px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-            z-index: 9999;
-            opacity: 1;
-            visibility: visible;
-            transition: opacity 0.5s ease, visibility 0.5s ease;
-            max-width: 90%;
-            width: fit-content;
-            text-align: left;
-        }
+        <style>
+            #errorPwAlert {
+                position: fixed;
+                top: 20px;
+                /* right: 0; */
+                left: 50%;
+                transform: translateX(-50%);
+                background-color: rgba(220, 53, 69, 0.95);
+                /* Bootstrap danger with transparency */
+                color: white;
+                padding: 16px 24px;
+                border-radius: 8px;
+                box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+                z-index: 9999;
+                opacity: 1;
+                visibility: visible;
+                transition: opacity 0.5s ease, visibility 0.5s ease;
+                max-width: 90%;
+                width: fit-content;
+                text-align: left;
+            }
 
-        #errorPwAlert.fade {
-            opacity: 0;
-            visibility: hidden;
-        }
+            #errorPwAlert.fade {
+                opacity: 0;
+                visibility: hidden;
+            }
 
-        #errorPwAlert p {
-            margin: 0;
-            padding: 2px 0;
-        }
-    </style>
+            #errorPwAlert p {
+                margin: 0;
+                padding: 2px 0;
+            }
+        </style>
 
-    <script>
-        setTimeout(function() {
-            const alert = document.getElementById('errorPwAlert');
-            if (alert) alert.classList.add('fade');
-        }, 2500);
-    </script>
-@endif
+        <script>
+            setTimeout(function() {
+                const alert = document.getElementById('errorPwAlert');
+                if (alert) alert.classList.add('fade');
+            }, 2500);
+        </script>
+    @endif
 
 
 
@@ -240,8 +240,8 @@
         </div>
         <div class="container header-main">
             <a href="{{ route('home') }}" class="logo">
-                <i class="fas fa-soap logo-icon"></i> <!-- Example icon -->
-                <span class="logo-text">SabunPasal.com</span>
+                <img src="{{ asset('logos/sabun_pasal_linear.png') }}" alt="SabunPasal.com Logo"
+                    class="logo-image">
             </a>
 
             <livewire:customer.search-bar />
@@ -302,11 +302,15 @@
                     <div x-show="open" @click.outside="open = false" class="bg-white border rounded"
                         style="position: absolute; width:200px; right: 0; z-index: 10;" x-transition>
                         @if (Auth::check())
-                            <a href="" class=" px-2 py-2 hover:bg-gray-100 block" onclick="event.preventDefault(); openChangePasswordModal();">Change Password</a><br>
-                            <a href="{{ route('user.orders') }}" class="px-2 py-2 hover:bg-gray-100 block">My Orders</a><br>
+                            <a href="" class=" px-2 py-2 hover:bg-gray-100 block"
+                                onclick="event.preventDefault(); openChangePasswordModal();">Change Password</a><br>
+                            <a href="{{ route('user.orders') }}" class="px-2 py-2 hover:bg-gray-100 block">My
+                                Orders</a><br>
                         @endif
-                        <a href="{{ route('privacy.policy') }}" class=" px-2 py-2 hover:bg-gray-100 block">Privacy Policy</a><br>
-                        <a href="{{ route('terms.service') }}" class=" px-2 py-2 hover:bg-gray-100 block">Terms of Service</a><br>
+                        <a href="{{ route('privacy.policy') }}" class=" px-2 py-2 hover:bg-gray-100 block">Privacy
+                            Policy</a><br>
+                        <a href="{{ route('terms.service') }}" class=" px-2 py-2 hover:bg-gray-100 block">Terms of
+                            Service</a><br>
                     </div>
                 </div>
 
@@ -325,8 +329,8 @@
         <div class="footer-main container">
             <div class="footer-column about-column">
                 <a href="index.html" class="logo footer-logo">
-                    <i class="fas fa-soap logo-icon"></i>
-                    <span class="logo-text">SabunPasal.com</span>
+                    <img src="{{ asset('logos/sabun_pasal_linear.png') }}" alt="SabunPasal.com Logo"
+                        class="logo-image">
                 </a>
                 <p>Your one-stop shop for quality cleaning supplies. We provide effective solutions for a sparkling
                     clean home and business.</p>
@@ -345,7 +349,7 @@
                     <li><a href="{{ route('user.orders') }}">Order History</a></li>
                     <li><a href="{{ route('user.wishlist') }}">Wishlist</a></li>
                     <li><a href="{{ route('contact.us') }}">Contact Us</a></li>
-                    <li><a href="#">FAQs</a></li>
+                    {{-- <li><a href="#">FAQs</a></li> --}}
                 </ul>
             </div>
             <div class="footer-column">
@@ -412,6 +416,17 @@
                     <button type="submit">Login</button>
                 </div>
 
+                <center class="mt-4 mb-4">
+                    --- OR ---
+                </center>
+
+                    <a href="{{ route('google.login') }}" class="btn btn-danger modal-btn">
+                        <i class="fab fa-google"></i> Login with Google
+                    </a>
+
+         
+
+
                 <div class="mt-4 text-center">
                     <a href="#" onclick="openRegisterModal(); closeLoginModal();"
                         class="underline text-sm text-gray-600 hover:text-gray-900">
@@ -467,42 +482,40 @@
     </div>
 
 
-      {{-- Change Password Modal --}}
-      <div id="changePasswordModal" class="modal" style="display: none;">
+    {{-- Change Password Modal --}}
+    <div id="changePasswordModal" class="modal" style="display: none;">
         <div class="modal-content">
             <form method="post" action="{{ route('password.update') }}" class="mt-6 space-y-6">
                 @csrf
                 @method('put')
-        
+
                 <div>
                     <x-input-label for="update_password_current_password" :value="__('Current Password')" />
-                    <x-text-input id="update_password_current_password" name="current_password" type="password" class="mt-1 block w-full" autocomplete="current-password" />
+                    <x-text-input id="update_password_current_password" name="current_password" type="password"
+                        class="mt-1 block w-full" autocomplete="current-password" />
                     {{-- <x-input-error :messages="$errors->updatePassword->get('current_password')" class="mt-2" /> --}}
                 </div>
-        
+
                 <div>
                     <x-input-label for="update_password_password" :value="__('New Password')" />
-                    <x-text-input id="update_password_password" name="password" type="password" class="mt-1 block w-full" autocomplete="new-password" />
+                    <x-text-input id="update_password_password" name="password" type="password"
+                        class="mt-1 block w-full" autocomplete="new-password" />
                     {{-- <x-input-error :messages="$errors->updatePassword->get('password')" class="mt-2" /> --}}
                 </div>
-        
+
                 <div>
                     <x-input-label for="update_password_password_confirmation" :value="__('Confirm Password')" />
-                    <x-text-input id="update_password_password_confirmation" name="password_confirmation" type="password" class="mt-1 block w-full" autocomplete="new-password" />
+                    <x-text-input id="update_password_password_confirmation" name="password_confirmation"
+                        type="password" class="mt-1 block w-full" autocomplete="new-password" />
                     {{-- <x-input-error :messages="$errors->updatePassword->get('password_confirmation')" class="mt-2" /> --}}
                 </div>
-        
+
                 <div class="flex items-center gap-4">
                     <x-primary-button>{{ __('Save') }}</x-primary-button>
-        
+
                     @if (session('status') === 'password-updated')
-                        <p
-                            x-data="{ show: true }"
-                            x-show="show"
-                            x-transition
-                            x-init="setTimeout(() => show = false, 2000)"
-                            class="text-sm text-gray-600"
-                        >{{ __('Saved.') }}</p>
+                        <p x-data="{ show: true }" x-show="show" x-transition x-init="setTimeout(() => show = false, 2000)"
+                            class="text-sm text-gray-600">{{ __('Saved.') }}</p>
                     @endif
                 </div>
             </form>
@@ -544,7 +557,7 @@
                 closeLoginModal();
             } else if (event.target === registerModal) {
                 closeRegisterModal();
-            }else if (event.target === changePasseordModal) {
+            } else if (event.target === changePasseordModal) {
                 closeChangePasswordModal();
             }
         });

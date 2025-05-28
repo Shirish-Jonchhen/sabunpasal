@@ -161,6 +161,11 @@
                 <!-- Add more static reviews as needed -->
             </div>
 
+            {{-- pagenation --}}
+            <div class="d-flex justify-content-end mt-3">
+                {{ $reviews->links('vendor.pagination.default') }}
+            </div>
+
             {{-- <nav class="pagination" aria-label="Reviews navigation">
             <ul>
                 <li><a href="#" class="page-link prev" aria-label="Previous page">&laquo; Prev</a></li>
