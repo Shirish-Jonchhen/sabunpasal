@@ -45,7 +45,7 @@
                                         alt="Main Promotion Banner">
                                     <div class="hero-banner-content">
                                         <h2>Welcome to SabunPasal.com</h2>
-                                        <a href="/products" class="btn btn-primary">Shop Now</a>
+                                        <a href="{{ route('user.all.product') }}" class="btn btn-primary">Shop Now</a>
                                     </div>
                                 </div>
                             </div>
@@ -60,18 +60,18 @@
                                         <div class="hero-banner-content">
                                             <h2>{{ $banner->title }}</h2>
                                             @if ($banner->link_type == 'product')
-                                            <a href="{{ route('product.show', Product::where('id', $banner->link_id)->firstOrFail()->slug) }}"
-                                                class="btn btn-primary">Shop Now</a>
-                                        @elseif ($banner->link_type == 'subcategory')
-                                            <a href="{{ route('user.show.subcategory', SubCategory::where('id', $banner->link_id)->firstOrFail()->slug) }}"
-                                                class="btn btn-primary">Shop Now</a>
-                                        @elseif ($banner->link_type == 'brand')
-                                        <a href="{{ route('user.all.product', [
-                                            'brands' => [Brand::where('id', $banner->link_id)->firstOrFail()->slug],
-                                            'sort' => 'default',
-                                        ]) }}" class="btn btn-primary">Shop Now</a>
-                                        
-                                        @endif
+                                                <a href="{{ route('product.show', Product::where('id', $banner->link_id)->firstOrFail()->slug) }}"
+                                                    class="btn btn-primary">Shop Now</a>
+                                            @elseif ($banner->link_type == 'subcategory')
+                                                <a href="{{ route('user.show.subcategory', SubCategory::where('id', $banner->link_id)->firstOrFail()->slug) }}"
+                                                    class="btn btn-primary">Shop Now</a>
+                                            @elseif ($banner->link_type == 'brand')
+                                                <a href="{{ route('user.all.product', [
+                                                    'brands' => [Brand::where('id', $banner->link_id)->firstOrFail()->slug],
+                                                    'sort' => 'default',
+                                                ]) }}"
+                                                    class="btn btn-primary">Shop Now</a>
+                                            @endif
                                         </div>
                                     </div>
                                 @endforeach
@@ -122,11 +122,11 @@
                                 <a href="{{ route('user.show.subcategory', SubCategory::where('id', $banner->link_id)->firstOrFail()->slug) }}"
                                     class="btn btn-primary">Shop Now</a>
                             @elseif ($banner->link_type == 'brand')
-                            <a href="{{ route('user.all.product', [
-                                'brands' => [Brand::where('id', $banner->link_id)->firstOrFail()->slug],
-                                'sort' => 'default',
-                            ]) }}" class="btn btn-primary">Shop Now</a>
-                            
+                                <a href="{{ route('user.all.product', [
+                                    'brands' => [Brand::where('id', $banner->link_id)->firstOrFail()->slug],
+                                    'sort' => 'default',
+                                ]) }}"
+                                    class="btn btn-primary">Shop Now</a>
                             @endif
 
                         </div>
@@ -172,18 +172,18 @@
                                 <h3>{{ $banner->title }}</h3>
                                 {{-- <p>{{ $banner->description }}</p> --}}
                                 @if ($banner->link_type == 'product')
-                                <a href="{{ route('product.show', Product::where('id', $banner->link_id)->firstOrFail()->slug) }}"
-                                    class="btn btn-primary">Shop Now</a>
-                            @elseif ($banner->link_type == 'subcategory')
-                                <a href="{{ route('user.show.subcategory', SubCategory::where('id', $banner->link_id)->firstOrFail()->slug) }}"
-                                    class="btn btn-primary">Shop Now</a>
-                            @elseif ($banner->link_type == 'brand')
-                            <a href="{{ route('user.all.product', [
-                                'brands' => [Brand::where('id', $banner->link_id)->firstOrFail()->slug],
-                                'sort' => 'default',
-                            ]) }}" class="btn btn-primary">Shop Now</a>
-                            
-                            @endif
+                                    <a href="{{ route('product.show', Product::where('id', $banner->link_id)->firstOrFail()->slug) }}"
+                                        class="btn btn-primary">Shop Now</a>
+                                @elseif ($banner->link_type == 'subcategory')
+                                    <a href="{{ route('user.show.subcategory', SubCategory::where('id', $banner->link_id)->firstOrFail()->slug) }}"
+                                        class="btn btn-primary">Shop Now</a>
+                                @elseif ($banner->link_type == 'brand')
+                                    <a href="{{ route('user.all.product', [
+                                        'brands' => [Brand::where('id', $banner->link_id)->firstOrFail()->slug],
+                                        'sort' => 'default',
+                                    ]) }}"
+                                        class="btn btn-primary">Shop Now</a>
+                                @endif
                             </div>
                         @endforeach
 

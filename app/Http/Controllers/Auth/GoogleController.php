@@ -41,6 +41,6 @@ class GoogleController extends Controller
         // Login and redirect
         Auth::login($user);
 
-        return redirect(session()->pull('google_login_redirect_url', '/')); // Or your preferred landing page
+        return redirect(session()->pull('google_login_redirect_url', '/'))->with("status", "Logged In Successfully."); // Or your preferred landing page
     }
 }

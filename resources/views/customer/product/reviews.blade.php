@@ -114,14 +114,16 @@
             <div class="review-filter-sort">
                 <div class="sort-options">
                     <form action="{{ route('product.reviews.show', $product->slug) }}" method="GET">
-                    <label for="sort-reviews">Sort By:</label>
-                    <select id="sort-reviews" name="sort-reviews" onchange="this.form.submit()">
-                        <option value="newest" {{ $sortOption == 'newest'? 'selected':'' }} >Newest</option>
-                        <option value="oldest" {{ $sortOption == 'oldest'? 'selected':'' }} >Oldest</option>
-                        <option value="rating-high" {{ $sortOption == 'rating-high'? 'selected':'' }} >Highest Rating</option>
-                        <option value="rating-low" {{ $sortOption == 'rating-low'? 'selected':'' }} >Lowest Rating</option>
-                        {{-- <option value="most-helpful">Most Helpful</option> --}}
-                    </select>
+                        <label for="sort-reviews">Sort By:</label>
+                        <select id="sort-reviews" name="sort-reviews" onchange="this.form.submit()">
+                            <option value="newest" {{ $sortOption == 'newest' ? 'selected' : '' }}>Newest</option>
+                            <option value="oldest" {{ $sortOption == 'oldest' ? 'selected' : '' }}>Oldest</option>
+                            <option value="rating-high" {{ $sortOption == 'rating-high' ? 'selected' : '' }}>Highest Rating
+                            </option>
+                            <option value="rating-low" {{ $sortOption == 'rating-low' ? 'selected' : '' }}>Lowest Rating
+                            </option>
+                            {{-- <option value="most-helpful">Most Helpful</option> --}}
+                        </select>
                     </form>
                 </div>
                 <!-- Add filter by rating if needed -->
@@ -132,7 +134,11 @@
                 @foreach ($reviews as $review)
                     <article class="review-item-full">
                         <div class="review-item-full-header">
-                            <span class="review-author-full">{{ $review->user->name }}</span>
+                            <span class="review-author-full">{{ $review->user->name }}
+                                @if ($review->user->email_verified_at)
+                                    <i class="fa-regular fa-circle-check" style="font-size: 1em;"></i>
+                                @endif
+                            </span>
                             <div class="review-rating-stars-full">
                                 @for ($i = 1; $i <= 5; $i++)
                                     @if ($i <= $review->star)
@@ -142,15 +148,16 @@
                                     @endif
                                 @endfor
                             </div>
-                            <span class="review-date-full">{{ \Carbon\Carbon::parse($review->created_at)->format('F j, Y') }}</span>
+                            <span
+                                class="review-date-full">{{ \Carbon\Carbon::parse($review->created_at)->format('F j, Y') }}</span>
                         </div>
                         {{-- <h4 class="review-title-full">Works great!</h4> --}}
-                        <p class="review-text-full">{{ $review->review  }}</p>
+                        <p class="review-text-full">{{ $review->review }}</p>
 
-                        @if( $review->isVerifiedPurchase() )
-                        <div class="review-meta-full">
-                            <span class="verified-purchase"><i class="fas fa-check-circle"></i> Verified Purchase</span>
-                        </div>
+                        @if ($review->isVerifiedPurchase())
+                            <div class="review-meta-full">
+                                <span class="verified-purchase"><i class="fas fa-check-circle"></i> Verified Purchase</span>
+                            </div>
                         @endif
 
 

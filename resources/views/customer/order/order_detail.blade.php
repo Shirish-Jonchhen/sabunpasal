@@ -61,7 +61,8 @@
                                         src="{{ asset('storage/' . $product->variantPrice->variant->images[0]->image_path) }}"
                                         alt="Sparkle All-Purpose Cleaner" class="item-image">
                                     <div class="item-info">
-                                        <span class="item-name">{{ $product->variantPrice->variant->product->name }} </span>
+                                        <span class="item-name">{{ $product->variantPrice->variant->product->name }}
+                                        </span>
                                         <span class="item-sku">Variant: {{ $product->variantPrice->variant->variant_name }}
                                             | Size: {{ $product->variantPrice->variant->size }} | Unit:
                                             {{ $product->variantPrice->unit->attribute_value }} </span>
@@ -94,7 +95,7 @@
                             {{ $order->total_amount }}</strong></div>
                 </div>
 
-                @if($order->notes)
+                @if ($order->notes)
                     <div class="order-note">
                         <span style="margin-right:1rem;">Order Note:</span>
                         <p>{{ $order->notes }}</p>
@@ -126,7 +127,9 @@
                     <p>{{ $order->payment_method == 'cod' ? 'Cash On Delivery' : $order->payment_method }}</p>
                 </div>
                 <div class="order-actions-detail">
-                    <button class="btn btn-secondary btn-block">Print Invoice</button>
+                    <a href="{{ route('invoice.download', $order->order_tracking_number) }}"
+                        class="btn btn-secondary btn-block">Print Invoice</a>
+                    {{-- <a onclick="window.print()" class="btn btn-secondary btn-block">Print Invoice</a> --}}
                     @if ($order->order_status == 'pending')
                         <button id="cancel-order-btn" class="btn btn-primary btn-block" style="margin-top: 0.5rem;">Cancel
                             Order</button>
@@ -142,7 +145,7 @@
     </div>
 
     <div id="confirmation-modal" class="modal" style="display: none;">
-        <div class="modal-content">
+        <div class="modal-content-confirm">
             <h4 id="modal-title">Are you sure?</h4>
             <p id="modal-message">This action cannot be undone.</p>
             <div class="modal-actions">
@@ -168,14 +171,14 @@
             document.getElementById('confirmation-modal').style.display = 'flex';
         }
 
-        document.addEventListener('DOMContentLoaded', function () {
+        document.addEventListener('DOMContentLoaded', function() {
             const clearCartButton = document.getElementById('cancel-order-btn');
             const confirmationModal = document.getElementById('confirmation-modal');
             const confirmActionButton = document.getElementById('confirm-action');
             const cancelActionButton = document.getElementById('cancel-action');
 
             // Clear cart setup
-            clearCartButton.addEventListener('click', function () {
+            clearCartButton.addEventListener('click', function() {
                 clearCartFlag = true;
                 itemToRemove = null;
 
@@ -185,14 +188,14 @@
             });
 
             // Confirm action
-            confirmActionButton.addEventListener('click', function () {
+            confirmActionButton.addEventListener('click', function() {
                 confirmationModal.style.display = 'none';
                 itemToRemove = null;
                 clearCartFlag = false;
             });
 
             // Cancel action
-            cancelActionButton.addEventListener('click', function () {
+            cancelActionButton.addEventListener('click', function() {
                 confirmationModal.style.display = 'none';
                 itemToRemove = null;
                 clearCartFlag = false;

@@ -14,6 +14,8 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.4/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-DQvkBjpPgn7RC31MCQoOeC9TI2kdqa4+BSgNMNj8v77fdC77Kj5zpWFTJaaAoMbC" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css" />
+    <link rel="icon" href="{{ asset('logos/sabun_pasal_logo.png') }}" type="image/png">
+
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link href="{{ asset('user_asset/css/style.css') }}" rel="stylesheet">
@@ -122,6 +124,53 @@
     @endif
 
 
+    @if (session('status'))
+        <div id="statusAlert" class="alert alert-success alert-dismissable show">
+            <p>{{ session('status') }}</p>
+        </div>
+
+        <style>
+            #statusAlert {
+                position: fixed;
+                top: 20px;
+                /* right: 0; */
+                left: 50%;
+                transform: translateX(-50%);
+                background-color: rgba(6, 147, 20, 0.51);
+                /* Bootstrap danger with transparency */
+                color: white;
+                padding: 16px 24px;
+                border-radius: 8px;
+                box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+                z-index: 9999;
+                opacity: 1;
+                visibility: visible;
+                transition: opacity 0.5s ease, visibility 0.5s ease;
+                max-width: 90%;
+                width: fit-content;
+                text-align: left;
+            }
+
+            #statusAlert.fade {
+                opacity: 0;
+                visibility: hidden;
+            }
+
+            #statusAlert p {
+                margin: 0;
+                padding: 2px 0;
+            }
+        </style>
+
+        <script>
+            setTimeout(function() {
+                const alert = document.getElementById('statusAlert');
+                if (alert) alert.classList.add('fade');
+            }, 2500);
+        </script>
+    @endif
+
+
 
     @if (session('success'))
         <div id="successAlert" class="alert alert-success alert-dismissable show">
@@ -221,7 +270,7 @@
         <div class="container header-top-bar">
             <span class="announcement"></span>
             <div class="top-bar-links">
-                <a href="#">Track Order</a>
+                {{-- <a href="#">Track Order</a> --}}
                 @if (Auth::user())
                     <form method="POST" action="{{ route('logout') }}" style="display: inline;">
                         @csrf
@@ -240,21 +289,10 @@
         </div>
         <div class="container header-main">
             <a href="{{ route('home') }}" class="logo">
-                <img src="{{ asset('logos/sabun_pasal_linear.png') }}" alt="SabunPasal.com Logo"
-                    class="logo-image">
+                <img src="{{ asset('logos/sabun_pasal_linear.png') }}" alt="SabunPasal.com Logo" class="logo-image">
             </a>
 
             <livewire:customer.search-bar />
-
-            {{-- <div class="search-bar">
-                <!-- Basic search form - point action to your Laravel search route -->
-                <form action="" style="display: flex; width: 100%;">
-                    <input type="text" name="query" placeholder="Search for products..." class="search-input-main"
-                        aria-label="Search products" wire:model.live="search">
-                    <button type="submit" class="search-button" aria-label="Submit search"><i
-                            class="fas fa-search"></i></button>
-                </form>
-            </div> --}}
 
             <div class="header-actions">
                 @if (Auth::user())
@@ -292,7 +330,11 @@
                     <a href="#" @click.prevent="open = !open" class="header-action-link ">
                         <i class="fas fa-user"></i>
                         @if (Auth::check())
-                            <span>{{ explode(' ', Auth::user()->name)[0] }}</span>
+                            <span>{{ explode(' ', Auth::user()->name)[0] }}
+                                @if (Auth::user()->email_verified_at)
+                                    <i class="fa-regular fa-circle-check" style="font-size: 1em;"></i>
+                                @endif
+                            </span>
                         @else
                             <span>Account</span>
                         @endif
@@ -302,6 +344,11 @@
                     <div x-show="open" @click.outside="open = false" class="bg-white border rounded"
                         style="position: absolute; width:200px; right: 0; z-index: 10;" x-transition>
                         @if (Auth::check())
+                            @if (!Auth::user()->email_verified_at)
+                                <a href="" class=" px-2 py-2 hover:bg-gray-100 block"
+                                    onclick="event.preventDefault(); openVerifyEmailModal();">Verify Email</a><br>
+                            @endif
+
                             <a href="" class=" px-2 py-2 hover:bg-gray-100 block"
                                 onclick="event.preventDefault(); openChangePasswordModal();">Change Password</a><br>
                             <a href="{{ route('user.orders') }}" class="px-2 py-2 hover:bg-gray-100 block">My
@@ -328,9 +375,9 @@
     <footer class="footer">
         <div class="footer-main container">
             <div class="footer-column about-column">
-                <a href="index.html" class="logo footer-logo">
-                    <img src="{{ asset('logos/sabun_pasal_linear.png') }}" alt="SabunPasal.com Logo"
-                        class="logo-image">
+                <a href="{{ route('home') }}" class="logo footer-logo">
+                    <img src="{{ asset('logos/sabun_pasal_linear_color_inversion.png') }}" alt="SabunPasal.com Logo"
+                        class="logo-image-footer">
                 </a>
                 <p>Your one-stop shop for quality cleaning supplies. We provide effective solutions for a sparkling
                     clean home and business.</p>
@@ -392,6 +439,10 @@
     {{-- Login Modal --}}
     <div id="loginModal" class="modal" style="display: none;">
         <div class="modal-content">
+            <img src="{{ asset('logos/sabun_pasal_linear.png') }}" alt="SabunPasal.com Logo"
+                class="logo-image-modal mb-4">
+
+            <h3 class="">Login to Your Account</h3>
             <form method="POST" action="{{ route('login') }}">
                 @csrf
                 <div>
@@ -406,11 +457,22 @@
                         required />
                 </div>
 
-                <div class="mt-4">
-                    <label>
-                        <input type="checkbox" name="remember"> Remember me
-                    </label>
+                <div class="d-flex mt-4" style="justify-content:space-between;">
+
+                    <div>
+                        <label>
+                            <input type="checkbox" name="remember"> Remember me
+                        </label>
+                    </div>
+                    <div>
+                        <label>
+                            <a style="cursor:pointer !important;"
+                                onclick="openForgotPasswordModal(); closeLoginModal()">Forgot Password?</a>
+                        </label>
+                    </div>
+
                 </div>
+
 
                 <div class="mt-4">
                     <button type="submit">Login</button>
@@ -420,11 +482,11 @@
                     --- OR ---
                 </center>
 
-                    <a href="{{ route('google.login') }}" class="btn btn-danger modal-btn">
-                        <i class="fab fa-google"></i> Login with Google
-                    </a>
+                <a href="{{ route('google.login') }}" class="btn btn-danger modal-btn">
+                    <i class="fab fa-google"></i> Login with Google
+                </a>
 
-         
+
 
 
                 <div class="mt-4 text-center">
@@ -440,6 +502,10 @@
     {{-- Register Modal --}}
     <div id="registerModal" class="modal" style="display: none;">
         <div class="modal-content">
+            <img src="{{ asset('logos/sabun_pasal_linear.png') }}" alt="SabunPasal.com Logo"
+                class="logo-image-modal mb-4">
+
+            <h3 class="">Register a New Account</h3>
             <form method="POST" action="{{ route('register') }}">
                 @csrf
 
@@ -467,6 +533,15 @@
                         name="password_confirmation" required autocomplete="new-password" />
                 </div>
 
+                <label for="terms" class="inline-flex items-center">
+                    <input id="terms" type="checkbox" name="terms"
+                        class="rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500"
+                        {{ old('terms') ? 'checked' : '' }} required>
+                    <span class="ml-2 text-sm text-gray-600">
+                        I agree to the <a href="{{ route('terms.service') }}"
+                            class="underline text-sm text-gray-600 hover:text-gray-900">Terms and Conditions</a>
+                    </span>
+                </label>
                 <div class="mt-4">
                     <button type="submit">Register</button>
                 </div>
@@ -485,6 +560,10 @@
     {{-- Change Password Modal --}}
     <div id="changePasswordModal" class="modal" style="display: none;">
         <div class="modal-content">
+            <img src="{{ asset('logos/sabun_pasal_linear.png') }}" alt="SabunPasal.com Logo"
+                class="logo-image-modal mb-4">
+
+            <h3 class="">Want to change your password?</h3>
             <form method="post" action="{{ route('password.update') }}" class="mt-6 space-y-6">
                 @csrf
                 @method('put')
@@ -522,9 +601,73 @@
         </div>
     </div>
 
+    {{-- forgot Password Modal --}}
+
+    <div id="forgotPasswordModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <img src="{{ asset('logos/sabun_pasal_linear.png') }}" alt="SabunPasal.com Logo"
+                class="logo-image-modal mb-4">
+
+            <h4 class="">Forgot your password? No problem. Just let us know your email address and we will email
+                you a password reset link that will allow you to choose a new one.</h4>
+            <form method="POST" action="{{ route('password.email') }}">
+                @csrf
+
+                <!-- Email Address -->
+                <div>
+                    <x-input-label for="email" :value="__('Email')" />
+                    <x-text-input id="email" class="block mt-1 w-full" type="email" name="email"
+                        :value="old('email')" required autofocus />
+                    {{-- <x-input-error :messages="$errors->get('email')" class="mt-2" /> --}}
+                </div>
+
+                <div class="flex items-center justify-end mt-4">
+                    <x-primary-button>
+                        {{ __('Email Password Reset Link') }}
+                    </x-primary-button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+    {{-- verify email Modal --}}
+    <div id="verifyEmailModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <img src="{{ asset('logos/sabun_pasal_linear.png') }}" alt="SabunPasal.com Logo"
+                class="logo-image-modal mb-4">
+
+            <h3 class="">Seems like you havent verified your email?</h3>
+
+            <p>
+                Thanks for signing up! Before getting started, could you verify your email address by clicking on the
+                link we just emailed to you? If you didn\'t receive the email, we will gladly send you another.
+            </p>
+            <form method="POST" action="{{ route('verification.send') }}">
+                @csrf
+
+                <div>
+                    <x-primary-button>
+                        {{ __('Resend Verification Email') }}
+                    </x-primary-button>
+                </div>
+            </form>
+
+        </div>
+    </div>
 
     <script>
+        @if (Auth::user() && !Auth::user()->email_verified_at && !session('shown_verify_email_popup'))
+            window.onload = function() {
+                openVerifyEmailModal();
+            };
+
+            @php
+                session(['shown_verify_email_popup' => true]);
+            @endphp
+        @endif
         function openLoginModal() {
+            console.log("hello");
             document.getElementById('loginModal').style.display = 'block';
         }
 
@@ -548,17 +691,39 @@
             document.getElementById('changePasswordModal').style.display = 'none';
         }
 
+        function openForgotPasswordModal() {
+            document.getElementById('forgotPasswordModal').style.display = 'block';
+        }
+
+        function closeForgotPasswordModal() {
+            document.getElementById('forgotPasswordModal').style.display = 'none';
+        }
+
+        function openVerifyEmailModal() {
+            document.getElementById('verifyEmailModal').style.display = 'block';
+        }
+
+        function closeVerifyEmailModal() {
+            document.getElementById('verifyEmailModal').style.display = 'none';
+        }
+
 
         window.addEventListener('click', function(event) {
             const loginModal = document.getElementById('loginModal');
             const registerModal = document.getElementById('registerModal');
             const changePasseordModal = document.getElementById('changePasswordModal');
+            const forgotPasseordModal = document.getElementById('forgotPasswordModal');
+            const verifyEmailModal = document.getElementById('verifyEmailModal');
             if (event.target === loginModal) {
                 closeLoginModal();
             } else if (event.target === registerModal) {
                 closeRegisterModal();
             } else if (event.target === changePasseordModal) {
                 closeChangePasswordModal();
+            } else if (event.target === forgotPasseordModal) {
+                closeForgotPasswordModal();
+            } else if (event.target === verifyEmailModal) {
+                closeVerifyEmailModal();
             }
         });
     </script>

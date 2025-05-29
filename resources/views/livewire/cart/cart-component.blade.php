@@ -13,7 +13,7 @@
             align-items: center;
         }
 
-        .modal-content {
+        .modal-content-confirm {
             background-color: white;
             padding: 20px;
             border-radius: 10px;
@@ -106,7 +106,6 @@
                 @if ($cartItems && $cartItems->count() > 0)
                     <a href="{{ route('user.checkout') }}" class="btn btn-secondary" id="checkout-button">Proceed to
                         Checkout</a>
-
                 @else
                     <a href="#" class="btn btn-secondary disabled" tabindex="-1" aria-disabled="true">Proceed to
                         Checkout</a>
@@ -118,7 +117,7 @@
 
     {{-- Confirmation modal --}}
     <div id="confirmation-modal" class="modal" style="display: none;">
-        <div class="modal-content">
+        <div class="modal-content-confirm">
             <h4 id="modal-title">Are you sure?</h4>
             <p id="modal-message">This action cannot be undone.</p>
             <div class="modal-actions">
@@ -141,24 +140,25 @@
             document.getElementById('confirmation-modal').style.display = 'flex';
         }
 
-        document.addEventListener('DOMContentLoaded', function () {
+        document.addEventListener('DOMContentLoaded', function() {
             const clearCartButton = document.getElementById('clear-cart-button');
             const confirmationModal = document.getElementById('confirmation-modal');
             const confirmActionButton = document.getElementById('confirm-action');
             const cancelActionButton = document.getElementById('cancel-action');
 
             // Clear cart setup
-            clearCartButton.addEventListener('click', function () {
+            clearCartButton.addEventListener('click', function() {
                 clearCartFlag = true;
                 itemToRemove = null;
 
                 document.getElementById('modal-title').innerText = "Clear Cart?";
-                document.getElementById('modal-message').innerText = "Are you sure you want to clear your cart?";
+                document.getElementById('modal-message').innerText =
+                    "Are you sure you want to clear your cart?";
                 confirmationModal.style.display = 'flex';
             });
 
             // Confirm action
-            confirmActionButton.addEventListener('click', function () {
+            confirmActionButton.addEventListener('click', function() {
                 if (clearCartFlag) {
                     @this.call('clearCart');
                 } else if (itemToRemove !== null) {
@@ -171,7 +171,7 @@
             });
 
             // Cancel action
-            cancelActionButton.addEventListener('click', function () {
+            cancelActionButton.addEventListener('click', function() {
                 confirmationModal.style.display = 'none';
                 itemToRemove = null;
                 clearCartFlag = false;

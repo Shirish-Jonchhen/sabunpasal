@@ -27,6 +27,7 @@ use App\Http\Controllers\CustomerCategoryController;
 use App\Http\Controllers\CustomerSubcategoryConroller;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\SearchController;
+use App\Http\Controllers\InvoiceController;
 use App\Models\HomePageSetting;
 use Illuminate\Support\Facades\Route;
 
@@ -41,9 +42,15 @@ Route::get('/contact-us', function () {
     return view('privacy_terms.contact');
 })->name('contact.us');
 
+
+Route::controller(InvoiceController::class)->group(function () {
+    Route::get('/invoice/{order_tracking_number}/download', 'downloadInvoice')->name('invoice.download');
+});
+
+
 Route::controller(GoogleController::class)->group(function () {
     Route::get('auth/google', 'redirectToGoogle')->name('google.login');
-    Route::get('auth/google/callback','handleGoogleCallback')->name('google.callback');
+    Route::get('auth/google/callback', 'handleGoogleCallback')->name('google.callback');
 });
 
 
@@ -55,7 +62,7 @@ Route::controller(HomeController::class)->group(function () {
 Route::controller(CustomerProductController::class)->group(function () {
     Route::get('/product/{slug}', 'index')->name('product.show');
     Route::get('/product/{slug}/reviews', 'get_all_reviews')->name('product.reviews.show');
-    
+
     Route::post('/product/review/{slug}', 'addReview')->name('product.review');
 });
 
@@ -221,11 +228,7 @@ Route::middleware(['auth', 'verified', 'rolemanager:admin'])->group(function () 
         Route::controller(OrderController::class)->group(function () {
             Route::get('/orders', 'get_all_orders')->name('admin.orders');
             Route::get('/orders/{trackingNumber}', 'show_one_order')->name('admin.order.show');
-
         });
-
-
-
     });
 });
 
@@ -266,7 +269,6 @@ Route::middleware(['auth', 'verified', 'rolemanager:vendor'])->group(function ()
         Route::controller(OrderController::class)->group(function () {
             Route::get('/orders', 'get_all_store_orders')->name('vendor.orders');
             Route::get('/orders/{trackingNumber}', 'show_one_store_order')->name('vendor.order.show');
-
         });
     });
 });

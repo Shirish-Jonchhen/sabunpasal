@@ -123,15 +123,13 @@
 
                             <div class="form-group">
                                 <label for="review-text">Your Review:</label>
-                                <textarea id="review-text" name="review" rows="4"
-                                    placeholder="Tell us what you think..."></textarea>
+                                <textarea id="review-text" name="review" rows="4" placeholder="Tell us what you think..."></textarea>
                             </div>
                             @if (Auth::user())
                                 <button type="submit" class="btn btn-secondary">Submit Review</button>
                             @else
                                 <button type="button" class="btn btn-secondary"
                                     onclick="event.preventDefault(); openLoginModal();">Submit Review</button>
-
                             @endif
 
 
@@ -153,7 +151,11 @@
                             @foreach ($reviews as $review)
                                 <div class="review-item">
                                     <div class="review-header">
-                                        <span class="review-author">{{ $review->user->name }}</span>
+                                        <span class="review-author">{{ $review->user->name }}
+                                            @if ($review->user->email_verified_at)
+                                                <i class="fa-regular fa-circle-check" style="font-size: 1em;"></i>
+                                            @endif
+                                        </span>
                                         <span
                                             class="review-date">{{ \Carbon\Carbon::parse($review->created_at)->format('F j, Y') }}</span>
                                         <div class="review-rating-stars">
@@ -170,8 +172,9 @@
                                 </div>
                             @endforeach
                             <!-- Add more static reviews -->
-                            @if($totalReviews > 2)
-                                <a href="{{ route('product.reviews.show', $product->slug) }}" class="view-all-link">View All Reviews</a>
+                            @if ($totalReviews > 2)
+                                <a href="{{ route('product.reviews.show', $product->slug) }}" class="view-all-link">View
+                                    All Reviews</a>
                             @else
                                 <div class="view-all-link">No More Reviews</div>
                             @endif
@@ -191,11 +194,10 @@
                 <h3>Similar Products</h3>
                 <!-- Re-use product card styling -->
                 <div class="similar-products">
-                @foreach ($similarProducts as  $product)
-                <x-product-card :product="$product" />
-                {{-- <br> --}}
-                    
-                @endforeach
+                    @foreach ($similarProducts as $product)
+                        <x-product-card :product="$product" />
+                        {{-- <br> --}}
+                    @endforeach
                 </div>
 
                 <!-- Add more similar products -->
@@ -212,10 +214,9 @@
             </div>
             <div class="product-grid product-grid-horizontal" id="product-grid-related">
                 <!-- Static Example Product Cards (Use same structure as index) -->
-               @foreach ( $youMayAlsoLike as $product )
-               <x-product-card :product="$product" />
-                   
-               @endforeach
+                @foreach ($youMayAlsoLike as $product)
+                    <x-product-card :product="$product" />
+                @endforeach
                 <!-- Add more static related products -->
             </div>
         </section>
@@ -267,11 +268,11 @@
                                 <p class="product-price">
                                     @php
                                         $lowestPrice =
-                                            $item->product->variants->flatMap->prices->sortBy('price')->first()->price ??
-                                            '0.00';
+                                            $item->product->variants->flatMap->prices->sortBy('price')->first()
+                                                ->price ?? '0.00';
                                         $highestPrice =
-                                            $item->product->variants->flatMap->prices->sortByDesc('price')->first()->price ??
-                                            '0.00';
+                                            $item->product->variants->flatMap->prices->sortByDesc('price')->first()
+                                                ->price ?? '0.00';
                                     @endphp
 
                                     @if ($lowestPrice == $highestPrice)
@@ -283,10 +284,9 @@
                             </div>
                         </div>
                     </a>
-
                 @endforeach
 
-                @if($recentViews->count() < 4)
+                @if ($recentViews->count() < 4)
                     <div class="product-card-placeholder" style="min-height: 350px;">
                         <p>Your recently viewed items will appear here.</p>
                     </div>
