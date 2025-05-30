@@ -32,8 +32,8 @@
                             ->old_price ?? '0.00';
                 @endphp
 
-                @if ($lowestOldPrice == $highestOldPrice)
-                    NRs.{{ $lowestOldPrice }}
+                @if ($lowestOldPrice == $highestOldPrice || $lowestOldPrice == '0.00')
+                    NRs.{{ $highestOldPrice }}
                 @else
                     NRs.{{ $lowestOldPrice }} - NRs.{{ $highestOldPrice }}
                 @endif

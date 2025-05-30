@@ -107,7 +107,7 @@
 
     <h2>Contact Us</h2>
     <p>
-      If you have any questions about these Terms, please <a href="contact.html">contact us</a>.
+      If you have any questions about these Terms, please <a href="{{ route('contact.us') }}">contact us</a>.
     </p>
 </div>
 

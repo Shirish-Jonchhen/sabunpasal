@@ -47,21 +47,21 @@
 
                         <label class="form-label fw-bold mb-2">Category</label>
                         <input type="text" class="form-control mb-2" name="category_name"
-                            value="{{ $product->brand->name }}" placeholder="Brand Name" readonly>
-                        <input type="hidden" class="form-control mb-2" name="category_id" value="{{ $product->brand->id }}"
+                            value="{{ $product->category->category_name }}" placeholder="Category Name" readonly>
+                        <input type="hidden" class="form-control mb-2" name="category_id" value="{{ $product->category->id }}"
                             readonly>
 
                         <label class="form-label fw-bold mb-2">Sub Category</label>
                         <input type="text" class="form-control mb-2" name="sub_category_name"
-                            value="{{ $product->category->category_name }}" readonly>
-                        <input type="hidden" class="form-control mb-2" name="brand_id"
-                            value="{{ $product->category->id }}" readonly>
-
-                        <label class="form-label fw-bold mb-2">Brand</label>
-                        <input type="text" class="form-control mb-2" name="brand_name"
                             value="{{ $product->subcategory->subcategory_name }}" readonly>
                         <input type="hidden" class="form-control mb-2" name="subcategory_id"
                             value="{{ $product->subcategory->id }}" readonly>
+
+                        <label class="form-label fw-bold mb-2">Brand</label>
+                        <input type="text" class="form-control mb-2" name="brand_name"
+                            value="{{ $product->brand->name }}" readonly>
+                        <input type="hidden" class="form-control mb-2" name="brand_id"
+                            value="{{ $product->brand->id }}" readonly>
 
                         <label class="form-label fw-bold mb-2">Store</label>
                         <input type="text" class="form-control mb-2" name="store_name"
