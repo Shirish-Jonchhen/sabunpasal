@@ -13,15 +13,16 @@ class HomeController extends Controller
 {
     public function index()
     {
+        // sleep(10);
         $banners = HomePageSetting::all();
         $categories = Category::all();
         $featured_subcategories = SubCategory::where('is_featured', 1)->get();
         $brands = Brand::all();
         $sale_products = Product::where('is_on_sale', 1)->get()->shuffle()->take(4);
         $randomCategories = Category::all()->shuffle();
-    
-        
 
-        return view('customer.home.index', compact('banners', 'categories', 'featured_subcategories','brands','sale_products','randomCategories'));
+
+
+        return view('customer.home.index', compact('banners', 'categories', 'featured_subcategories', 'brands', 'sale_products', 'randomCategories'));
     }
 }

@@ -25,6 +25,15 @@
 
 <body class="relative">
 
+
+    <div id="page-loader">
+        <div class="loader-inner">
+            {{-- Make sure you have a spinner.gif in public/images/ --}}
+            <img src="{{ asset('gifs/loading.gif') }}" alt="Loading..." />
+            {{-- <p>Loading, please wait...</p> --}}
+        </div>
+    </div>
+
     @if ($errors->updatePassword->any())
         <div id="errorPwAlert" class="alert alert-danger alert-dismissable show">
             @foreach ($errors->updatePassword->all() as $error)
@@ -447,13 +456,13 @@
                 @csrf
                 <div>
                     <x-input-label for="email" :value="__('Email')" />
-                    <x-text-input id="email" class="block mt-1 w-full" type="email" name="email"
+                    <x-text-input id="email-login" class="block mt-1 w-full" type="email" name="email"
                         value="{{ old('email') }}" required autofocus />
                 </div>
 
                 <div class="mt-4">
                     <x-input-label for="password" :value="__('Password')" />
-                    <x-text-input id="password" class="block mt-1 w-full" type="password" name="password"
+                    <x-text-input id="password-login" class="block mt-1 w-full" type="password" name="password"
                         required />
                 </div>
 
@@ -516,15 +525,15 @@
                 </div>
 
                 <div class="mt-4">
-                    <x-input-label for="email" :value="__('Email')" />
+                    <x-input-label for="email-register" :value="__('Email')" />
                     <x-text-input id="email" class="block mt-1 w-full" type="email" name="email"
                         :value="old('email')" required autocomplete="username" />
                 </div>
 
                 <div class="mt-4">
                     <x-input-label for="password" :value="__('Password')" />
-                    <x-text-input id="password" class="block mt-1 w-full" type="password" name="password" required
-                        autocomplete="new-password" />
+                    <x-text-input id="password-register" class="block mt-1 w-full" type="password" name="password"
+                        required autocomplete="new-password" />
                 </div>
 
                 <div class="mt-4">
@@ -616,7 +625,7 @@
                 <!-- Email Address -->
                 <div>
                     <x-input-label for="email" :value="__('Email')" />
-                    <x-text-input id="email" class="block mt-1 w-full" type="email" name="email"
+                    <x-text-input id="email-forgot-password" class="block mt-1 w-full" type="email" name="email"
                         :value="old('email')" required autofocus />
                     {{-- <x-input-error :messages="$errors->get('email')" class="mt-2" /> --}}
                 </div>
@@ -655,6 +664,50 @@
 
         </div>
     </div>
+
+    {{-- 4) INTERCEPT INTERNAL LINK CLICKS TO SHOW LOADER IMMEDIATELY --}}
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Grab all <a> tags on the page
+            document.querySelectorAll('a').forEach(function(link) {
+                // Only intercept “same-host” links (i.e. internal navigation)
+                const href = link.getAttribute('href');
+                if (!href || href.startsWith('http') || href.startsWith('#')) {
+                    // console.log("Intercepted link clickss:", href);
+
+                    return;
+                }
+
+                link.addEventListener('click', function(e) {
+                    // Let special links (e.g. target="_blank") behave normally:
+                    if (link.target === '_blank' || e.metaKey || e.ctrlKey) {
+                        return;
+                    }
+
+                    // Prevent the default jump immediately
+                    e.preventDefault();
+
+                    console.log("Intercepted link click:", href);
+
+                    // Show our loader overlay right away
+                    document.getElementById('page-loader').style.display = 'flex';
+                    document.getElementById('main-content').style.display = 'none';
+
+                    // Wait a tiny tick so the loader actually paints:
+                    setTimeout(function() {
+                        window.location.href = href;
+                    }, 5000);
+                });
+            });
+        });
+    </script>
+    <script>
+        window.addEventListener('load', function() {
+            // Once all CSS, JS, images, etc. are fully loaded:
+            document.getElementById('page-loader').style.display = 'none';
+            document.getElementById('main-content').style.display = 'block';
+        });
+    </script>
 
     <script>
         @if (Auth::user() && !Auth::user()->email_verified_at && !session('shown_verify_email_popup'))
