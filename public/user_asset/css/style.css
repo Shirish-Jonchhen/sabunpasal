@@ -4119,7 +4119,7 @@ ul {
         width: fit-content;
         height: fit-content;
         margin-bottom: 1rem;
-        z-index: 1001;
+        /* z-index: 1001; */
         top: 10px;
         left: 10px;
     }
