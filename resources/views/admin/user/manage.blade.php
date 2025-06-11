@@ -24,7 +24,7 @@
                         </div>
                     @endif
 
-                    {{-- <livewire:admin.category-manager /> --}}
+                    <livewire:admin.user-manager />
 
 
                     <div class="table-responsive">
@@ -53,7 +53,7 @@
                                         <td>{{ $user->email_verified_at ?? 'N/A' }}</td>
                                         <td>{{ $user->created_at }}</td>
                                         <td>
-                                            <a href="" class="btn btn-primary btn-sm">Edit</a>
+                                            <a href="{{ route('admin.edit.user',$user->id) }}" class="btn btn-primary btn-sm">Edit</a>
                                             {{-- <form action="{{ route('delete.cat', $category->id) }}" method="POST"
                                                 style="display:inline-block;">
                                                 @csrf

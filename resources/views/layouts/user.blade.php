@@ -806,6 +806,7 @@
 
     <script src="{{ asset('user_asset/js/script.js') }}"></script>
     <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
 
     @livewireScripts
 </body>

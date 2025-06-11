@@ -60,7 +60,7 @@
 
                     <li class="sidebar-item {{ request()->routeIs('admin.manage.user') ? 'active' : '' }}">
                         <a class="sidebar-link" href="{{ route('admin.manage.user') }}">
-                            <i class="align-middle" data-feather="plus-circle"></i> <span
+                            <i class="align-middle" data-feather="users"></i> <span
                                 class="align-middle">Users</span>
                         </a>
                     </li>

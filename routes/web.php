@@ -119,6 +119,8 @@ Route::middleware(['auth', 'verified', 'rolemanager:admin'])->group(function () 
             Route::get('/dashboard', 'index')->name('admin');
             Route::get('/settings', 'setting')->name('admin.settings');
             Route::get('/manage/users', 'manage_user')->name('admin.manage.user');
+            Route::get('/edit/users/{id}', 'edit_user')->name('admin.edit.user');
+            Route::put('/update/users/{id}', 'update_user')->name('admin.update.user');
             Route::get('/manage/store', 'manage_stores')->name('admin.manage.store');
             Route::get('/cart/history', 'cart_history')->name('admin.cart.histroy');
             Route::get('/order/history', 'order_history')->name('admin.order.histroy');
@@ -128,10 +130,7 @@ Route::middleware(['auth', 'verified', 'rolemanager:admin'])->group(function () 
 
             Route::get('/home/banner/create', 'index')->name('home.banner.create');
             Route::get('/home/banner/manage', 'manage')->name('home.banner.manage');
-
             Route::post('/home/banner/add', 'add_home_banner')->name('add.home.banner');
-            // Route::get('/home/banner/{id}', 'show_single_home_banner')->name('show.home.banner');
-            // Route::put('/home/banner/update/{id}', 'update_home_banner')->name('update.home.banner');
             Route::delete('/home/banner/delete/{id}', 'delete_home_banner')->name('delete.home.banner');
         });
 

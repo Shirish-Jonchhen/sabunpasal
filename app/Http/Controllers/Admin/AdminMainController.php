@@ -65,6 +65,31 @@ class AdminMainController extends Controller
         return view('admin.user.manage', compact('users'));
     }
 
+    public function edit_user($id){
+        //fetch user by id
+        $user = User::findOrFail($id);
+        return view('admin.user.edit', compact('user'));
+    }
+
+    public function update_user(Request $request, $id)
+    {
+        //validate the request
+        $request->validate([
+
+            'role' => 'required',
+        ]);
+
+        //update user
+        $user = User::findOrFail($id);
+        $user->update([
+            'role' => $request->role,
+        ]);
+        // dd($user);
+
+
+        return redirect()->back()->with('success', 'User updated successfully');
+    }
+
     public function manage_stores()
     {
         return view('admin.store.manage');
