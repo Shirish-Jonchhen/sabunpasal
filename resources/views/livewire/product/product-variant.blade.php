@@ -17,8 +17,8 @@
                 @if ($variantImages->isEmpty())
                     <img loading="lazy" src="default-image.jpg" alt="Default Image" id="main-product-image">
                 @else
-                    <img loading="lazy" src="{{ asset('storage/' . $variantImages->first()->image_path) }}" alt="Main Image"
-                        id="main-product-image">
+                    <img loading="lazy" src="{{ asset('storage/' . $variantImages->first()->image_path) }}"
+                        alt="Main Image" id="main-product-image">
                 @endif
 
 
@@ -37,7 +37,6 @@
                         <i class="fas fa-heart" style='color: {{ $isInWishlist ? 'red' : '#666666' }} ;'></i>
 
                     </button>
-
                 @endif
 
 
@@ -46,14 +45,14 @@
             </div>
             <div class="thumbnail-images">
                 @foreach ($variantImages as $image)
-                    <img loading="lazy" src="{{ asset('storage/' . $image->image_path) }}" alt="Thumbnail" class="thumbnail"
-                        id="thumbnail-{{ $image->id }}" data-large-src="{{ asset('storage/' . $image->image_path) }}"
-                        onclick="changeMainImage(this)">
+                    <img loading="lazy" src="{{ asset('storage/' . $image->image_path) }}" alt="Thumbnail"
+                        class="thumbnail" id="thumbnail-{{ $image->id }}"
+                        data-large-src="{{ asset('storage/' . $image->image_path) }}" onclick="changeMainImage(this)">
                 @endforeach
             </div>
         </div>
         <script>
-            document.addEventListener("DOMContentLoaded", function () {
+            document.addEventListener("DOMContentLoaded", function() {
                 const firstThumbnail = document.querySelector('.thumbnail');
                 if (firstThumbnail) {
                     firstThumbnail.classList.add('selected');
@@ -68,7 +67,7 @@
 
                 // Remove the 'selected' class from all thumbnails
                 var thumbnails = document.querySelectorAll('.thumbnail');
-                thumbnails.forEach(function (thumb) {
+                thumbnails.forEach(function(thumb) {
                     thumb.classList.remove('selected');
                 });
 
@@ -168,8 +167,8 @@
                     <div class="quantity-controls">
                         <button wire:click="decreaseQuantity" class="quantity-decrease" title="Decrease quantity"
                             aria-label="Decrease quantity">-</button>
-                        <input type="number" id="quantity" name="quantity" wire:model.live="quantity"
-                            value="{{ $quantity }}" min="1" class="quantity-input" aria-label="Quantity">
+                        <input type="number" id="quantity" name="quantity" readonly value="{{ $quantity }}"
+                            min="1" class="quantity-input" aria-label="Quantity">
                         <button wire:click="increaseQuantity" class="quantity-increase" title="Increase quantity"
                             aria-label="Increase quantity">+</button>
                     </div>
@@ -194,7 +193,8 @@
                             <i class="fas fa-cart-plus"></i> Add to Cart
                         </button>
                     @else
-                        <button class="btn btn-primary btn-buy-now" onclick="event.preventDefault(); openLoginModal();">Buy
+                        <button class="btn btn-primary btn-buy-now"
+                            onclick="event.preventDefault(); openLoginModal();">Buy
                             Now</button>
 
                         <button class="btn btn-secondary add-to-cart-button"
@@ -208,7 +208,8 @@
 
 
             @if (Auth::user())
-                <a href="#" class="add-to-wishlist-link" data-product-id="{{ $product->id }}" wire:click="addToWishlist">
+                <a href="#" class="add-to-wishlist-link" data-product-id="{{ $product->id }}"
+                    wire:click="addToWishlist">
                     <i class="fas fa-heart"></i>
                     @if ($isInWishlist)
                         Remove from Wishlist
