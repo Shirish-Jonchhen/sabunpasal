@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\OrderConfirmation;
 use App\Models\CartItem;
 use App\Models\District;
 use App\Models\Municipality;
@@ -14,6 +15,7 @@ use App\Models\VariantPrice;
 use App\Models\Ward;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 
 class CheckoutController extends Controller
 {
@@ -159,11 +161,15 @@ class CheckoutController extends Controller
             $variantPrice->save();
         }
 
+        // Send order confirmation email
+        Mail::to(Auth::user()->email)->send(new OrderConfirmation($order));
+
         return redirect()->route("user.orders")->with('success', 'Order created successfully.');
     }
 
 
-    public function create_single_order(Request $request){
+    public function create_single_order(Request $request)
+    {
         // <input type="hidden" name="product_variant_id" value="{{ $productVariantPriceId }}">
         // <input type="hidden" name="quantity" value="{{ $quantity }}">
         $request->validate([
@@ -248,11 +254,9 @@ class CheckoutController extends Controller
             // Add other payment-related fields as needed
         ]);
 
+        Mail::to(Auth::user()->email)->send(new OrderConfirmation($order));
 
         return redirect()->route("user.orders")->with('success', 'Order created successfully.');
-
-
-
     }
 
 

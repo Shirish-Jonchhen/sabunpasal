@@ -69,8 +69,8 @@ html {
     max-width: 80vw;
 }
 
-/* For screens ≤ 922px */
-@media (max-width: 922px) {
+/* For screens ≤ 992px */
+@media (max-width: 992px) {
     .loader-inner img {
         width: 400px;
     }
