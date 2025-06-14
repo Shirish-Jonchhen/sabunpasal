@@ -110,6 +110,10 @@ class ProductVariant extends Component
     // Methods to increase and decrease quantity
     public function increaseQuantity()
     {
+        if ($this->stock !== null && $this->quantity >= $this->stock) {
+            session()->flash('error', 'Cannot increase quantity beyond available stock.');
+            return;
+        }
         $this->quantity++;
     }
 

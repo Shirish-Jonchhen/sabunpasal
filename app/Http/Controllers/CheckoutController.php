@@ -56,6 +56,13 @@ class CheckoutController extends Controller
         ]);
 
         $cartItems = CartItem::where('user_id', Auth::user()->id)->get();
+
+        foreach ($cartItems as $item) {
+            if ($item->variantPrice->stock < $item->quantity) {
+                return redirect()->back()->with('error', 'Insufficient stock for product: ' . $item->variantPrice->variant->product->name);
+            }
+        }
+
         $subtotal = 0;
         foreach ($cartItems as $item) {
             $subtotal += $item->variantPrice->old_price * $item->quantity;
@@ -189,10 +196,17 @@ class CheckoutController extends Controller
             'delivery_charge' => 'nullable|numeric',
         ]);
 
+
+
         $variantPrice = VariantPrice::findOrFail($request->product_variant_price_id);
         $subtotal = $variantPrice->old_price * $request->quantity;
         $totalTax = (($variantPrice->variant->product->tax_rate / 100) * $variantPrice->price) * $request->quantity;
         $discountAmount = ($variantPrice->old_price - $variantPrice->price) * $request->quantity;
+
+
+        if ($variantPrice->stock < $request->quantity) {
+            return redirect()->back()->with('error', 'Insufficient stock for product: ' . $variantPrice->variant->product->name);
+        }
 
         $order = Order::create([
 

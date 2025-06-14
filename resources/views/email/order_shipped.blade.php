@@ -5,7 +5,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <title>Your Order Has Been Confirmed!</title>
+    <title>Your Order Has Been Shipped!</title> <!-- Refactored: Title changed -->
     <style type="text/css">
         /* Reset styles for better consistency across email clients */
         body,
@@ -236,14 +236,14 @@
                         color: #333333;
                         padding-bottom: 16px;
                       ">
-                                        Order Confirmation
+                                        Your Order Has Been Shipped! <!-- Refactored: Heading changed -->
                                     </td>
                                 </tr>
                                 <tr>
                                     <td align="center" class="text-base md-text-base text-gray-600 sm-leading-24"
                                         style="font-size: 16px; line-height: 24px; color: #666666">
-                                        Thank you for your purchase! Your order has been confirmed
-                                        and is being processed.
+                                        Great news! Your recent order has shipped and is on its way to you.
+                                        <!-- Refactored: Intro text changed -->
                                     </td>
                                 </tr>
                             </table>
@@ -285,7 +285,7 @@
                               color: #333333;
                               padding-bottom: 4px;
                             ">
-                                                    {{ $order->order_tracking_number }}
+                                                    Order Number: {{ $order->order_tracking_number }}
                                                 </td>
                                             </tr>
                                             <tr>
@@ -326,6 +326,7 @@
                                                     {{ $order->payment_method == 'cod' ? 'Cash on Delivery' : 'Online Payment' }}
                                                 </td>
                                             </tr>
+
                                             <tr>
                                                 <td class="w-1/2 text-gray-600"
                                                     style="width: 50%; font-size: 15px; color: #666666">
@@ -659,30 +660,6 @@
                             </table>
                         </td>
                     </tr>
-
-                    <!-- Call to Action Button -->
-                    {{-- <tr>
-                        <td align="center" class="p-8 lg-px-10 md-px-16 sm-px-20" style="padding: 32px">
-                            <table border="0" cellpadding="0" cellspacing="0">
-                                <tr>
-                                    <td align="center" class="bg-blue-600 rounded-md"
-                                        style="border-radius: 5px; background-color: #007788">
-                                        <a href="https://yourwebsite.com/track-order/ABCDE12345" target="_blank"
-                                            class="block py-3 px-6 text-white font-semibold no-underline"
-                                            style="
-                          display: block;
-                          padding: 12px 24px;
-                          color: #ffffff;
-                          text-decoration: none;
-                          font-weight: 600;
-                        ">
-                                            Track Your Order
-                                        </a>
-                                    </td>
-                                </tr>
-                            </table>
-                        </td>
-                    </tr> --}}
 
                     <!-- Footer Section -->
                     <tr>

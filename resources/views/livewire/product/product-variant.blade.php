@@ -8,6 +8,14 @@
                     style="position: absolute; top: 0.5rem; right: 0.75rem; background: none; border: none; font-size: 1.25rem; cursor: pointer;">&times;</button>
             </div>
         @endif
+
+        @if (session()->has('error'))
+            <div id="success-alert" class="alert alert-warning fade-in show" style="position: relative;">
+                {{ session('error') }}
+                <button wire:click="closeAlert"
+                    style="position: absolute; top: 0.5rem; right: 0.75rem; background: none; border: none; font-size: 1.25rem; cursor: pointer;">&times;</button>
+            </div>
+        @endif
     </div>
     <section class="product-detail-layout">
         <!-- Product Image Gallery -->
@@ -174,7 +182,7 @@
                     </div>
                     {{-- <span class="stock-status">In Stock {{ $stock}}</span> --}}
                     @if ($stock != null && $stock > 0)
-                        <span class="stock-status">In Stock</span>
+                        <span class="stock-status"> {{ $stock }} Remaining in Stock</span>
                     @else
                         <span class="stock-status out-of-stock">Out of Stock</span>
                     @endif
