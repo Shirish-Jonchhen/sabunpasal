@@ -29,9 +29,15 @@ class OrderShipped extends Mailable
      */
     public function envelope(): Envelope
     {
-        return new Envelope(
-            subject: 'Order Shipped | #' . $this->order->id,
-        );
+        if ($this->order->delivery_method == "delivery") {
+            return new Envelope(
+                subject: 'Order Shipped | #' . $this->order->id,
+            );
+        } else {
+            return new Envelope(
+                subject: 'Order Ready For Pick Up | #' . $this->order->id,
+            );
+        }
     }
 
     /**

@@ -240,11 +240,20 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td align="center" class="text-base md-text-base text-gray-600 sm-leading-24"
-                                        style="font-size: 16px; line-height: 24px; color: #666666">
-                                        Great news! Your recent order has shipped and is on its way to you.
-                                        <!-- Refactored: Intro text changed -->
-                                    </td>
+                                    @if ($order->delivery_method == 'delivery')
+                                        <td align="center" class="text-base md-text-base text-gray-600 sm-leading-24"
+                                            style="font-size: 16px; line-height: 24px; color: #666666">
+                                            Great news! Your recent order has shipped and is on its way to you.
+                                            <!-- Refactored: Intro text changed -->
+                                        </td>
+                                    @elseif($order->delivery_method == 'pickup')
+                                        <td align="center" class="text-base md-text-base text-gray-600 sm-leading-24"
+                                            style="font-size: 16px; line-height: 24px; color: #666666">
+                                            Great news! Your recent order is ready to be picked up.
+                                            <!-- Refactored: Intro text changed -->
+                                        </td>
+                                    @endif
+
                                 </tr>
                             </table>
                         </td>
