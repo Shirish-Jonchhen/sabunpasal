@@ -9,7 +9,7 @@ class WishlistController extends Controller
 {
     public function index()
     {
-        dd(Auth::check());
+        // dd(Auth::check());
 
         if (Auth::check()) {
             return view('customer.wishlist.wishlist');
