@@ -9,7 +9,7 @@ class VariantPrice extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['product_variant_id', 'unit_id', 'price', 'old_price', 'stock'];
+    protected $fillable = ['product_variant_id', 'unit_id', 'price', 'old_price', 'pieces_per_unit' ];
 
     public function variant()
     {

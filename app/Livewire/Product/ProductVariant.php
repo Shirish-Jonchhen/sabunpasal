@@ -51,7 +51,10 @@ class ProductVariant extends Component
             $this->selectedUnitID = $firstPrice?->id;
             $this->price = $firstPrice?->price;
             $this->old_price = $firstPrice?->old_price;
-            $this->stock = $firstPrice?->stock;
+
+            // dd($firstVariant->stock);
+
+            $this->stock = floor($firstVariant->stock / ($firstPrice?->pieces_per_unit ?? 1));
             $this->variantImages = $firstVariant->images;
 
             if (Auth::check() && $this->product) {
@@ -76,7 +79,7 @@ class ProductVariant extends Component
 
             $this->unitList = $prices;
             $this->selectedUnitID = $firstPrice?->id;
-            $this->stock = $firstPrice?->stock;
+            $this->stock = floor($variant->stock / ($unit?->pieces_per_unit ?? 1));
             $this->price = $firstPrice?->price;
             $this->old_price = $firstPrice?->old_price ?? 0;
             $this->variantImages = $variant->images;
@@ -102,7 +105,7 @@ class ProductVariant extends Component
                 $this->selectedUnitID = $unitId;
                 $this->price = $unit->price;
                 $this->old_price = $unit->old_price;
-                $this->stock = $unit->stock;
+                $this->stock = floor($variant->stock / ($unit?->pieces_per_unit ?? 1))                ;
             }
         }
     }

@@ -120,6 +120,11 @@
                                             name="variants[{{ $variantIndex }}][size]" value="{{ $variant->size }}"
                                             placeholder="Size (e.g., 750ml)">
 
+                                            <label class="form-label fw-bold mb-2">Stock</label>
+                                            <input type="number" class="form-control mb-2"
+                                                name="variants[{{ $variantIndex }}][stock]" value="{{ $variant->stock }}"
+                                                placeholder="10">
+
                                         <label class="form-label fw-bold mb-2">Variant Images</label>
                                         <input type="file" class="form-control mb-3"
                                             name="variants[{{ $variantIndex }}][images][]" multiple>
@@ -164,9 +169,10 @@
                                                     <input type="number" class="form-control mb-2"
                                                         name="variants[{{ $variantIndex }}][prices][{{ $priceIndex }}][price]"
                                                         value="{{ $price->price }}" placeholder="Price">
+
                                                     <input type="number" class="form-control mb-2"
-                                                        name="variants[{{ $variantIndex }}][prices][{{ $priceIndex }}][stock]"
-                                                        value="{{ $price->stock }}" placeholder="Stock">
+                                                        name="variants[{{ $variantIndex }}][prices][{{ $priceIndex }}][pieces_per_unit]"
+                                                        value="{{ $price->pieces_per_unit }}" placeholder="Pieces Per Unit">
                                                     <button type="button"
                                                         class="btn btn-danger btn-sm remove-price">Remove Price</button>
                                                 </div>
@@ -206,6 +212,9 @@
                 <label class="form-label fw-bold mb-2">Size</label>
                 <input type="text" class="form-control mb-2" name="variants[${variantCount}][size]" placeholder="Size (e.g., 750ml)">
 
+                 <label class="form-label fw-bold mb-2">Stock</label>
+                <input type="number" class="form-control mb-2" name="variants[${variantCount}][stock]" placeholder="10">
+
                 <label class="form-label fw-bold mb-2">Variant Images</label>
                 <input type="file" class="form-control mb-3" name="variants[${variantCount}][images][]" multiple>
 
@@ -232,7 +241,7 @@
                     </select>
                     <input type="number" class="form-control mb-2" name="variants[${variantIndex}][prices][${priceIndex}][old_price]" placeholder="Old Price">
                     <input type="number" class="form-control mb-2" name="variants[${variantIndex}][prices][${priceIndex}][price]" placeholder="Price">
-                    <input type="number" class="form-control mb-2" name="variants[${variantIndex}][prices][${priceIndex}][stock]" placeholder="Stock">
+                    <input type="number" class="form-control mb-2" name="variants[${variantIndex}][prices][${priceIndex}][pieces_per_unit]" placeholder="Pieces Per Unit">
                     <button type="button" class="btn btn-danger btn-sm remove-price">Remove Price</button>
                 </div>
             `;

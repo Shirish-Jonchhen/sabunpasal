@@ -58,7 +58,8 @@ class CheckoutController extends Controller
         $cartItems = CartItem::where('user_id', Auth::user()->id)->get();
 
         foreach ($cartItems as $item) {
-            if ($item->variantPrice->stock < $item->quantity) {
+            if ($item->variantPrice->variant->stock < $item->quantity * $item->variantPrice->pieces_per_unit) {
+                
                 return redirect()->back()->with('error', 'Insufficient stock for product: ' . $item->variantPrice->variant->product->name);
             }
         }
@@ -163,9 +164,9 @@ class CheckoutController extends Controller
 
         //reduce variantPrice quantity by order quantity
         foreach ($cartItems as $item) {
-            $variantPrice = $item->variantPrice;
-            $variantPrice->stock -= $item->quantity;
-            $variantPrice->save();
+            $variant = $item->variantPrice->variant;
+            $variant->stock -= ($item->quantity * $item->variantPrice->pieces_per_unit);
+            $variant->save();
         }
 
         // Send order confirmation email
@@ -204,7 +205,7 @@ class CheckoutController extends Controller
         $discountAmount = ($variantPrice->old_price - $variantPrice->price) * $request->quantity;
 
 
-        if ($variantPrice->stock < $request->quantity) {
+        if ($variantPrice->variant->stock < ($request->quantity * $variantPrice->pieces_per_unit)) {
             return redirect()->back()->with('error', 'Insufficient stock for product: ' . $variantPrice->variant->product->name);
         }
 
@@ -261,12 +262,18 @@ class CheckoutController extends Controller
             'order_id' => $order->id,
             'amount' => $order->total_amount,
             'method' => $request->payment_method,
-            'payment_status' => 'pending', // Set payment status if applicable
-            'payment_reference' => null, // Set payment reference if applicable
+            'payment_status' => 'pending', 
+            'payment_reference' => null, 
             // 'notes' => $request->note,
             'status' => 'pending',
             // Add other payment-related fields as needed
         ]);
+
+              //reduce variantPrice quantity by order quantity
+                $variant = $variantPrice->variant;
+                $variant->stock -= ($request->quantity * $variantPrice->pieces_per_unit);
+                $variant->save();
+    
 
         Mail::to(Auth::user()->email)->send(new OrderConfirmation($order));
 

@@ -54,10 +54,12 @@ class VendorProductController extends Controller
             'images.*' => 'image|mimes:jpg,jpeg,png,gif|max:2048',
             'variants.*.flavor' => 'string|max:255',
             'variants.*.size' => 'string|max:255',
-            'variants.*.prices.*.unit' => 'required|string|max:50',
+            'variants.*.stock' => 'required|integer|min:0',
+            'variants.*.prices' => 'required|array',
+            'variants.*.prices.*.unit' => 'required|string|max:50|exists:default_attributes,id',
             'variants.*.prices.*.price' => 'required|numeric',
             'variants.*.prices.*.old_price' => 'nullable|numeric',
-            'variants.*.prices.*.stock' => 'required|integer',
+            'variants.*.prices.*.pieces_per_unit' => 'required|integer',
         ]);
 
         // Validation for old_price being greater than new price
@@ -117,6 +119,7 @@ class VendorProductController extends Controller
                     'product_id' => $product->id,
                     'size' => $variantData['size'],
                     'variant_name' => $variantData['flavor'],
+                    'stock' => $variantData['stock'],
                     'sku' => $sku,
                 ]);
 
@@ -127,7 +130,8 @@ class VendorProductController extends Controller
                         'unit_id' => $priceData['unit'],
                         'old_price' => $priceData['old_price'],
                         'price' => $priceData['price'],
-                        'stock' => $priceData['stock'],
+                        'pieces_per_unit' => $priceData['pieces_per_unit'],
+                        // 'stock' => $priceData['stock'],
                     ]);
                 }
 
@@ -201,11 +205,12 @@ class VendorProductController extends Controller
             'variants' => 'required|array',
             'variants.*.flavor' => 'required|string|max:255',
             'variants.*.size' => 'required|string|max:255',
+            'variants.*.stock' => 'required|integer|min:0',
             'variants.*.prices' => 'required|array',
             'variants.*.prices.*.unit' => 'required|integer|exists:default_attributes,id',
             'variants.*.prices.*.old_price' => 'nullable|numeric|min:0',
             'variants.*.prices.*.price' => 'required|numeric|min:0',
-            'variants.*.prices.*.stock' => 'required|integer|min:0',
+            'variants.*.prices.*.pieces_per_unit' => 'required|integer',
         ]);
 
         // Validation for old_price being greater than new price
@@ -277,6 +282,7 @@ class VendorProductController extends Controller
                 $variant = $product->variants()->create([
                     'variant_name' => $variantData['flavor'] ?? null,
                     'size' => $variantData['size'] ?? null,
+                    'stock' => $variantData['stock'] ?? 0,
                     'sku' => $this->generateSku(
                         $store->slug,
                         $request->product_name,
@@ -290,7 +296,8 @@ class VendorProductController extends Controller
                         'unit_id' => $priceData['unit'],
                         'old_price' => $priceData['old_price'],
                         'price' => $priceData['price'],
-                        'stock' => $priceData['stock'],
+                        'pieces_per_unit' => $priceData['pieces_per_unit'],
+                        // 'stock' => $priceData['stock'],
                     ]);
                 }
 

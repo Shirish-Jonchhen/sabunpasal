@@ -102,8 +102,14 @@
                 <label class="form-label fw-bold mb-2">Size</label>
                 <input type="text" class="form-control mb-2" name="variants[${variantCount}][size]" placeholder="Size (e.g., 750ml)">
 
+                <label class="form-label fw-bold mb-2">Stock</label>
+                <input type="number" class="form-control mb-2" name="variants[${variantCount}][stock]" placeholder="Stock in Pcs (e.g., 50)">
+
                 <label class="form-label fw-bold mb-2">Variant Images</label>
                 <input type="file" class="form-control mb-3" name="variants[${variantCount}][images][]" multiple>
+
+                
+                
 
                 <div class="d-flex variant-prices mb-2" data-variant="${variantCount}">
                     ${generatePriceRow(variantCount, 0)}
@@ -132,7 +138,9 @@
                     </select>
                     <input type="number" class="form-control mb-2" name="variants[${variantIndex}][prices][${priceIndex}][old_price]" placeholder="Old Price">
                     <input type="number" class="form-control mb-2" name="variants[${variantIndex}][prices][${priceIndex}][price]" placeholder="Price">
-                    <input type="number" class="form-control mb-2" name="variants[${variantIndex}][prices][${priceIndex}][stock]" placeholder="Stock">
+
+                    <input type="number" class="form-control mb-2" name="variants[${variantIndex}][prices][${priceIndex}][pieces_per_unit]" placeholder="Pieces Per Unit">
+
                     <button type="button" class="btn btn-danger btn-sm remove-price mb-1">Remove Price</button>
                     
                 </div>

@@ -72,7 +72,7 @@
                                         <td>{{ $product->store->store_name ?? '-' }}</td>
                                         <td>{{ $firstPrice?->price ?? 'N/A' }}</td>
                                         <td>{{ $product->tax_rate }}%</td>
-                                        <td>{{ $firstPrice?->stock ?? '0' }}</td>
+                                        <td>{{ $firstVariant?->stock ?? '0' }}</td>
 
                                         <td>{{ $product->status }}</td>
                                         <td>{{ $product->visibility }}</td>
