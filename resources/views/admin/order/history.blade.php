@@ -132,7 +132,11 @@
 
 
                                     <span class="status ">
-                                        Delivery By: {{ $order->DeliveryPerson ? $order->DeliveryPerson->name : 'Not Assigned' }}
+                                        Delivery By: @if ($order->delivery_method == 'delivery')
+                                            {{ $order->DeliveryPerson ? $order->DeliveryPerson->name : 'Not Assigned' }}
+                                        @else
+                                            Self
+                                        @endif
                                     </span>
                                 </div>
                                 <div class="order-details">

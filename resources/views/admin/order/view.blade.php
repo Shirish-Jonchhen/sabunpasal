@@ -26,29 +26,32 @@
                         <p class="order-date">Placed on: {{ \Carbon\Carbon::parse($order->created_at)->format('F j, Y') }}
                         </p>
 
-
-                        <form action = "{{ route('admin.order.assign.delivery', $order->order_tracking_number) }}" method="POST">
-                            @csrf
-                            @method('PUT')
-                            Delivery Assignment:
-                            @if($order->order_status != 'delivered' && $order->order_status != 'cancelled' && $order->order_status != 'returned')
-                            <select name="delivered_by" id="delivered_by" onchange="this.form.submit()">
-                                <option value="">Select Delivery Guy</option>
-                                {{-- <option value="">{{ $order->delivered_by ? $order->delivered_by : 'Not Assigned' }}</option> --}}
-                                @foreach ($delivery_guys as $user)
-                                    {{-- @if ($user->role == 3) <!-- Assuming role 3 is for delivery guys --> --}}
-                                    <option value="{{ $user->id }}"
-                                        {{ $order->delivered_by == $user->id ? 'selected' : '' }}>{{ $user->name }} (
-                                        {{ $user->email }} )</option>
-                                    {{-- @endif --}}
-                                @endforeach
-                            </select>
-                            @else
-
-                            <input type ="text" name="delivered_by"
-                                value="{{ $order->deliveryPerson ? $order->deliveryPerson->name : 'Not Assigned' }}" readonly>
-                            @endif
-                        </form>
+                        @if ($order->delivery_method == 'delivery')
+                            <form action = "{{ route('admin.order.assign.delivery', $order->order_tracking_number) }}"
+                                method="POST">
+                                @csrf
+                                @method('PUT')
+                                Delivery Assignment:
+                                @if ($order->order_status != 'delivered' && $order->order_status != 'cancelled' && $order->order_status != 'returned')
+                                    <select name="delivered_by" id="delivered_by" onchange="this.form.submit()">
+                                        <option value="">Select Delivery Guy</option>
+                                        {{-- <option value="">{{ $order->delivered_by ? $order->delivered_by : 'Not Assigned' }}</option> --}}
+                                        @foreach ($delivery_guys as $user)
+                                            {{-- @if ($user->role == 3) <!-- Assuming role 3 is for delivery guys --> --}}
+                                            <option value="{{ $user->id }}"
+                                                {{ $order->delivered_by == $user->id ? 'selected' : '' }}>
+                                                {{ $user->name }} (
+                                                {{ $user->email }} )</option>
+                                            {{-- @endif --}}
+                                        @endforeach
+                                    </select>
+                                @else
+                                    <input type ="text" name="delivered_by"
+                                        value="{{ $order->deliveryPerson ? $order->deliveryPerson->name : 'Not Assigned' }}"
+                                        readonly>
+                                @endif
+                            </form>
+                        @endif
 
 
                         <div class="order-items-summary">
@@ -63,7 +66,8 @@
                                                 src="{{ asset('storage/' . $product->variantPrice->variant->images[0]->image_path) }}"
                                                 alt="Sparkle All-Purpose Cleaner" class="item-image">
                                             <div class="item-info">
-                                                <span class="item-name">{{ $product->variantPrice->variant->product->name }}
+                                                <span
+                                                    class="item-name">{{ $product->variantPrice->variant->product->name }}
                                                 </span>
                                                 <span class="item-sku">Variant:
                                                     {{ $product->variantPrice->variant->variant_name }}

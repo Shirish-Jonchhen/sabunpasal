@@ -2,7 +2,8 @@
 
 namespace App\Http\Controllers;
 
-
+use App\Models\Municipality;
+use App\Models\Order;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -20,20 +21,65 @@ class DeliveryMainController extends Controller
     // Route::get('/earnings', 'go_to_earnings')->name('delivery.earnings');
     // Route::get('/payouts', 'go_to_payouts')->name('delivery.payouts');
 
-    public function go_to_active_orders()
+    public function go_to_active_orders(Request $request)
     {
+        $query = Order::where('delivered_by', Auth::user()->id)
+            ->where('order_status', '!=', 'delivered');
 
-        $orders = Auth::user()->deliveredOrders()
-        ->whereNot('order_status', 'delivered')
-        ->orderBy('created_at', 'desc')
-        ->get();
+        if ($request->has('search') && $request->search != '') {
+            $query->where('order_tracking_number', 'like', '%' . $request->search . '%');
+        }
 
-        $orderStatuses = ['pending', 'processing', 'shipped', 'delivered', 'cancelled', 'returned'];
-$paymentStatuses = ['unpaid', 'partial', 'paid', 'refunded'];
-    
+        if ($request->has('municipality') && $request->municipality != '') {
+            $query->where('municipality', $request->municipality);
+        }
 
-        return view('delivery.orders.active', compact('orders', 'orderStatuses', 'paymentStatuses'));
+        if ($request->has('sort') && $request->sort != '') {
+            switch ($request->sort) {
+                case 'price_asc':
+                    $query->orderBy('price', 'asc');
+                    break;
+                case 'price_desc':
+                    $query->orderBy('price', 'desc');
+                    break;
+                case 'date_latest':
+                    $query->orderBy('created_at', 'desc');
+                    break;
+                case 'date_oldest':
+                    $query->orderBy('created_at', 'asc');
+                    break;
+            }
+        } else {
+            // Default sorting
+            $query->orderBy('created_at', 'desc');
+        }
+
+        // ✅ Add pagination (e.g., 10 per page)
+        $orders = $query->paginate(10);
+
+        // Pass filters back to view
+        $searchQuery = $request->query('search', '');
+        $municipalityQuery = $request->query('municipality', '');
+        $sortQuery = $request->query('sort', '');
+
+        // To preserve query parameters in pagination links
+        $orders->appends($request->all());
+
+        $orderStatuses = ['pending', 'processing', 'shpipped', 'delivered', 'cancelled', 'returned'];
+        $paymentStatuses = ['unapid', 'partial', 'paid'];
+        $municipalities = Municipality::orderBy('municipality_name')->get();
+
+        return view('delivery.orders.active', compact(
+            'orders',
+            'orderStatuses',
+            'paymentStatuses',
+            'municipalities',
+            'searchQuery',
+            'municipalityQuery',
+            'sortQuery'
+        ));
     }
+
 
     public function go_to_completed_orders()
     {
@@ -44,16 +90,14 @@ $paymentStatuses = ['unpaid', 'partial', 'paid', 'refunded'];
     {
         return view('delivery.orders.others');
     }
-    
+
     public function go_to_earnings()
     {
         return view('delivery.earnings.earnings');
     }
-    
+
     public function go_to_payouts()
     {
         return view('delivery.earnings.payouts');
     }
-
-
 }

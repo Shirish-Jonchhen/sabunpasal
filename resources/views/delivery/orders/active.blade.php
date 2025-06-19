@@ -23,162 +23,224 @@
                         </div>
                     @endif
 
-                    <div class="order-list">
+                    {{-- - - --}}
+                    {{-- Search and Filter Section --}}
+                    <div class="mb-4 p-3 border rounded bg-light">
+                        <form method="GET" class="d-flex flex-wrap gap-3 align-items-center justify-content-between">
+                            <input type="text" name="search" placeholder="Search by tracking number..."
+                                value="{{ $searchQuery ?? '' }}" class="form-control form-control-sm flex-grow-1" />
 
-                        <div
-                            style="margin-bottom: 1rem; padding: 1rem; border: 1px solid #dee2e6; border-radius: 0.375rem; background-color: #fff; box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05); display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 1rem;">
-                            <!-- Search Bar -->
-                            <form method="GET"
-                                style="display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center; width: 100%; max-width: 100%;">
-
-
-                                <input type="text" name="search" placeholder="Search by tracking number..."
-                                    value="{{ $search ?? '' }}"
-                                    style="width: 20%; padding: 0.375rem 0.75rem; border: 1px solid #ccc; border-radius: 0.375rem; box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);" />
-
-                                <!-- Filter payment Dropdown -->
-                                <select name="status"
-                                    style="width: 20%; padding: 0.375rem 0.75rem; border: 1px solid #ccc; border-radius: 0.375rem;">
-                                    <option value="">All Status</option>
-                                    <option value="pending" {{ ($status ?? '') == 'pending' ? 'selected' : '' }}>Pending
+                            <select name="municipality" class="form-select form-select-sm flex-grow-1">
+                                <option value="">Municipality</option>
+                                @foreach ($municipalities as $m)
+                                    <option value="{{ $m->municipality_name }}"
+                                        {{ ($municipalityQuery ?? '') == $m->municipality_name ? 'selected' : '' }}>
+                                        {{ $m->municipality_name }}
                                     </option>
-                                    <option value="processing" {{ ($status ?? '') == 'processing' ? 'selected' : '' }}>
-                                        Processing</option>
-                                    <option value="shipped" {{ ($status ?? '') == 'shipped' ? 'selected' : '' }}>Shipped
-                                    </option>
-                                    <option value="delivered" {{ ($status ?? '') == 'delivered' ? 'selected' : '' }}>
-                                        Delivered</option>
-                                    <option value="cancelled" {{ ($status ?? '') == 'cancelled' ? 'selected' : '' }}>
-                                        Cancelled</option>
-                                </select>
+                                @endforeach
 
-                                <!-- Filter Dropdown -->
-                                <select name="payment_status"
-                                    style="width: 20%; padding: 0.375rem 0.75rem; border: 1px solid #ccc; border-radius: 0.375rem;">
-                                    <option value="">Payment Status</option>
-                                    <option value="unpaid" {{ ($paymentStatus ?? '') == 'unpaid' ? 'selected' : '' }}>Unpaid
-                                    </option>
-                                    <option value="partial" {{ ($paymentStatus ?? '') == 'partial' ? 'selected' : '' }}>
-                                        Partially Paid</option>
-                                    <option value="paid" {{ ($paymentStatus ?? '') == 'paid' ? 'selected' : '' }}>paid
-                                    </option>
-                                </select>
+                            </select>
 
-                                <!-- Sort Dropdown -->
-                                <select name="sort"
-                                    style="width: 20%; padding: 0.375rem 0.75rem; border: 1px solid #ccc; border-radius: 0.375rem;">
-                                    <option value="">Sort By</option>
-                                    <option value="price_asc" {{ ($sort ?? '') == 'price_asc' ? 'selected' : '' }}>Price:
-                                        Low to High</option>
-                                    <option value="price_desc" {{ ($sort ?? '') == 'price_desc' ? 'selected' : '' }}>Price:
-                                        High to Low</option>
-                                    <option value="date_latest" {{ ($sort ?? '') == 'date_latest' ? 'selected' : '' }}>
-                                        Date: Latest</option>
-                                    <option value="date_oldest" {{ ($sort ?? '') == 'date_oldest' ? 'selected' : '' }}>
-                                        Date: Oldest</option>
-                                </select>
+                            <select name="sort" class="form-select form-select-sm flex-grow-1">
+                                <option value="">Sort By</option>
+                                <option value="price_asc" {{ ($sortQuery ?? '') == 'price_asc' ? 'selected' : '' }}>Price:
+                                    Low
+                                    to High</option>
+                                <option value="price_desc" {{ ($sortQuery ?? '') == 'price_desc' ? 'selected' : '' }}>Price:
+                                    High to Low</option>
+                                <option value="date_latest" {{ ($sortQuery ?? '') == 'date_latest' ? 'selected' : '' }}>
+                                    Date:
+                                    Latest</option>
+                                <option value="date_oldest" {{ ($sortQuery ?? '') == 'date_oldest' ? 'selected' : '' }}>
+                                    Date:
+                                    Oldest</option>
+                            </select>
 
-                                <button type="submit"
-                                    style="padding: 0.375rem 0.75rem; background-color: #0d6efd; color: white; border: none; border-radius: 0.375rem; cursor: pointer;">
-                                    Apply
-                                </button>
-
-                                <a href="{{ route('admin.orders') }}"
-                                    style="padding: 0.375rem 0.75rem; border: 1px solid #6c757d; color: #6c757d; border-radius: 0.375rem; text-decoration: none; display: inline-block;">
-                                    Reset
-                                </a>
-                            </form>
-                        </div>
-
-
-
-                        {{-- @foreach ($orders as $order) --}}
-                        <div class="table-responsive">
-                            <table class="table table-bordered table-striped">
-                                <thead>
-                                    <tr>
-                                        <th>Order ID</th>
-                                        <th>Date</th>
-                                        <th>Customer</th>
-                                        <th>Delivery Address</th>
-                                        <th>Total Amount</th>
-                                        <th>Order Status</th>
-                                        <th>Payment Status</th>
-                                        <th>Delivery Person</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach($orders as $order)
-                                        <tr>
-                                            <td>{{ $order->order_tracking_number }}</td>
-                                            <td>{{ \Carbon\Carbon::parse($order->created_at)->format('F j, Y') }}</td>
-                                            <td>{{ $order->user->name ?? 'N/A' }}</td>
-                                            <td>
-                                                {{-- Full Delivery Address --}}
-                                                @if($order->place_name){{ $order->place_name }}<br>@endif
-                                                @if($order->ward)Ward: {{ $order->ward }}<br>@endif
-                                                Municipality: {{ $order->municipality }}<br>
-                                                @if($order->district)District: {{ $order->district }}<br>@endif
-                                                Country: {{ $order->country }}
-                                                @if($order->additional_info)(Additional Info: {{ $order->additional_info }})@endif
-                                            </td>
-                                            <td>NRs. {{ number_format($order->total_amount, 2) }}</td>
-                        
-                                            {{-- Order Status Dropdown (Display Only) --}}
-                                            <td>
-                                                {{-- No form tags or onchange event --}}
-                                                <select class="form-select" disabled> {{-- 'disabled' makes it non-interactive for display --}}
-                                                    @foreach($orderStatuses as $status)
-                                                        <option value="{{ $status }}" {{ $order->order_status == $status ? 'selected' : '' }}>
-                                                            {{ ucfirst($status) }}
-                                                        </option>
-                                                    @endforeach
-                                                </select>
-                                            </td>
-                        
-                                            {{-- Payment Status Dropdown (Display Only) --}}
-                                            <td>
-                                                {{-- No form tags or onchange event --}}
-                                                <select class="form-select" disabled> {{-- 'disabled' makes it non-interactive for display --}}
-                                                    @foreach($paymentStatuses as $status)
-                                                        <option value="{{ $status }}" {{ $order->payment_status == $status ? 'selected' : '' }}>
-                                                            {{ ucfirst($status) }}
-                                                        </option>
-                                                    @endforeach
-                                                </select>
-                                            </td>
-                                            <td>{{ $order->deliveryPerson->name ?? 'Not Assigned' }}</td>
-                                        </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
-                        </div>
-                        
-                        {{-- No JavaScript required --}}
-                        
-                        <style>
-                            /* Basic styling for status spans (if you still use them elsewhere) */
-                            .status {
-                                padding: 4px 8px;
-                                border-radius: 4px;
-                                font-size: 0.8em;
-                                white-space: nowrap;
-                                display: inline-block;
-                            }
-                            .status-pending { background-color: #ffe0b2; color: #fb8c00; }
-                            .status-processing { background-color: #bbdefb; color: #2196f3; }
-                            .status-shipped { background-color: #c8e6c9; color: #43a047; }
-                            .status-delivered { background-color: #d1c4e9; color: #673ab7; }
-                            .status-cancelled, .status-refunded, .status-returned { background-color: #ffcdd2; color: #e53935; }
-                        </style>
-                        
-                        {{-- @endforeach --}}
-
-
-
-                        <!-- This message's visibility is controlled by JS based on whether .order-item exists -->
-                        {{-- <p id="no-orders-message" style="display: none;">You have no past orders.</p> --}}
+                            <button type="submit" class="btn btn-primary btn-sm flex-grow-1">Apply</button>
+                            <a href="{{ route('delivery.active') }}" class="btn btn-secondary btn-sm flex-grow-1">Reset</a>
+                        </form>
                     </div>
+
+
+                    <div class="order-cards-container d-grid gap-3">
+                        @forelse($orders as $order)
+                            <div class="card shadow-sm border">
+                                <div
+                                    class="card-header bg-primary text-white d-flex justify-content-between align-items-center py-2">
+                                    <h6 class="mb-0 text-white">#{{ $order->order_tracking_number }}</h6>
+                                    <span class="badge bg-light text-primary fs-6">NRs.
+                                        {{ number_format($order->total_amount, 2) }}</span>
+                                </div>
+                                <div class="card-body">
+                                    <div
+                                        class="d-flex flex-column flex-md-row justify-content-between align-items-start mb-3">
+                                        <div class="mb-2 mb-md-0">
+                                            <p class="mb-0 text-muted small">Date:
+                                                {{ \Carbon\Carbon::parse($order->created_at)->format('F j, Y') }}</p>
+                                            <p class="mb-0 text-muted small">Customer:
+                                                <strong>{{ $order->user->name ?? 'N/A' }}</strong>
+                                            </p>
+                                            <p class="mb-0 text-muted small">Delivery By:
+                                                <strong>{{ $order->DeliveryPerson->name ?? 'Not Assigned' }}</strong>
+                                            </p>
+                                        </div>
+                                        <div class="text-md-end">
+                                            @php
+                                                $orderStatusClass = match ($order->order_status) {
+                                                    'pending' => 'bg-warning text-dark',
+                                                    'processing' => 'bg-info',
+                                                    'shipped' => 'bg-primary',
+                                                    'delivered' => 'bg-success',
+                                                    'cancelled', 'returned' => 'bg-danger',
+                                                    default => 'bg-secondary',
+                                                };
+                                            @endphp
+                                            <span
+                                                class="badge {{ $orderStatusClass }} mb-1 p-2">{{ ucfirst($order->order_status) }}</span>
+
+                                            @php
+                                                $paymentStatusClass = match ($order->payment_status) {
+                                                    'unpaid' => 'bg-danger',
+                                                    'partial' => 'bg-warning text-dark',
+                                                    'paid' => 'bg-success',
+                                                    'refunded' => 'bg-secondary',
+                                                    default => 'bg-secondary',
+                                                };
+                                            @endphp
+                                            <span
+                                                class="badge {{ $paymentStatusClass }} p-2">{{ ucfirst($order->payment_status) }}</span>
+                                        </div>
+                                    </div>
+
+                                    {{-- Delivery Address & Navigate Button --}}
+                                    <h6 class="text-primary mt-2">Delivery Location:</h6>
+                                    <p class="mb-2 small">
+                                        @if ($order->place_name)
+                                            {{ $order->place_name }}<br>
+                                        @endif
+                                        @if ($order->ward)
+                                            Ward: {{ $order->ward }}<br>
+                                        @endif
+                                        Municipality: {{ $order->municipality }}<br>
+                                        @if ($order->district)
+                                            District: {{ $order->district }}<br>
+                                        @endif
+                                        Country: {{ $order->country }}
+
+                                    </p>
+                                    <p class="mb-2 small">
+                                        Phone: <a href="tel:{{ $order->phone ?? '' }}"
+                                            class="text-decoration-none">{{ $order->phone ?? 'N/A' }}</a>
+                                    </p>
+                                    @if ($order->notes)
+                                        <p class="mb-2 small text-danger"><strong>Order Notes:</strong> {{ $order->notes }}
+                                        </p>
+                                    @endif
+
+                                    @php
+                                        $fullAddressForMap = implode(
+                                            ', ',
+                                            array_filter([
+                                                $order->place_name,
+                                                $order->ward ? 'Ward: ' . $order->ward : null,
+                                                $order->municipality,
+                                                $order->district,
+                                                $order->country,
+                                            ]),
+                                        );
+                                    @endphp
+                                    {{-- <a href="http://maps.google.com/?q={{ urlencode($fullAddressForMap) }}" target="_blank"
+                                        class="btn btn-outline-primary btn-sm w-100 mb-3">
+                                        <i class="fas fa-map-marker-alt me-2"></i> Navigate to Location
+                                    </a> --}}
+
+                                    {{-- Collapsible Order Items --}}
+                                    <p>
+                                        <button class="btn btn-link btn-sm p-0" type="button" data-bs-toggle="collapse"
+                                            data-bs-target="#orderItems{{ $order->id }}" aria-expanded="false"
+                                            aria-controls="orderItems{{ $order->id }}">
+                                            View Order Items <i class="fas fa-chevron-down ms-1"></i>
+                                        </button>
+                                    </p>
+                                    <div class="collapse" id="orderItems{{ $order->id }}">
+                                        <div class="card card-body bg-light p-2">
+                                            <h6>Items:</h6>
+                                            <ul class="list-unstyled mb-0 small">
+                                                @forelse ($order->storeOrders as $store_order)
+                                                    <li>
+                                                        <strong>{{ $store_order->store->store_name ?? 'Unknown Store' }}</strong>
+                                                        <ol class="mb-0">
+                                                            @foreach ($store_order->storeOrederProducts as $product)
+                                                                <li>
+                                                                    {{ $product->variantPrice->variant->product->name ?? 'N/A' }}
+                                                                    |
+                                                                    {{ $product->variantPrice->variant->variant_name ?? 'N/A' }}
+                                                                    |
+                                                                    {{ $product->variantPrice->variant->size ?? 'N/A' }}
+                                                                    (x{{ $product->quantity ?? '0' }}
+                                                                    {{ $product->variantPrice->unit->attribute_value ?? '' }})
+                                                                </li>
+                                                            @endforeach
+                                                        </ol>
+                                                    </li>
+                                                @empty
+                                                    <li>No items found for this order.</li>
+                                                @endforelse
+                                            </ul>
+                                        </div>
+                                    </div>
+
+                                    {{-- Status Update Dropdowns (Display Only) --}}
+                                    <form>
+                                        <hr class="my-3">
+                                        <div class="d-flex flex-column gap-2">
+                                            <div class="d-flex align-items-center gap-2">
+                                                <label for="orderStatus{{ $order->id }}"
+                                                    class="form-label mb-0 small text-muted w-25">Order Status:</label>
+                                                <select id="orderStatus{{ $order->id }}"
+                                                    class="form-select form-select-sm flex-grow-1">
+                                                    @foreach ($orderStatuses as $statusOption)
+                                                        <option value="{{ $statusOption }}"
+                                                            {{ $order->order_status == $statusOption ? 'selected' : '' }}>
+                                                            {{ ucfirst($statusOption) }}
+                                                        </option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                            <div class="d-flex align-items-center gap-2">
+                                                <label for="paymentStatus{{ $order->id }}"
+                                                    class="form-label mb-0 small text-muted w-25">Payment Status:</label>
+                                                <select id="paymentStatus{{ $order->id }}"
+                                                    class="form-select form-select-sm flex-grow-1">
+                                                    @foreach ($paymentStatuses as $statusOption)
+                                                        <option value="{{ $statusOption }}"
+                                                            {{ $order->payment_status == $statusOption ? 'selected' : '' }}>
+                                                            {{ ucfirst($statusOption) }}
+                                                        </option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        {{-- View Details Button (if a separate detailed page exists) --}}
+                                        <div class="mt-3">
+                                            <button type="submit" class="btn btn-outline-primary btn-sm w-100">
+                                                Submit Status Update
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        @empty
+                            <div class="alert alert-info text-center mt-3" role="alert">
+                                No active deliveries found.
+                            </div>
+                        @endforelse
+                    </div>
+                    <div class="d-flex justify-content-end mt-3">
+                        {{ $orders->links('vendor.pagination.default') }}
+                    </div>
+
                 </div>
             </div>
         </div>
