@@ -26,6 +26,31 @@
                         <p class="order-date">Placed on: {{ \Carbon\Carbon::parse($order->created_at)->format('F j, Y') }}
                         </p>
 
+
+                        <form action = "{{ route('admin.order.assign.delivery', $order->order_tracking_number) }}" method="POST">
+                            @csrf
+                            @method('PUT')
+                            Delivery Assignment:
+                            @if($order->order_status != 'delivered' && $order->order_status != 'cancelled' && $order->order_status != 'returned')
+                            <select name="delivered_by" id="delivered_by" onchange="this.form.submit()">
+                                <option value="">Select Delivery Guy</option>
+                                {{-- <option value="">{{ $order->delivered_by ? $order->delivered_by : 'Not Assigned' }}</option> --}}
+                                @foreach ($delivery_guys as $user)
+                                    {{-- @if ($user->role == 3) <!-- Assuming role 3 is for delivery guys --> --}}
+                                    <option value="{{ $user->id }}"
+                                        {{ $order->delivered_by == $user->id ? 'selected' : '' }}>{{ $user->name }} (
+                                        {{ $user->email }} )</option>
+                                    {{-- @endif --}}
+                                @endforeach
+                            </select>
+                            @else
+
+                            <input type ="text" name="delivered_by"
+                                value="{{ $order->deliveryPerson ? $order->deliveryPerson->name : 'Not Assigned' }}" readonly>
+                            @endif
+                        </form>
+
+
                         <div class="order-items-summary">
                             <h3>Items Ordered</h3>
                             <div class="order-item-list">
@@ -73,12 +98,12 @@
                             <div class="summary-line total"><strong>Grand Total:</strong> <strong>NRs.
                                     {{ $order->total_amount }}</strong></div>
                         </div>
-                        @if($order->notes)
-                        <div class="order-note">
-                            <span style="margin-right:1rem;">Order Note:</span>
-                            <p>{{ $order->notes }}</p>
-                        </div>
-                    @endif
+                        @if ($order->notes)
+                            <div class="order-note">
+                                <span style="margin-right:1rem;">Order Note:</span>
+                                <p>{{ $order->notes }}</p>
+                            </div>
+                        @endif
                     </section>
 
                     <aside class="order-sidebar-details">
@@ -87,7 +112,7 @@
                             @if ($order->delivery_method == 'pickup')
                                 <p>Store Pick-Up</p>
                             @else
-                                <p>{{ User::find($order->user_id)->name  }}<br>
+                                <p>{{ User::find($order->user_id)->name }}<br>
                                     {{ $order->street }}, {{ $order->ward }}<br>
                                     {{ $order->municipality }}, {{ $order->district }}<br>
                                     {{ $order->country }}</p>
@@ -95,7 +120,7 @@
                         </div>
                         <div class="detail-card">
                             <h4>Billing Address</h4>
-                            <p>{{ User::find($order->user_id)->name  }}<br>
+                            <p>{{ User::find($order->user_id)->name }}<br>
                                 {{ $order->street }}, {{ $order->ward }}<br>
                                 {{ $order->municipality }}, {{ $order->district }}<br>
                                 {{ $order->country }}</p>

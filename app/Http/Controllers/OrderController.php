@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Order;
 use App\Models\StoreOrder;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -117,8 +118,10 @@ class OrderController extends Controller
         $order = Order::where('order_tracking_number', $trackingNumber)
             ->with('storeOrders.store', 'storeOrders.storeOrederProducts.variantPrice.variant.product')
             ->first();
+
+            $delivery_guys = User::where('role', '3')->get();
         if ($order) {
-            return view('admin.order.view', compact('order'));
+            return view('admin.order.view', compact('order', 'delivery_guys'));
         } else {
             return redirect()->back()->with('error', 'Order not found.');
         }
@@ -195,5 +198,31 @@ class OrderController extends Controller
         } else {
             return redirect()->back()->with('error', 'Order not found.');
         }
+    }
+
+
+    public function assign_delivery_person(Request $request, $trackingNumber)
+    {
+        $request->validate([
+            'delivered_by' => 'required|exists:users,id',
+        ]);
+        $order = Order::where('order_tracking_number', $trackingNumber)->first();
+
+        if (!$order) {
+
+            return redirect()->back()->with('error', 'Order not found.');
+        }
+
+        // Check if the user is authorized to assign delivery persons
+        if (Auth::user()->role != "0") {
+
+            return redirect()->back()->with('error', 'You are not authorized to assign delivery persons.');
+        }
+
+        $order->delivered_by = $request->input('delivered_by');
+        $order->save();
+        
+
+        return redirect()->back()->with('success', 'Delivery person assigned successfully.');
     }
 }

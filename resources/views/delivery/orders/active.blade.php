@@ -1,11 +1,11 @@
-@extends('admin.layouts.layout')
-@section('admin_page_title', 'Order History - Admin Panel')
-@section('admin_layout')
+@extends('delivery.layouts.layout')
+@section('delivery_page_title', 'Active Deliveries - Delivery Panel')
+@section('delivery_layout')
     <div class="row">
         <div class="col-12">
             <div class="card">
                 <div class="card-header">
-                    <h5 class="card-title mb-0">Orders</h5>
+                    <h5 class="card-title mb-0">Active Deliveries</h5>
                 </div>
 
                 <div class="card-body">
@@ -24,8 +24,7 @@
                     @endif
 
                     <div class="order-list">
-                        <!-- Static Orders Example (Replace with Blade in Laravel) -->
-                        <!-- Filter, Sort, and Search Section -->
+
                         <div
                             style="margin-bottom: 1rem; padding: 1rem; border: 1px solid #dee2e6; border-radius: 0.375rem; background-color: #fff; box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05); display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 1rem;">
                             <!-- Search Bar -->
@@ -93,104 +92,95 @@
 
 
 
-                        @foreach ($orders as $order)
-                            <div class="order-item">
-                                <div class="order-header">
-                                    <h3>{{ $order->order_tracking_number }}</h3>
-                                    <span>Date: {{ \Carbon\Carbon::parse($order->created_at)->format('F j, Y') }}</span>
-                                    <span>Total: NRs. {{ $order->total_amount }}</span>
-                                    @php
-                                        $statusClass = match ($order->order_status) {
-                                            'pending' => 'status-pending',
-                                            'processing' => 'status-processing',
-                                            'shipped' => 'status-shipped',
-                                            'delivered' => 'status-delivered',
-                                            'cancelled' => 'status-cancelled',
-                                            'returned' => 'status-cancelled',
-                                            default => '',
-                                        };
-                                    @endphp
-
-                                    <span class="status {{ $statusClass }}">
-                                        Status: {{ $order->order_status }}
-                                    </span>
-                                    @php
-                                        $statusClass = match ($order->payment_status) {
-                                            'unpaid' => 'status-pending',
-                                            'partial' => 'status-processing',
-                                            // 'shipped' => 'status-shipped',
-                                            'paid' => 'status-delivered',
-                                            'refunded' => 'status-cancelled',
-                                            // 'cancelled' => 'status-cancelled',
-                                            default => '',
-                                        };
-                                    @endphp
-
-                                    <span class="status {{ $statusClass }}">
-                                        Payment: {{ $order->payment_status }}
-                                    </span>
-
-
-                                    <span class="status ">
-                                        Delivery By: {{ $order->DeliveryPerson ? $order->DeliveryPerson->name : 'Not Assigned' }}
-                                    </span>
-                                </div>
-                                <div class="order-details">
-                                    <h4>Items:</h4>
-                                    <ul>
-                                        @foreach ($order->storeOrders as $store_order)
-                                            <li> <strong>{{ $store_order->store->store_name }} </strong>
-                                                @php
-                                                    $storeStatusClass = match ($store_order->status) {
-                                                        'pending' => 'status-pending',
-                                                        'processing' => 'status-processing',
-                                                        'shipped' => 'status-shipped',
-                                                        'delivered' => 'status-delivered',
-                                                        'cancelled' => 'status-cancelled',
-                                                        default => '',
-                                                    };
-                                                @endphp
-
-                                                <span class="status {{ $storeStatusClass }}">
-                                                    Status: {{ $store_order->status }}
-                                                </span>
-
-
-                                                <ol>
-
-                                                    @foreach ($store_order->storeOrederProducts as $product)
-                                                        <li>{{ $product->variantPrice->variant->product->name }} |
-                                                            {{ $product->variantPrice->variant->variant_name }} |
-                                                            {{ $product->variantPrice->variant->size }}
-                                                            (x{{ $product->quantity }}
-                                                            {{ $product->variantPrice->unit->attribute_value }})
-                                                        </li>
+                        {{-- @foreach ($orders as $order) --}}
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Order ID</th>
+                                        <th>Date</th>
+                                        <th>Customer</th>
+                                        <th>Delivery Address</th>
+                                        <th>Total Amount</th>
+                                        <th>Order Status</th>
+                                        <th>Payment Status</th>
+                                        <th>Delivery Person</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach($orders as $order)
+                                        <tr>
+                                            <td>{{ $order->order_tracking_number }}</td>
+                                            <td>{{ \Carbon\Carbon::parse($order->created_at)->format('F j, Y') }}</td>
+                                            <td>{{ $order->user->name ?? 'N/A' }}</td>
+                                            <td>
+                                                {{-- Full Delivery Address --}}
+                                                @if($order->place_name){{ $order->place_name }}<br>@endif
+                                                @if($order->ward)Ward: {{ $order->ward }}<br>@endif
+                                                Municipality: {{ $order->municipality }}<br>
+                                                @if($order->district)District: {{ $order->district }}<br>@endif
+                                                Country: {{ $order->country }}
+                                                @if($order->additional_info)(Additional Info: {{ $order->additional_info }})@endif
+                                            </td>
+                                            <td>NRs. {{ number_format($order->total_amount, 2) }}</td>
+                        
+                                            {{-- Order Status Dropdown (Display Only) --}}
+                                            <td>
+                                                {{-- No form tags or onchange event --}}
+                                                <select class="form-select" disabled> {{-- 'disabled' makes it non-interactive for display --}}
+                                                    @foreach($orderStatuses as $status)
+                                                        <option value="{{ $status }}" {{ $order->order_status == $status ? 'selected' : '' }}>
+                                                            {{ ucfirst($status) }}
+                                                        </option>
                                                     @endforeach
-                                                </ol>
-
-                                            </li>
-                                        @endforeach
-
-                                    </ul>
-                                    <div class="order-actions-list">
-                                        <a href="{{ route('admin.order.show', $order->order_tracking_number) }}"
-                                            class="btn btn-secondary btn-sm">View Details</a>
-                                    </div>
-                                </div>
-                            </div>
-                        @endforeach
+                                                </select>
+                                            </td>
+                        
+                                            {{-- Payment Status Dropdown (Display Only) --}}
+                                            <td>
+                                                {{-- No form tags or onchange event --}}
+                                                <select class="form-select" disabled> {{-- 'disabled' makes it non-interactive for display --}}
+                                                    @foreach($paymentStatuses as $status)
+                                                        <option value="{{ $status }}" {{ $order->payment_status == $status ? 'selected' : '' }}>
+                                                            {{ ucfirst($status) }}
+                                                        </option>
+                                                    @endforeach
+                                                </select>
+                                            </td>
+                                            <td>{{ $order->deliveryPerson->name ?? 'Not Assigned' }}</td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                        
+                        {{-- No JavaScript required --}}
+                        
+                        <style>
+                            /* Basic styling for status spans (if you still use them elsewhere) */
+                            .status {
+                                padding: 4px 8px;
+                                border-radius: 4px;
+                                font-size: 0.8em;
+                                white-space: nowrap;
+                                display: inline-block;
+                            }
+                            .status-pending { background-color: #ffe0b2; color: #fb8c00; }
+                            .status-processing { background-color: #bbdefb; color: #2196f3; }
+                            .status-shipped { background-color: #c8e6c9; color: #43a047; }
+                            .status-delivered { background-color: #d1c4e9; color: #673ab7; }
+                            .status-cancelled, .status-refunded, .status-returned { background-color: #ffcdd2; color: #e53935; }
+                        </style>
+                        
+                        {{-- @endforeach --}}
 
 
 
                         <!-- This message's visibility is controlled by JS based on whether .order-item exists -->
                         {{-- <p id="no-orders-message" style="display: none;">You have no past orders.</p> --}}
                     </div>
-
-
-
                 </div>
             </div>
         </div>
     </div>
-
 @endsection

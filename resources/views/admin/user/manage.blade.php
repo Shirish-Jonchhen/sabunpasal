@@ -47,7 +47,7 @@
                                         <td>{{ $user->id }}</td>
                                         <td>{{ $user->name }}</td>
                                         <td>{{ $user->email }}</td>
-                                        <td>{{ $user->role == 0 ? 'Admin' : ($user->role == 1 ? 'Vendor' : 'Customer') }}
+                                        <td>{{ $user->role == 0 ? 'Admin' : ($user->role == 1 ? 'Vendor' : ($user->role == 3 ? 'Delivery' : 'Customer')) }}
                                         </td>
                                         <td>{{ $user->google_id ?? 'N/A' }}</td>
                                         <td>{{ $user->email_verified_at ?? 'N/A' }}</td>

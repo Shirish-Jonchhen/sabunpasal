@@ -2,21 +2,14 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable
 {
-    /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var list<string>
-     */
     protected $fillable = [
         'name',
         'email',
@@ -25,22 +18,11 @@ class User extends Authenticatable
         'role',
     ];
 
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var list<string>
-     */
     protected $hidden = [
         'password',
         'remember_token',
     ];
 
-
-    /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
     protected function casts(): array
     {
         return [
@@ -48,22 +30,38 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    /**
+     * A user (as a customer) can have many orders.
+     */
+    public function orders()
+    {
+        return $this->hasMany(Order::class, 'user_id'); // Explicitly define foreign key if not default
+    }
+
+    /**
+     * A user (as a delivery person) can deliver many orders.
+     */
+    public function deliveredOrders()
+    {
+        return $this->hasMany(Order::class, 'delivered_by'); // 'delivered_by' is the foreign key in the Order model
+    }
+
+    // You can uncomment and use the `deliveries()` method as you had it,
+    // but `deliveredOrders()` might be more semantically clear
+    // public function deliveries()
+    // {
+    //     return $this->hasMany(Order::class, 'delivered_by');
+    // }
+
+    // --- Existing Relationships ---
     public function addresses()
     {
         return $this->hasMany(UserAddress::class);
-    }
-
-    public function orders()
-    {
-        return $this->hasMany(Order::class);
     }
 
     public function products()
     {
         return $this->hasMany(Product::class);
     }
-
-    
-
-
 }

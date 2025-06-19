@@ -38,6 +38,11 @@ class RoleManager
                     return $next($request);
                 }
                 break;
+            case 'delivery':
+                if ($authUserRole == 3) {
+                    return $next($request);
+                }
+                break;
         }
 
         // Redirect based on user's role
@@ -48,6 +53,8 @@ class RoleManager
                 return redirect()->route('vendor');
             case 2:
                 return redirect()->route('home');
+            case 3:
+                return redirect()->route('delivery');
         }
 
         return redirect()->back()->with('error', 'You do not have permission to access this page.');

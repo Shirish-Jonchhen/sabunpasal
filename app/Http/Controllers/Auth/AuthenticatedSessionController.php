@@ -30,13 +30,16 @@ class AuthenticatedSessionController extends Controller
 
         $authUserRole = Auth::user()->role;
 
-        if($authUserRole == 0){
+        if ($authUserRole == 0) {
             return redirect()->intended(route('admin', absolute: false));
-        }elseif($authUserRole == 1){
+        } elseif ($authUserRole == 1) {
             return redirect()->intended(route('vendor', absolute: false));
-        }else{
+        } elseif ($authUserRole == 3) {
+            return redirect()->intended(route('delivery', absolute: false));
+        } else {
             return redirect()->back()->with(
-                'success', 'Logged In Successfully.'
+                'success',
+                'Logged In Successfully.'
             );
         }
 
@@ -53,10 +56,11 @@ class AuthenticatedSessionController extends Controller
         $request->session()->invalidate();
 
         $request->session()->regenerateToken();
-        
+
         // return redirect('https://accounts.google.com/Logout');
         return redirect()->route('home')->with(
-            'success', 'Logged Out Successfully.'
+            'success',
+            'Logged Out Successfully.'
         );
     }
 }
