@@ -302,6 +302,10 @@ Route::middleware(['auth', 'verified', 'rolemanager:delivery'])->group(function 
             Route::get('/earnings', 'go_to_earnings')->name('delivery.earnings');
             Route::get('/payouts', 'go_to_payouts')->name('delivery.payouts');
         });
+
+        Route::controller(OrderController::class)->group(function () {
+            Route::put('/orders/update/{trackingNumber}', 'update_order_status')->name('delivery.order.update');
+        });
     });
 });
 

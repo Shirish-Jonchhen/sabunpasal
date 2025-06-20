@@ -24,7 +24,8 @@ class DeliveryMainController extends Controller
     public function go_to_active_orders(Request $request)
     {
         $query = Order::where('delivered_by', Auth::user()->id)
-            ->where('order_status', '!=', 'delivered');
+            ->where('order_status', '!=', 'delivered')
+            ->where('delivery_method', 'delivery');
 
         if ($request->has('search') && $request->search != '') {
             $query->where('order_tracking_number', 'like', '%' . $request->search . '%');
@@ -81,9 +82,63 @@ class DeliveryMainController extends Controller
     }
 
 
-    public function go_to_completed_orders()
+    public function go_to_completed_orders(Request $request)
     {
-        return view('delivery.orders.completed');
+        $query = Order::where('delivered_by', Auth::user()->id)
+            ->where('order_status', 'delivered');
+
+        if ($request->has('search') && $request->search != '') {
+            $query->where('order_tracking_number', 'like', '%' . $request->search . '%');
+        }
+
+        if ($request->has('municipality') && $request->municipality != '') {
+            $query->where('municipality', $request->municipality);
+        }
+
+        if ($request->has('sort') && $request->sort != '') {
+            switch ($request->sort) {
+                case 'price_asc':
+                    $query->orderBy('price', 'asc');
+                    break;
+                case 'price_desc':
+                    $query->orderBy('price', 'desc');
+                    break;
+                case 'date_latest':
+                    $query->orderBy('created_at', 'desc');
+                    break;
+                case 'date_oldest':
+                    $query->orderBy('created_at', 'asc');
+                    break;
+            }
+        } else {
+            // Default sorting
+            $query->orderBy('created_at', 'desc');
+        }
+
+        // ✅ Add pagination (e.g., 10 per page)
+        $orders = $query->paginate(10);
+
+        // Pass filters back to view
+        $searchQuery = $request->query('search', '');
+        $municipalityQuery = $request->query('municipality', '');
+        $sortQuery = $request->query('sort', '');
+
+        // To preserve query parameters in pagination links
+        $orders->appends($request->all());
+
+        $orderStatuses = ['pending', 'processing', 'shpipped', 'delivered', 'cancelled', 'returned'];
+        $paymentStatuses = ['unapid', 'partial', 'paid'];
+        $municipalities = Municipality::orderBy('municipality_name')->get();
+
+        return view('delivery.orders.completed', compact(
+            'orders',
+            'orderStatuses',
+            'paymentStatuses',
+            'municipalities',
+            'searchQuery',
+            'municipalityQuery',
+            'sortQuery'
+        ));
     }
 
     public function go_to_other_orders()

@@ -6,6 +6,7 @@ use App\Models\Order;
 use App\Models\StoreOrder;
 use App\Models\User;
 use Illuminate\Http\Request;
+use App\Services\DeliveryCommissionService;
 use Illuminate\Support\Facades\Auth;
 
 class OrderController extends Controller
@@ -119,7 +120,7 @@ class OrderController extends Controller
             ->with('storeOrders.store', 'storeOrders.storeOrederProducts.variantPrice.variant.product')
             ->first();
 
-            $delivery_guys = User::where('role', '3')->get();
+        $delivery_guys = User::where('role', '3')->get();
         if ($order) {
             return view('admin.order.view', compact('order', 'delivery_guys'));
         } else {
@@ -221,8 +222,45 @@ class OrderController extends Controller
 
         $order->delivered_by = $request->input('delivered_by');
         $order->save();
-        
+
 
         return redirect()->back()->with('success', 'Delivery person assigned successfully.');
+    }
+
+
+    public function update_order_status(Request $request, $trackingNumber)
+    {
+        $request->validate([
+            'order_status' => 'required|in:pending,processing,shipped,delivered,cancelled',
+            'payment_status' => 'required|in:paid,partial,unpaid',
+        ]);
+
+        $order = Order::where('order_tracking_number', $trackingNumber)->first();
+
+        if (!$order) {
+            return redirect()->back()->with('error', 'Order not found.');
+        }
+
+        if (Auth::user()->role != 3) {
+            return redirect()->back()->with('error', 'You are not authorized to update order status.');
+        }
+
+        $order->order_status = $request->input('order_status');
+        $order->payment_status = $request->input('payment_status');
+
+        if ($order->order_status == 'delivered') {
+            $order->delivered_at = now();
+        
+            $service = new DeliveryCommissionService();
+            $commission = $service->calculateCommissionForOrder($order->deliveryPerson, now(), $order->delivery_charge);
+            $order->delivery_guy_commission = $commission;
+        } else {
+            $order->delivered_at = null;
+            $order->delivery_guy_commission = null;
+        }
+
+        $order->save();
+
+        return redirect()->back()->with('success', 'Order status updated successfully.');
     }
 }

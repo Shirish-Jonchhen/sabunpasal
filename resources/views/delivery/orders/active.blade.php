@@ -191,13 +191,17 @@
                                     </div>
 
                                     {{-- Status Update Dropdowns (Display Only) --}}
-                                    <form>
+                                    <form action="{{ route('delivery.order.update', $order->order_tracking_number) }}" method="POST">
+                                        @csrf
+                                        @method('PUT')
+
                                         <hr class="my-3">
                                         <div class="d-flex flex-column gap-2">
+
                                             <div class="d-flex align-items-center gap-2">
                                                 <label for="orderStatus{{ $order->id }}"
                                                     class="form-label mb-0 small text-muted w-25">Order Status:</label>
-                                                <select id="orderStatus{{ $order->id }}"
+                                                <select id="orderStatus{{ $order->id }}" name="order_status"
                                                     class="form-select form-select-sm flex-grow-1">
                                                     @foreach ($orderStatuses as $statusOption)
                                                         <option value="{{ $statusOption }}"
@@ -207,10 +211,11 @@
                                                     @endforeach
                                                 </select>
                                             </div>
+
                                             <div class="d-flex align-items-center gap-2">
                                                 <label for="paymentStatus{{ $order->id }}"
                                                     class="form-label mb-0 small text-muted w-25">Payment Status:</label>
-                                                <select id="paymentStatus{{ $order->id }}"
+                                                <select id="paymentStatus{{ $order->id }}" name="payment_status"
                                                     class="form-select form-select-sm flex-grow-1">
                                                     @foreach ($paymentStatuses as $statusOption)
                                                         <option value="{{ $statusOption }}"
