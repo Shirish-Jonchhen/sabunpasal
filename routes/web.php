@@ -26,6 +26,7 @@ use App\Http\Controllers\WishlistController;
 use App\Http\Controllers\CustomerCategoryController;
 use App\Http\Controllers\CustomerSubcategoryConroller;
 use App\Http\Controllers\DeliveryMainController;
+use App\Http\Controllers\FinanceController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\InvoiceController;
@@ -230,6 +231,12 @@ Route::middleware(['auth', 'verified', 'rolemanager:admin'])->group(function () 
             Route::get('/orders/{trackingNumber}', 'show_one_order')->name('admin.order.show');
             Route::put('/orders/assign/delivery/{trackingNumber}', 'assign_delivery_person')->name('admin.order.assign.delivery');
         });
+
+        Route::controller(FinanceController::class)->group(function () {
+            Route::get('/finance/remaining-collections', 'goToRemainingCollections')->name('admin.finance.remaining.collections');
+           
+        });
+
     });
 });
 

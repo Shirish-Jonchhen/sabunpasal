@@ -30,18 +30,18 @@ class AuthenticatedSessionController extends Controller
 
         $authUserRole = Auth::user()->role;
 
-        if ($authUserRole == 0) {
-            return redirect()->intended(route('admin', absolute: false));
-        } elseif ($authUserRole == 1) {
-            return redirect()->intended(route('vendor', absolute: false));
-        } elseif ($authUserRole == 3) {
-            return redirect()->intended(route('delivery', absolute: false));
-        } else {
+        // if ($authUserRole == 0) {
+        //     return redirect()->intended(route('admin', absolute: false));
+        // } elseif ($authUserRole == 1) {
+        //     return redirect()->intended(route('vendor', absolute: false));
+        // } elseif ($authUserRole == 3) {
+        //     return redirect()->intended(route('delivery', absolute: false));
+        // } else {
             return redirect()->back()->with(
                 'success',
                 'Logged In Successfully.'
             );
-        }
+        // }
 
         // return redirect()->intended(route('dashboard', absolute: false));
     }

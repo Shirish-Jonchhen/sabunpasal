@@ -39,11 +39,13 @@ class Order extends Model
         'delivered_at',            // Timestamp when the order was delivered
         'delivery_guy_commission', // Commission earned by the delivery guy for THIS order
         'delivery_payout_id',      // Foreign key to DeliveryPayout, indicates if commission is paid
+        'delivery_collection_id'
     ];
 
     protected $casts = [
         'delivered_at'          => 'datetime',
         'delivery_guy_commission' => 'decimal:2',
+        'delivery_collection_id' => 'integer',
     ];
 
     public function user()

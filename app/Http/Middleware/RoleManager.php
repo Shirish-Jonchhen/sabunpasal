@@ -46,16 +46,16 @@ class RoleManager
         }
 
         // Redirect based on user's role
-        switch ($authUserRole) {
-            case 0:
-                return redirect()->route('admin');
-            case 1:
-                return redirect()->route('vendor');
-            case 2:
-                return redirect()->route('home');
-            case 3:
-                return redirect()->route('delivery');
-        }
+        // switch ($authUserRole) {
+        //     case 0:
+        //         return redirect()->route('admin');
+        //     case 1:
+        //         return redirect()->route('vendor');
+        //     case 2:
+        //         return redirect()->route('home');
+        //     case 3:
+        //         return redirect()->route('delivery');
+        // }
 
         return redirect()->back()->with('error', 'You do not have permission to access this page.');
     }

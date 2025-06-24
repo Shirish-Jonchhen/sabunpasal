@@ -193,19 +193,32 @@
                     </li>
 
                     <li class="sidebar-header">
-                        Discount
+                        Finances
                     </li>
 
-                    <li class="sidebar-item {{ request()->routeIs('discount.create') ? 'active' : '' }}">
-                        <a class="sidebar-link" href="{{ route('discount.create') }}">
+                    <li class="sidebar-item {{ request()->routeIs('admin.finance.remaining.collections') ? 'active' : '' }} ">
+                        <a class="sidebar-link" href="{{ route('admin.finance.remaining.collections') }}">
                             <i class="align-middle" data-feather="plus-circle"></i> <span
-                                class="align-middle">Create</span>
+                                class="align-middle">Remaining Collections</span>
                         </a>
                     </li>
-                    <li class="sidebar-item {{ request()->routeIs('discount.manage') ? 'active' : '' }}">
-                        <a class="sidebar-link" href="{{ route('discount.manage') }}">
+                    <li class="sidebar-item ">
+                        <a class="sidebar-link" href="">
                             <i class="align-middle" data-feather="sliders"></i> <span
-                                class="align-middle">Manage</span>
+                                class="align-middle">Collections</span>
+                        </a>
+                    </li>
+
+                    <li class="sidebar-item ">
+                        <a class="sidebar-link" href="">
+                            <i class="align-middle" data-feather="plus-circle"></i> <span
+                                class="align-middle">Remaining Payouts</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-item ">
+                        <a class="sidebar-link" href="">
+                            <i class="align-middle" data-feather="sliders"></i> <span
+                                class="align-middle">Payouts</span>
                         </a>
                     </li>
 
@@ -215,43 +228,13 @@
                             <i class="align-middle" data-feather="star"></i> <span class="align-middle">Review</span>
                         </a>
                     </li> --}}
-
-                    <li class="sidebar-header">
-                        History
-                    </li>
-
-                    <li class="sidebar-item {{ request()->routeIs('admin.cart.histroy') ? 'active' : '' }}">
-                        <a class="sidebar-link" href="{{ route('admin.cart.histroy') }}">
-                            <i class="align-middle" data-feather="shopping-cart"></i> <span
-                                class="align-middle">Cart</span>
-                        </a>
-                    </li>
-                    <li class="sidebar-item {{ request()->routeIs('admin.order.histroy') ? 'active' : '' }}">
-                        <a class="sidebar-link" href="{{ route('admin.order.histroy') }}">
-                            <i class="align-middle" data-feather="list"></i> <span class="align-middle">Order</span>
-                        </a>
-                    </li>
-
-                    <li class="sidebar-header">
-                        Settings
-                    </li>
-
-                    <li class="sidebar-item {{ request()->routeIs('admin.settings') ? 'active' : '' }}">
-                        <a class="sidebar-link" href="{{ route('admin.settings') }}">
-                            <i class="align-middle" data-feather="settings"></i> <span
-                                class="align-middle">Settings</span>
-                        </a>
-                    </li>
                 </ul>
 
                 <div class="sidebar-cta">
                     <div class="sidebar-cta-content">
-                        <strong class="d-inline-block mb-2">Upgrade to Pro</strong>
-                        <div class="mb-3 text-sm">
-                            Are you looking for more components? Check out our premium version.
-                        </div>
+         
                         <div class="d-grid">
-                            <a href="upgrade-to-pro.html" class="btn btn-primary">Upgrade to Pro</a>
+                            <a href="{{ route('home') }}" class="btn btn-primary">HOME</a>
                         </div>
                     </div>
                 </div>
