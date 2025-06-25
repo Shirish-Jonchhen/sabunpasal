@@ -202,8 +202,8 @@
                                 class="align-middle">Remaining Collections</span>
                         </a>
                     </li>
-                    <li class="sidebar-item ">
-                        <a class="sidebar-link" href="">
+                    <li class="sidebar-item {{ request()->routeIs('admin.finance.collections') ? 'active' : '' }}">
+                        <a class="sidebar-link" href="{{ route('admin.finance.collections') }}">
                             <i class="align-middle" data-feather="sliders"></i> <span
                                 class="align-middle">Collections</span>
                         </a>

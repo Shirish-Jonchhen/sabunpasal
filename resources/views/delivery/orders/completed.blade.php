@@ -68,8 +68,19 @@
                                 <div
                                     class="card-header bg-primary text-white d-flex justify-content-between align-items-center py-2">
                                     <h6 class="mb-0 text-white">#{{ $order->order_tracking_number }}</h6>
+
+
+                                    <span class="badge bg-light text-primary fs-6">
+                                        {{ $order->delivery_collection_id ? 'collected' : 'Not Collected' }}</span>
+
+                                        <span class="badge bg-light text-primary fs-6">
+                                            {{ $order->delivery_payout_id ? 'Paid' : 'Not Paid' }}</span>
+
+
                                     <span class="badge bg-light text-primary fs-6">NRs.
                                         {{ number_format($order->total_amount, 2) }}</span>
+                                        
+                                       
                                 </div>
                                 <div class="card-body">
                                     <div

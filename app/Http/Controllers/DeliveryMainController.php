@@ -25,6 +25,8 @@ class DeliveryMainController extends Controller
     {
         $query = Order::where('delivered_by', Auth::user()->id)
             ->where('order_status', '!=', 'delivered')
+            ->where('order_status', '!=', 'returned')
+            ->where('order_status', '!=', 'cancelled')
             ->where('delivery_method', 'delivery');
 
         if ($request->has('search') && $request->search != '') {

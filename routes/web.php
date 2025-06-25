@@ -234,6 +234,8 @@ Route::middleware(['auth', 'verified', 'rolemanager:admin'])->group(function () 
 
         Route::controller(FinanceController::class)->group(function () {
             Route::get('/finance/remaining-collections', 'goToRemainingCollections')->name('admin.finance.remaining.collections');
+            Route::get('/finance/collections', 'goToCollections')->name('admin.finance.collections');
+            Route::get('/finance/collect', 'collectDeliverypayments')->name('admin.finance.collect');
            
         });
 

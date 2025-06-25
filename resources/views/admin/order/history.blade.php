@@ -97,7 +97,8 @@
                             <div class="order-item">
                                 <div class="order-header">
                                     <h3>{{ $order->order_tracking_number }}</h3>
-                                    <span>Date: {{ \Carbon\Carbon::parse($order->created_at)->format('F j, Y') }}</span>
+                                    <span>Date Placed: {{ \Carbon\Carbon::parse($order->created_at)->format('F j, Y') }}</span>
+                                    <span>Date Delivered: {{ $order->delivered_at?\Carbon\Carbon::parse($order->delivered_at)->format('F j, Y'):'N/A' }}</span>
                                     <span>Total: NRs. {{ $order->total_amount }}</span>
                                     @php
                                         $statusClass = match ($order->order_status) {
