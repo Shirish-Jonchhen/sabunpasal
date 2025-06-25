@@ -36,8 +36,9 @@
                                         <label for="delivery_person_id">Delivery Person:</label>
                                         <select name="delivery_person_id" id="delivery_person_id" class="form-control">
                                             <option value="">All Delivery Persons</option>
-                                            @foreach($deliveryPersons as $person)
-                                                <option value="{{ $person->id }}" {{ ($request->input('delivery_person_id') == $person->id) ? 'selected' : '' }}>
+                                            @foreach ($deliveryPersons as $person)
+                                                <option value="{{ $person->id }}"
+                                                    {{ $request->input('delivery_person_id') == $person->id ? 'selected' : '' }}>
                                                     {{ $person->name }}
                                                 </option>
                                             @endforeach
@@ -83,11 +84,11 @@
                                             <a href="{{ route('admin.finance.collect', [
                                                 'delivery_person_id' => $data->delivered_by,
                                                 'period_start_date' => $request->input('start_date'), // Pass filter dates
-                                                'period_end_date' => $request->input('end_date'),    // Pass filter dates
+                                                'period_end_date' => $request->input('end_date'), // Pass filter dates
                                                 'amount_collected' => $data->total_uncollected_amount,
                                             ]) }}"
                                                 class="btn btn-success btn-sm">Collect</a>
-                                        
+
                                         </td>
                                     </tr>
                                 @empty

@@ -24,55 +24,80 @@
                         </div>
                     @endif
 
-                    <livewire:admin.user-manager />
+                    {{-- <livewire:admin.user-manager /> --}}
+
+
+                    <div class="card shadow mb-4">
+                        <div class="card-header py-3">
+                            <h6 class="m-0 font-weight-bold text-primary">Filter Collections</h6>
+                        </div>
+                        <div class="card-body">
+                            <form method="GET"> {{-- Ensure this route matches your actual route name --}}
+                                <div class="row">
+                                    <div class="col-md-4 form-group">
+                                        <label for="delivery_person_id">Delivery Person:</label>
+                                        <select name="delivery_person_id" id="delivery_person_id" class="form-control">
+                                            <option value="">All Delivery Persons</option>
+                                            @foreach ($deliveryPersons as $person)
+                                                <option value="{{ $person->id }}"
+                                                    {{ $request->input('delivery_person_id') == $person->id ? 'selected' : '' }}>
+                                                    {{ $person->name }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    {{-- <div class="col-md-3 form-group">
+                                        <label for="start_date">Delivered From:</label>
+                                        <input type="date" name="start_date" id="start_date" class="form-control" value="{{ $request->input('start_date') }}">
+                                    </div>
+                                    <div class="col-md-3 form-group">
+                                        <label for="end_date">Delivered To:</label>
+                                        <input type="date" name="end_date" id="end_date" class="form-control" value="{{ $request->input('end_date') }}">
+                                    </div> --}}
+                                    <div class="col-md-2 form-group d-flex align-items-end">
+                                        <button type="submit" class="btn btn-primary w-100">Apply Filters</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
 
 
                     <div class="table-responsive">
-                        <table class="table">
+                        <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                             <thead>
                                 <tr>
                                     <th>#</th>
-                                    <th>Name</th>
-                                    <th>Email</th>
-                                    <th>Role</th>
-                                    <th>Google ID</th>
-                                    <th>Email Varified At</th>
-                                    <th>Registered</th>
+                                    <th>Delivery User</th>
+                                    <th>Remaining Payments</th>
+                                    <th>No Of Orders</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @forelse ($users as $user)
+                                @forelse ($payoutData as $index => $data)
                                     <tr>
-                                        <td>{{ $user->id }}</td>
-                                        <td>{{ $user->name }}</td>
-                                        <td>{{ $user->email }}</td>
-                                        <td>{{ $user->role == 0 ? 'Admin' : ($user->role == 1 ? 'Vendor' : ($user->role == 3 ? 'Delivery' : 'Customer')) }}
-                                        </td>
-                                        <td>{{ $user->google_id ?? 'N/A' }}</td>
-                                        <td>{{ $user->email_verified_at ?? 'N/A' }}</td>
-                                        <td>{{ $user->created_at }}</td>
+                                        <td>{{ $index + 1 }}</td>
+                                        <td>{{ $data->deliveryPerson->name ?? 'N/A' }}</td> {{-- Access delivery person's name --}}
+                                        <td>NRs. {{ number_format($data->total_commission_amount, 2) }}</td>
+                                        <td>{{ $data->total_orders }}</td>
                                         <td>
-                                            <a href="{{ route('admin.edit.user',$user->id) }}" class="btn btn-primary btn-sm">Edit</a>
-                                            {{-- <form action="{{ route('delete.cat', $category->id) }}" method="POST"
-                                                style="display:inline-block;">
-                                                @csrf
-                                                @method('DELETE')
-                                                <input type="submit" class="btn btn-danger btn-sm" value="Delete">
-                                            </form> --}}
+
+                                            <a href="#" class="btn btn-success btn-sm">Pay</a>
+
                                         </td>
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="6" class="text-center">No categories found.</td>
+                                        <td colspan="5" class="text-center">No delivery persons with remaining COD
+                                            collections found.</td>
                                     </tr>
                                 @endforelse
                             </tbody>
                         </table>
-                        <div class="d-flex justify-content-end mt-3">
-                            {{ $users->links('vendor.pagination.default') }}
-                        </div>
-
+                    </div>
+                    <div class="d-flex justify-content-end mt-3">
+                        {{ $payoutData->links('vendor.pagination.default') }}
                     </div>
                 </div>
             </div>

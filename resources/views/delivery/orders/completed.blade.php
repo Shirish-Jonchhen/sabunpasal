@@ -73,14 +73,18 @@
                                     <span class="badge bg-light text-primary fs-6">
                                         {{ $order->delivery_collection_id ? 'collected' : 'Not Collected' }}</span>
 
-                                        <span class="badge bg-light text-primary fs-6">
-                                            {{ $order->delivery_payout_id ? 'Paid' : 'Not Paid' }}</span>
+                                    <span class="badge bg-light text-primary fs-6">
+                                        {{ $order->delivery_payout_id ? 'Paid' : 'Not Paid' }}</span>
+
+
+                                    <span class="badge bg-light text-primary fs-6">My Pay:
+                                        {{ number_format($order->delivery_guy_commission, 2) }}</span>
 
 
                                     <span class="badge bg-light text-primary fs-6">NRs.
                                         {{ number_format($order->total_amount, 2) }}</span>
-                                        
-                                       
+
+
                                 </div>
                                 <div class="card-body">
                                     <div
@@ -212,7 +216,7 @@
                                             <div class="d-flex align-items-center gap-2">
                                                 <label for="orderStatus{{ $order->id }}"
                                                     class="form-label mb-0 small text-muted w-25">Order Status:</label>
-                                                <select disabled id="orderStatus{{ $order->id }}" 
+                                                <select disabled id="orderStatus{{ $order->id }}"
                                                     class="form-select form-select-sm flex-grow-1">
                                                     @foreach ($orderStatuses as $statusOption)
                                                         <option value="{{ $statusOption }}"
@@ -226,8 +230,8 @@
                                             <div class="d-flex align-items-center gap-2">
                                                 <label for="paymentStatus{{ $order->id }}"
                                                     class="form-label mb-0 small text-muted w-25">Payment Status:</label>
-                                                <select  disabled id="paymentStatus{{ $order->id }}" 
-                                                    class="form-select form-select-sm flex-grow-1 " > 
+                                                <select disabled id="paymentStatus{{ $order->id }}"
+                                                    class="form-select form-select-sm flex-grow-1 ">
                                                     @foreach ($paymentStatuses as $statusOption)
                                                         <option value="{{ $statusOption }}"
                                                             {{ $order->payment_status == $statusOption ? 'selected' : '' }}>

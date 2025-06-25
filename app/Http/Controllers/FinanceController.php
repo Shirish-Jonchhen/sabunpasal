@@ -21,8 +21,12 @@ class FinanceController extends Controller
 
         // Build the base query for uncollected COD orders
         $query = Order::where('payment_method', 'cod') // Must be Cash on Delivery
-            ->where('order_status', 'Delivered') // Must be delivered
+            ->where('delivery_method', 'delivery') // Must be a delivery order
+            ->where('order_status', 'delivered') // Must be delivered
             ->whereNull('delivery_collection_id'); // Must NOT have been reconciled/collected yet
+
+
+        // dd($query->get()); // Debugging line to check the query
 
         // --- Apply Optional Filters from Request ---
         // Filter by specific delivery person
@@ -49,11 +53,14 @@ class FinanceController extends Controller
             ->with('deliveryPerson')
             ->paginate(10); // Execute the query
 
+        ;
+
         // Corrected: Pass $uncollectedData to the view
         return view('admin.finance.remaining_collection', compact('uncollectedData', 'deliveryPersons', 'request'));
     }
 
-    public function collectDeliverypayments(Request $request){
+    public function collectDeliverypayments(Request $request)
+    {
         $request->validate([
             'delivery_person_id' => 'required|exists:users,id',
             'amount_collected'   => 'required|numeric|min:0',
@@ -69,21 +76,21 @@ class FinanceController extends Controller
         // These will be the actual values used for insertion and order linking
 
         $effectivePeriodStartDate = $request->filled('period_start_date')
-                                    ? Carbon::parse($request->input('period_start_date'))->startOfDay()
-                                    : null; // Temporarily allow null for resolution
+            ? Carbon::parse($request->input('period_start_date'))->startOfDay()
+            : null; // Temporarily allow null for resolution
 
         $effectivePeriodEndDate = $request->filled('period_end_date')
-                                  ? Carbon::parse($request->input('period_end_date'))->endOfDay()
-                                  : null; // Temporarily allow null for resolution
+            ? Carbon::parse($request->input('period_end_date'))->endOfDay()
+            : null; // Temporarily allow null for resolution
 
 
         DB::transaction(function () use ($deliveryPersonId, $amountCollected, $effectivePeriodStartDate, $effectivePeriodEndDate, $request) {
 
             // --- Determine the actual date range for linking orders and for the collection record ---
             $ordersToLinkQuery = Order::where('payment_method', 'cod')
-                                     ->where('order_status', 'Delivered')
-                                     ->where('delivered_by', $deliveryPersonId)
-                                     ->whereNull('delivery_collection_id'); // Only uncollected orders
+                ->where('order_status', 'Delivered')
+                ->where('delivered_by', $deliveryPersonId)
+                ->whereNull('delivery_collection_id'); // Only uncollected orders
 
             // If effectivePeriodStartDate is null, find the minimum delivered_at among potential orders
             if (is_null($effectivePeriodStartDate)) {
@@ -117,10 +124,10 @@ class FinanceController extends Controller
             // 2. Link relevant COD orders to this new collection using the resolved date range
             // (Clone the base query again to apply date range filters without affecting previous min/max calculations)
             $ordersToLinkQuery = Order::where('payment_method', 'cod')
-                                     ->where('order_status', 'Delivered')
-                                     ->where('delivered_by', $deliveryPersonId)
-                                     ->whereNull('delivery_collection_id')
-                                     ->whereBetween('delivered_at', [$effectivePeriodStartDate, $effectivePeriodEndDate]); // Use resolved dates
+                ->where('order_status', 'Delivered')
+                ->where('delivered_by', $deliveryPersonId)
+                ->whereNull('delivery_collection_id')
+                ->whereBetween('delivered_at', [$effectivePeriodStartDate, $effectivePeriodEndDate]); // Use resolved dates
 
             $ordersToLinkQuery->update(['delivery_collection_id' => $collection->id]);
 
@@ -129,10 +136,10 @@ class FinanceController extends Controller
         });
 
         return redirect()->back()->with('success', 'Delivery collection recorded successfully.');
-
     }
 
-    public function goToCollections(Request $request){
+    public function goToCollections(Request $request)
+    {
         $deliveryPersons = User::where('role', 3)->orderBy('name')->get();
 
         // Build the base query for all collections
@@ -157,7 +164,6 @@ class FinanceController extends Controller
         $collections = $query->paginate(10);
 
         return view('admin.finance.collection', compact('collections', 'deliveryPersons', 'request'));
-
     }
 
 
@@ -166,13 +172,40 @@ class FinanceController extends Controller
 
 
     //payouts functions
-    public function goToRemainingPayouts()
+    public function goToRemainingPayouts(Request $request)
     {
-        $uncollectedOrders = Order::where('payment_method', 'cod')
-            ->where('order_status', 'Delivered')
-            ->whereNull('delivery_collection_id')
-            ->get();
 
-        return view('admin.finance.remaining_payouts', compact('uncollectedOrders'));
+        $deliveryPersons = User::where('role', 3)->orderBy('name')->get();
+
+        $query = Order::where('payment_method', 'cod')
+            ->where('order_status', 'delivered')
+            ->where('delivery_method', 'delivery')
+            ->whereNotNull('delivery_collection_id')
+            ->whereNull('delivery_payout_id');
+
+        if ($request->filled('delivery_person_id')) {
+            $query->where('delivered_by', $request->input('delivery_person_id'));
+        }
+        // Filter by delivery date start
+        if ($request->filled('start_date')) {
+            $query->where('delivered_at', '>=', Carbon::parse($request->input('start_date'))->startOfDay());
+        }
+        // Filter by delivery date end
+        if ($request->filled('end_date')) {
+            $query->where('delivered_at', '<=', Carbon::parse($request->input('end_date'))->endOfDay());
+        }
+
+        // --- Aggregate Data ---
+        // Select the delivery person ID, sum of total_amount, and count of orders
+        $payoutData = $query->select(
+            'delivered_by',
+            DB::raw('SUM(delivery_guy_commission) as total_commission_amount'),
+            DB::raw('COUNT(id) as total_orders')
+        )
+            ->groupBy('delivered_by')
+            ->with('deliveryPerson')
+            ->paginate(10); // Execute the query
+
+        return view('admin.finance.remaining_payouts', compact('payoutData', 'deliveryPersons', 'request'));
     }
 }

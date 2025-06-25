@@ -60,8 +60,7 @@
 
                     <li class="sidebar-item {{ request()->routeIs('admin.manage.user') ? 'active' : '' }}">
                         <a class="sidebar-link" href="{{ route('admin.manage.user') }}">
-                            <i class="align-middle" data-feather="users"></i> <span
-                                class="align-middle">Users</span>
+                            <i class="align-middle" data-feather="users"></i> <span class="align-middle">Users</span>
                         </a>
                     </li>
 
@@ -196,7 +195,8 @@
                         Finances
                     </li>
 
-                    <li class="sidebar-item {{ request()->routeIs('admin.finance.remaining.collections') ? 'active' : '' }} ">
+                    <li
+                        class="sidebar-item {{ request()->routeIs('admin.finance.remaining.collections') ? 'active' : '' }} ">
                         <a class="sidebar-link" href="{{ route('admin.finance.remaining.collections') }}">
                             <i class="align-middle" data-feather="plus-circle"></i> <span
                                 class="align-middle">Remaining Collections</span>
@@ -209,14 +209,15 @@
                         </a>
                     </li>
 
-                    <li class="sidebar-item ">
-                        <a class="sidebar-link" href="">
+                    <li
+                        class="sidebar-item {{ request()->routeIs('admin.finance.remaining.payouts') ? 'active' : '' }}">
+                        <a class="sidebar-link" href="{{ route('admin.finance.remaining.payouts') }}">
                             <i class="align-middle" data-feather="plus-circle"></i> <span
                                 class="align-middle">Remaining Payouts</span>
                         </a>
                     </li>
-                    <li class="sidebar-item ">
-                        <a class="sidebar-link" href="">
+                    <li class="sidebar-item {{ request()->routeIs('admin.finance.payouts') ? 'active' : '' }}">
+                        <a class="sidebar-link" href="{{ route('admin.finance.payouts') }}">
                             <i class="align-middle" data-feather="sliders"></i> <span
                                 class="align-middle">Payouts</span>
                         </a>
@@ -232,7 +233,7 @@
 
                 <div class="sidebar-cta">
                     <div class="sidebar-cta-content">
-         
+
                         <div class="d-grid">
                             <a href="{{ route('home') }}" class="btn btn-primary">HOME</a>
                         </div>

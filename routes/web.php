@@ -236,9 +236,12 @@ Route::middleware(['auth', 'verified', 'rolemanager:admin'])->group(function () 
             Route::get('/finance/remaining-collections', 'goToRemainingCollections')->name('admin.finance.remaining.collections');
             Route::get('/finance/collections', 'goToCollections')->name('admin.finance.collections');
             Route::get('/finance/collect', 'collectDeliverypayments')->name('admin.finance.collect');
-           
-        });
 
+
+            Route::get('/finance/remaining-payouts', 'goToRemainingPayouts')->name('admin.finance.remaining.payouts');
+            Route::get('/finance/payouts', 'goToPayouts')->name('admin.finance.payouts');
+            Route::get('/finance/pay', 'payDeliveryCommissions')->name('admin.finance.pay');
+        });
     });
 });
 
