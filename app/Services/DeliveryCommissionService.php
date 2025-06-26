@@ -11,11 +11,11 @@ class DeliveryCommissionService
 {
     public function getCommissionRate(int $dailyDeliveryCount): float
     {
-        if ($dailyDeliveryCount <= 10) {
+        if ($dailyDeliveryCount <= 5) {
             return 0.70;
-        } elseif ($dailyDeliveryCount <= 15) {
+        } elseif ($dailyDeliveryCount <= 10) {
             return 0.80;
-        } elseif ($dailyDeliveryCount <= 20) {
+        } elseif ($dailyDeliveryCount <= 15) {
             return 0.90;
         } else {
             return 1.00;

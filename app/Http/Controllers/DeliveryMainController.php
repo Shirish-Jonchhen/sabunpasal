@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\DeliveryPayout;
 use App\Models\Municipality;
 use App\Models\Order;
 use Illuminate\Http\Request;
@@ -106,10 +107,10 @@ class DeliveryMainController extends Controller
                     $query->orderBy('price', 'desc');
                     break;
                 case 'date_latest':
-                    $query->orderBy('created_at', 'desc');
+                    $query->orderBy('delivered_at', 'desc');
                     break;
                 case 'date_oldest':
-                    $query->orderBy('created_at', 'asc');
+                    $query->orderBy('delivered_at', 'asc');
                     break;
             }
         } else {
@@ -153,8 +154,49 @@ class DeliveryMainController extends Controller
         return view('delivery.earnings.earnings');
     }
 
-    public function go_to_payouts()
+    public function go_to_payouts(Request $request)
     {
-        return view('delivery.earnings.payouts');
+
+        $payouts = DeliveryPayout::where('delivery_person_id', Auth::user()->id);
+
+        //filter by date by start date
+        if ($request->has('start_date') && $request->start_date != '') {
+            $payouts->whereDate('created_at', '>=', $request->start_date);
+        }
+        //filter by date by end date
+        if ($request->has('end_date') && $request->end_date != '') {
+            $payouts->whereDate('created_at', '<=', $request->end_date);
+        }
+
+        if ($request->has('sort') && $request->sort != '') {
+            switch ($request->sort) {
+                case 'amount_asc':
+                    $payouts->orderBy('amount', 'asc');
+                    break;
+                case 'amount_desc':
+                    $payouts->orderBy('amount', 'desc');
+                    break;
+                case 'date_latest':
+                    $payouts->orderBy('created_at', 'desc');
+                    break;
+                case 'date_oldest':
+                    $payouts->orderBy('created_at', 'asc');
+                    break;
+            }
+        } else {
+            // Default sorting
+            $payouts->orderBy('created_at', 'desc');
+        }
+
+
+        // ✅ Add pagination (e.g., 10 per page)
+        $payouts = $payouts->paginate(10);
+
+
+
+        return view('delivery.earnings.payouts', compact(
+            'payouts',
+            'request'
+        ));
     }
 }

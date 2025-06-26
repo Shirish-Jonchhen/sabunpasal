@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\DeliveryCollection;
+use App\Models\DeliveryPayout;
 use App\Models\Order;
 use App\Models\User;
 use Carbon\Carbon;
@@ -177,10 +178,8 @@ class FinanceController extends Controller
 
         $deliveryPersons = User::where('role', 3)->orderBy('name')->get();
 
-        $query = Order::where('payment_method', 'cod')
-            ->where('order_status', 'delivered')
+        $query = Order::where('order_status', 'delivered')
             ->where('delivery_method', 'delivery')
-            ->whereNotNull('delivery_collection_id')
             ->whereNull('delivery_payout_id');
 
         if ($request->filled('delivery_person_id')) {
@@ -208,4 +207,126 @@ class FinanceController extends Controller
 
         return view('admin.finance.remaining_payouts', compact('payoutData', 'deliveryPersons', 'request'));
     }
+
+
+
+    public function payDeliveryCommissions(Request $request)
+    {
+        // 1. Validate the incoming request data
+        $request->validate([
+            'delivery_person_id' => 'required|exists:users,id',
+            'amount_paid'        => 'required|numeric|min:0',
+            'period_start_date'  => 'nullable|date', // Allow null input from form
+            'period_end_date'    => 'nullable|date|after_or_equal:period_start_date', // Allow null input from form
+            'notes'              => 'nullable|string|max:500',
+        ]);
+
+        $deliveryPersonId = $request->input('delivery_person_id');
+        $amountPaid       = $request->input('amount_paid'); // Renamed for clarity from amount_collected
+
+        // Resolve the effective period_start_date and period_end_date
+        // These will be the actual values used for insertion and order linking
+
+        $effectivePeriodStartDate = $request->filled('period_start_date')
+            ? Carbon::parse($request->input('period_start_date'))->startOfDay()
+            : null; // Temporarily allow null for resolution
+
+        $effectivePeriodEndDate = $request->filled('period_end_date')
+            ? Carbon::parse($request->input('period_end_date'))->endOfDay()
+            : null; // Temporarily allow null for resolution
+
+
+        DB::transaction(function () use ($deliveryPersonId, $amountPaid, $effectivePeriodStartDate, $effectivePeriodEndDate, $request) {
+
+            // --- Determine the actual date range for linking unpaid orders for commission payout ---
+            // Base query for eligible unpaid commissions
+            $ordersToLinkForPayoutQuery = Order::where('order_status', 'delivered')
+            ->where('delivery_method', 'delivery') // Ensure it's a delivery order
+                ->where('delivered_by', $deliveryPersonId)
+                ->whereNotNull('delivery_guy_commission') // Ensure commission was calculated
+                ->whereNull('delivery_payout_id'); // Only unpaid commissions
+
+            // If effectivePeriodStartDate is null, find the minimum delivered_at among potential *unpaid* orders
+            if (is_null($effectivePeriodStartDate)) {
+                $minDeliveredAt = (clone $ordersToLinkForPayoutQuery)->min('delivered_at');
+                // Set effective start date to the earliest delivered order with unpaid commission, else a sensible default
+                $effectivePeriodStartDate = $minDeliveredAt ? Carbon::parse($minDeliveredAt)->startOfDay() : Carbon::createFromDate(2000, 1, 1)->startOfDay();
+            }
+
+            // If effectivePeriodEndDate is null, set it to now
+            if (is_null($effectivePeriodEndDate)) {
+                $effectivePeriodEndDate = Carbon::now()->endOfDay();
+            }
+
+            // Ensure start date is not after end date for the payout record itself
+            if ($effectivePeriodStartDate->greaterThan($effectivePeriodEndDate)) {
+                // You might throw an error here, or adjust the start date to be before the end date
+                $effectivePeriodStartDate = $effectivePeriodEndDate->copy()->subDay();
+            }
+
+            // 1. Create the new DeliveryPayout record with resolved dates
+            $payout = DeliveryPayout::create([ // Using DeliveryPayout model here
+                'delivery_person_id'   => $deliveryPersonId,
+                'amount'               => $amountPaid, // Use 'amount' as per DeliveryPayout model
+                'payment_date'         => Carbon::now(),
+                'status'               => 'Paid', // Assuming creation means it's paid immediately
+                'paid_by_user_id'      => Auth::user()->id,
+                'notes'                => $request->input('notes'),
+                'period_start_date'    => $effectivePeriodStartDate,
+                'period_end_date'      => $effectivePeriodEndDate,
+            ]);
+
+            // 2. Link relevant unpaid commissions to this new payout record
+            // (Clone the base query again to apply date range filters)
+            $ordersToLinkForPayoutQuery = Order::where('order_status', 'Delivered')
+                ->where('delivered_by', $deliveryPersonId)
+                ->whereNotNull('delivery_guy_commission')
+                ->whereNull('delivery_payout_id') // Still only unpaid commissions
+                ->whereBetween('delivered_at', [$effectivePeriodStartDate, $effectivePeriodEndDate]);
+
+            $ordersToLinkForPayoutQuery->update(['delivery_payout_id' => $payout->id]); // Update delivery_payout_id
+
+            // Optional: You might want to compare $amountPaid with the sum of linked commissions here
+            // $totalLinkedCommissions = Order::where('delivery_payout_id', $payout->id)->sum('delivery_guy_commission');
+            // if (abs($amountPaid - $totalLinkedCommissions) > 0.01) { // Use tolerance for float comparison
+            //     // Handle discrepancy, maybe log it or set payout status to 'Discrepancy'
+            //     $payout->status = 'Discrepancy';
+            //     $payout->notes .= ' (Discrepancy detected: Expected ' . $totalLinkedCommissions . ')';
+            //     $payout->save();
+            // }
+        });
+
+        return redirect()->back()->with('success', 'Delivery commission payout recorded successfully.');
+    }
+
+    public function goToPayouts(Request $request){
+        $deliveryPersons = User::where('role', 3)->orderBy('name')->get();
+
+        // Build the base query for all payouts
+        $query = DeliveryPayout::with('deliveryPerson')
+            ->orderBy('payment_date', 'desc'); // Default to latest first
+
+        // --- Apply Optional Filters from Request ---
+        // Filter by specific delivery person
+        if ($request->filled('delivery_person_id')) {
+            $query->where('delivery_person_id', $request->input('delivery_person_id'));
+        }
+        // Filter by payment date start
+        if ($request->filled('start_date')) {
+            $query->where('payment_date', '>=', Carbon::parse($request->input('start_date'))->startOfDay());
+        }
+        // Filter by payment date end
+        if ($request->filled('end_date')) {
+            $query->where('payment_date', '<=', Carbon::parse($request->input('end_date'))->endOfDay());
+        }
+
+        // --- Execute Query and Paginate ---
+        $payouts = $query->paginate(10);
+
+        return view('admin.finance.payouts', compact('payouts', 'deliveryPersons', 'request'));
+    }
+    
+
+
+    
 }

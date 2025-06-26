@@ -83,7 +83,12 @@
                                         <td>{{ $data->total_orders }}</td>
                                         <td>
 
-                                            <a href="#" class="btn btn-success btn-sm">Pay</a>
+                                            <a href="{{ route('admin.finance.pay',[
+                                                'delivery_person_id' => $data->delivered_by,
+                                                'period_start_date' => $request->input('start_date'), // Pass filter dates
+                                                'period_end_date' => $request->input('end_date'), // Pass filter dates
+                                                'amount_paid' => $data->total_commission_amount,
+                                            ]) }}" class="btn btn-success btn-sm">Pay</a>
 
                                         </td>
                                     </tr>

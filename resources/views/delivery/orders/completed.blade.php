@@ -98,6 +98,9 @@
                                             <p class="mb-0 text-muted small">Delivery By:
                                                 <strong>{{ $order->DeliveryPerson->name ?? 'Not Assigned' }}</strong>
                                             </p>
+                                            <p class="mb-0 text-muted small">Delivery At:
+                                                <strong>{{ $order->delivered_at ?? 'Not Delivered' }}</strong>
+                                            </p>
                                         </div>
                                         <div class="text-md-end">
                                             @php
