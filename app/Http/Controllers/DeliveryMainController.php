@@ -5,22 +5,111 @@ namespace App\Http\Controllers;
 use App\Models\DeliveryPayout;
 use App\Models\Municipality;
 use App\Models\Order;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class DeliveryMainController extends Controller
 {
     public function index()
     {
-        return view('delivery.delivery');
+        $months = collect();
+        $monthlyCommissionEarnings = collect(); // To store sum of delivery_guy_commission per month
+        $monthlyDeliveredOrdersCount = collect(); // To store count of delivered orders by delivery guys per month
+
+        $now = Carbon::now();
+
+        for ($i = 11; $i >= 0; $i--) {
+            $monthDate = $now->copy()->subMonths($i); // Use ->copy() to prevent modifying $now
+
+            // Format month for display (e.g., "Jan", "Feb")
+            $months->push($monthDate->format('M'));
+
+            // Query for monthly commission earnings
+            $commissionEarnings = Order::whereYear('delivered_at', $monthDate->year)
+            ->where('delivered_by', Auth::user()->id) // Ensure the order was delivered by the current delivery person
+                ->whereMonth('delivered_at', $monthDate->month)
+                ->where('order_status', 'Delivered') // Only consider delivered orders for commission
+                ->whereNotNull('delivery_guy_commission') // Only orders with a commission set
+                ->sum('delivery_guy_commission'); // Sum the commission amounts
+
+            $monthlyCommissionEarnings->push($commissionEarnings);
+
+            // Query for monthly delivered orders count by delivery guys
+            $deliveredOrdersCount = Order::whereYear('delivered_at', $monthDate->year)
+            ->where('delivered_by', Auth::user()->id) // Ensure the order was delivered by the current delivery person
+                ->whereMonth('delivered_at', $monthDate->month)
+                ->where('order_status', 'Delivered') // Only count delivered orders
+                ->whereNotNull('delivered_by') // Ensure it was delivered by a person (not self-pickup etc.)
+                ->count();
+
+            $monthlyDeliveredOrdersCount->push($deliveredOrdersCount);
+        }
+
+
+        $deliveryLocationCounts = DB::table('orders')
+        ->select('municipality', DB::raw('COUNT(*) as count'))
+        ->where('delivered_by', Auth::user()->id) // Ensure the order was delivered by the current delivery person
+        ->where('order_status', 'delivered') // Only consider delivered orders
+        ->whereMonth('delivered_at', Carbon::now()->month)
+        ->whereYear('delivered_at', Carbon::now()->year)
+        ->groupBy('municipality')
+        ->get();
+
+    $deliveryLocationLabels = $deliveryLocationCounts->pluck('municipality');
+    $deliveryLocationCountsData = $deliveryLocationCounts->pluck('count');
+
+    // --- NEW: Generate dynamic colors for the pie chart ---
+    $pieChartColors = [];
+    // Define a comprehensive list of distinct colors
+    $predefinedColors = [
+        '#4e73df', // Bootstrap Primary / Theme Blue
+        '#f6c23e', // Bootstrap Warning / Theme Yellow
+        '#e74a3b', // Bootstrap Danger / Theme Red
+        '#36b9cc', // Bootstrap Info / Theme Cyan
+        '#1cc88a', // Bootstrap Success / Theme Green
+        '#858796', // Bootstrap Secondary / Theme Grey
+        '#fd7e14', // Bootstrap Orange
+        '#6f42c1', // Bootstrap Purple
+        '#20c997', // Bootstrap Teal
+        '#6610f2', // Bootstrap Indigo
+        '#d63384', // Bootstrap Pink
+        '#6c757d', // Dark Grey (a darker secondary)
+        '#adb5bd', // Light Grey (a lighter secondary)
+        '#28a745', // Stronger Green
+        '#007bff', // Stronger Blue
+        '#dc3545', // Stronger Red
+        '#ffc107', // Stronger Yellow
+        '#17a2b8', // Stronger Cyan
+        '#663399', // A custom purple
+        '#CC6666', // Muted Red
+        '#FF9900', // Bright Orange
+        '#99CC99', // Light Green
+        '#6699CC', // Medium Blue
+        '#FFCC00', // Gold
+        '#CCFFCC', // Very Light Green
+        // Add many more hex codes here if you expect a very large number of distinct municipalities
+    ];
+
+    $numberOfSlices = $deliveryLocationLabels->count();
+    for ($i = 0; $i < $numberOfSlices; $i++) {
+        // Use modulo operator to cycle through predefinedColors if there are more slices than colors
+        $pieChartColors[] = $predefinedColors[$i % count($predefinedColors)];
+    }
+    // --- END: Generate dynamic colors ---
+
+    return view('delivery.delivery', compact(
+        'months',
+        'monthlyCommissionEarnings',
+        'monthlyDeliveredOrdersCount',
+        'deliveryLocationLabels',
+        'deliveryLocationCountsData',
+        'pieChartColors' // Pass the new color array to the view
+    ));
     }
 
-    // Route::get('/dashboard', 'index')->name('delivery');
-    // Route::get('/orders/active', 'go_to_active_orders')->name('delivery.active');
-    // Route::get('/orders/completed', 'go_to_completed_orders')->name('delivery.completed');
-    // Route::get('/orders/other', 'go_to_other_orders')->name('delivery.other');
-    // Route::get('/earnings', 'go_to_earnings')->name('delivery.earnings');
-    // Route::get('/payouts', 'go_to_payouts')->name('delivery.payouts');
+
 
     public function go_to_active_orders(Request $request)
     {
