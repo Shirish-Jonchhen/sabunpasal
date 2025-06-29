@@ -244,13 +244,6 @@
                                                 </select>
                                             </div>
                                         </div>
-
-                                        {{-- View Details Button (if a separate detailed page exists)
-                                        <div class="mt-3">
-                                            <button type="submit" class="btn btn-outline-primary btn-sm w-100">
-                                                Submit Status Update
-                                            </button>
-                                        </div> --}}
                                     </form>
                                 </div>
                             </div>

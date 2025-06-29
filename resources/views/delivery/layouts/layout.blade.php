@@ -60,8 +60,8 @@
 
                     <li class="sidebar-item {{ request()->routeIs('delivery.active') ? 'active' : '' }} ">
                         <a class="sidebar-link" href="{{ route('delivery.active') }}">
-                            <i class="align-middle" data-feather="truck"></i> <span
-                                class="align-middle">Active Deliveries</span>
+                            <i class="align-middle" data-feather="truck"></i> <span class="align-middle">Active
+                                Deliveries</span>
                         </a>
                     </li>
 
@@ -74,8 +74,8 @@
 
                     <li class="sidebar-item {{ request()->routeIs('delivery.other') ? 'active' : '' }} ">
                         <a class="sidebar-link" href=" {{ route('delivery.other') }}">
-                            <i class="align-middle" data-feather="slash"></i> <span
-                                class="align-middle">Other Deliveries</span>
+                            <i class="align-middle" data-feather="slash"></i> <span class="align-middle">Other
+                                Deliveries</span>
                         </a>
                     </li>
 
@@ -83,19 +83,20 @@
                         Earnings
                     </li>
 
-                    <li class="sidebar-item {{ request()->routeIs('delivery.earnings') ? 'active' : '' }} ">
-                        <a class="sidebar-link" href=" {{ route('delivery.earnings') }} ">
-                            <i class="align-middle" data-feather="dollar-sign"></i> <span
-                                class="align-middle">My Earnings</span>
+                    <li class="sidebar-item {{ request()->routeIs('delivery.collections') ? 'active' : '' }} ">
+                        <a class="sidebar-link" href=" {{ route('delivery.collections') }} ">
+                            <i class="align-middle" data-feather="dollar-sign"></i> <span class="align-middle">My
+                                Collections</span>
                         </a>
                     </li>
                     <li class="sidebar-item {{ request()->routeIs('delivery.payouts') ? 'active' : '' }} ">
                         <a class="sidebar-link" href=" {{ route('delivery.payouts') }} ">
-                            <i class="align-middle" data-feather="send"></i> <span class="align-middle">My PayOuts</span>
+                            <i class="align-middle" data-feather="send"></i> <span class="align-middle">My
+                                PayOuts</span>
                         </a>
                     </li>
 
-                   
+
                 </ul>
 
                 <div class="sidebar-cta">

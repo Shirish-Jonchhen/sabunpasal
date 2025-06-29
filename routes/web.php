@@ -311,7 +311,7 @@ Route::middleware(['auth', 'verified', 'rolemanager:delivery'])->group(function 
             Route::get('/orders/active', 'go_to_active_orders')->name('delivery.active');
             Route::get('/orders/completed', 'go_to_completed_orders')->name('delivery.completed');
             Route::get('/orders/other', 'go_to_other_orders')->name('delivery.other');
-            Route::get('/earnings', 'go_to_earnings')->name('delivery.earnings');
+            Route::get('/collections', 'go_to_collections')->name('delivery.collections');
             Route::get('/payouts', 'go_to_payouts')->name('delivery.payouts');
         });
 
