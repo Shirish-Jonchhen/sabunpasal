@@ -249,7 +249,7 @@
                             </div>
                         @empty
                             <div class="alert alert-info text-center mt-3" role="alert">
-                                No active deliveries found.
+                                No completed deliveries found.
                             </div>
                         @endforelse
                     </div>

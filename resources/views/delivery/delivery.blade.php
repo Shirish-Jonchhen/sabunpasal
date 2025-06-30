@@ -211,47 +211,45 @@ use App\Models\Product;
                     <th class="d-none d-xl-table-cell">SubTotal</th>
                     <th class="d-none d-xl-table-cell">Discount</th>
                     <th class="d-none d-xl-table-cell">Tax Amount</th>
-                    {{-- <th class="d-none d-xl-table-cell">Delivery Charge</th> --}}
+                    <th class="d-none d-xl-table-cell">Delivery Charge</th>
                     <th class="d-none d-xl-table-cell">Total Amount</th>
-                    <th class="d-none d-xl-table-cell">Store</th>
+                    <th class="d-none d-xl-table-cell">Shipping Method</th>
                     <th class="d-none d-md-table-cell">Status</th>
                 </tr>
             </thead>
             <tbody>
-                @foreach (StoreOrder::with('order')->whereIn('store_id', function ($query) {
-        $query->select('id')->from('stores')->where('user_id', Auth::user()->id);
-    })->latest()->take(5)->get() as $order)
-                    <tr>
-                        <td>{{ $order->order?->order_tracking_number ?? 'N/A' }}</td>
-                        <td class="d-none d-xl-table-cell">{{ $order->created_at }}</td>
-                        <td class="d-none d-xl-table-cell">{{ $order->subtotal }}</td>
-                        <td class="d-none d-xl-table-cell">{{ $order->discount }}</td>
-                        <td class="d-none d-xl-table-cell">{{ $order->tax }}</td>
-                        {{-- <td class="d-none d-xl-table-cell">{{$order->delivery_charge}}</td> --}}
-                        <td class="d-none d-xl-table-cell">{{ $order->total }}</td>
-                        <td class="d-none d-xl-table-cell">{{ $order->store->store_name }}</td>
-                        @php
-                            $statusClass = '';
-                            if ($order->status == 'pending') {
-                                $statusClass = 'bg-secondary';
-                            } elseif ($order->status == 'processing') {
-                                $statusClass = 'bg-warning';
-                            } elseif ($order->status == 'shipped') {
-                                $statusClass = 'bg-primary';
-                            } elseif ($order->status == 'delivered') {
-                                $statusClass = 'bg-success';
-                            } elseif ($order->status == 'cancelled') {
-                                $statusClass = 'bg-danger';
-                            } elseif ($order->status == 'returned') {
-                                $statusClass = 'bg-danger';
-                            }
-                        @endphp
-                        <td><span class="badge {{ $statusClass }}">{{ $order->status }}</span></td>
+                @foreach (Order::where('delivered_by', Auth::user()->id)->latest()->take(5)->get() as $order )
+                <tr>
+                    <td>{{$order->order_tracking_number}}</td>
+                    <td class="d-none d-xl-table-cell">{{$order->created_at}}</td>
+                    <td class="d-none d-xl-table-cell">{{$order->subtotal}}</td>
+                    <td class="d-none d-xl-table-cell">{{$order->discount}}</td>
+                    <td class="d-none d-xl-table-cell">{{$order->tax}}</td>
+                    <td class="d-none d-xl-table-cell">{{$order->delivery_charge}}</td>
+                    <td class="d-none d-xl-table-cell">{{$order->total_amount}}</td>
+                    <td class="d-none d-xl-table-cell">{{$order->delivery_method}}</td>
+                    @php
+                        $statusClass = '';
+                        if ($order->order_status == 'pending') {
+                            $statusClass = 'bg-secondary';
+                        } elseif ($order->order_status == 'processing') {
+                            $statusClass = 'bg-warning';
+                        } elseif ($order->order_status == 'shipped') {
+                            $statusClass = 'bg-primary';
+                        }elseif ($order->order_status == 'delivered') {
+                            $statusClass = 'bg-success';
+                        }elseif ($order->order_status == 'cancelled') {
+                            $statusClass = 'bg-danger';
+                        }elseif ($order->order_status == 'returned') {
+                            $statusClass = 'bg-danger';
+                        }
+                    @endphp
+                    <td><span class="badge {{ $statusClass }}">{{$order->order_status}}</span></td>
 
-                    </tr>
+                </tr>
                 @endforeach
-
-
+                
+                
             </tbody>
         </table>
     </div>

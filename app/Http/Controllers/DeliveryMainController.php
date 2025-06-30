@@ -100,6 +100,8 @@ class DeliveryMainController extends Controller
         }
         // --- END: Generate dynamic colors ---
 
+
+
         return view('delivery.delivery', compact(
             'months',
             'monthlyCommissionEarnings',
@@ -234,9 +236,67 @@ class DeliveryMainController extends Controller
         ));
     }
 
-    public function go_to_other_orders()
+    public function go_to_other_orders(Request $request)
     {
-        return view('delivery.orders.others');
+        $query = Order::where('delivered_by', Auth::user()->id)
+        ->whereIn('order_status', ['returned', 'cancelled']);
+    
+
+
+        if ($request->has('search') && $request->search != '') {
+            $query->where('order_tracking_number', 'like', '%' . $request->search . '%');
+        }
+
+        if ($request->has('municipality') && $request->municipality != '') {
+            $query->where('municipality', $request->municipality);
+        }
+
+        if ($request->has('sort') && $request->sort != '') {
+            switch ($request->sort) {
+                case 'price_asc':
+                    $query->orderBy('price', 'asc');
+                    break;
+                case 'price_desc':
+                    $query->orderBy('price', 'desc');
+                    break;
+                case 'date_latest':
+                    $query->orderBy('delivered_at', 'desc');
+                    break;
+                case 'date_oldest':
+                    $query->orderBy('delivered_at', 'asc');
+                    break;
+            }
+        } else {
+            // Default sorting
+            $query->orderBy('created_at', 'desc');
+        }
+
+        // ✅ Add pagination (e.g., 10 per page)
+        $orders = $query->paginate(10);
+
+        // Pass filters back to view
+        $searchQuery = $request->query('search', '');
+        $municipalityQuery = $request->query('municipality', '');
+        $sortQuery = $request->query('sort', '');
+
+        // To preserve query parameters in pagination links
+        $orders->appends($request->all());
+
+        $orderStatuses = ['pending', 'processing', 'shpipped', 'delivered'];
+        $paymentStatuses = ['unapid','paid'];
+        $municipalities = Municipality::orderBy('municipality_name')->get();
+        return view(
+            'delivery.orders.others',
+            compact(
+                'orders',
+                'orderStatuses',
+                'paymentStatuses',
+                'municipalities',
+                'searchQuery',
+                'municipalityQuery',
+                'sortQuery'
+            )
+        );
     }
 
     public function go_to_collections(Request $request)
