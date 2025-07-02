@@ -246,7 +246,7 @@
         <section class="info-section container">
             <div class="info-content">
                 <h3>Your Partner in Cleanliness</h3>
-                <p>At SabunPasal.com, we believe a clean space is a happy space. We offer a curated selection of
+                <p>At <strong>SabunPasal.com</strong> by <strong>Swastika Shirish Traders</strong>, we believe a clean space is a happy space. We offer a curated selection of
                     high-quality
                     cleaning supplies for every need, from everyday home cleaning to professional-grade solutions. We are
                     committed to providing effective products, excellent customer service, and fast shipping.</p>

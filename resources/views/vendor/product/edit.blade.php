@@ -173,15 +173,15 @@
                                                     <input type="number" class="form-control mb-2"
                                                         name="variants[{{ $variantIndex }}][prices][{{ $priceIndex }}][pieces_per_unit]"
                                                         value="{{ $price->pieces_per_unit }}" placeholder="Pieces Per Unit">
-                                                    <button type="button"
-                                                        class="btn btn-danger btn-sm remove-price">Remove Price</button>
+                                                    {{-- <button type="button"
+                                                        class="btn btn-danger btn-sm remove-price">Remove Price</button> --}}
                                                 </div>
                                             @endforeach
                                         </div>
                                         <button type="button" class="btn btn-info btn-sm mb-4"
                                             onclick="addPriceRow({{ $variantIndex }})">Add Price</button> <br>
-                                        <button type="button" class="btn btn-danger btn-md remove-variant">Remove
-                                            Variant</button>
+                                        {{-- <button type="button" class="btn btn-danger btn-md remove-variant">Remove
+                                            Variant</button> --}}
                                         <hr>
                                     </div>
                                 @endforeach

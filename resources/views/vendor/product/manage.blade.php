@@ -80,13 +80,13 @@
                                         <td>
                                             <a href="{{ route('vendor.product.show', $product->id) }}"
                                                 class="btn btn-primary btn-sm">Edit</a>
-                                            <form action="{{ route('vendor.product.delete', $product->id) }}" method="POST"
+                                            {{-- <form action="{{ route('vendor.product.delete', $product->id) }}" method="POST"
                                                 style="display:inline-block;">
                                                 @csrf
                                                 @method('DELETE')
                                                 <input type="submit" value="Delete" class="btn btn-danger btn-sm"
                                                     onclick="return confirm('Are you sure you want to delete this product?')">
-                                            </form>
+                                            </form> --}}
                                         </td>
                                     </tr>
                                 @endforeach

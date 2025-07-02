@@ -63,10 +63,10 @@
                     <ul>
                         @foreach ($order->storeOrders as $store_order)
                             @foreach ($store_order->storeOrederProducts as $product)
-                                <li>{{ $product->variantPrice->variant->product->name }} |
-                                    {{ $product->variantPrice->variant->variant_name }} |
-                                    {{ $product->variantPrice->variant->size }} (x{{ $product->quantity }}
-                                    {{ $product->variantPrice->unit->attribute_value }})</li>
+                                <li>{{ $product->variantPrice->variant->product->name ?? "N/A" }} |
+                                    {{ $product->variantPrice->variant->variant_name ?? "N/A"}} |
+                                    {{ $product->variantPrice->variant->size  ?? "N/A" }} (x{{ $product->quantity }}
+                                    {{ $product->variantPrice->unit->attribute_value ?? "N/A"}})</li>
                             @endforeach
                         @endforeach
 

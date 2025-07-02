@@ -279,8 +279,24 @@
         <div class="container header-top-bar">
             <span class="announcement"></span>
             <div class="top-bar-links">
+
+
+
                 {{-- <a href="#">Track Order</a> --}}
                 @if (Auth::user())
+
+                    @if (Auth::user()->role == 0)
+                        <a href="{{ route('admin') }}">Admin Dashboard</a>
+                    @endif
+
+                    @if (Auth::user()->role == 1)
+                        <a href="{{ route('vendor') }}">Vendor Dashboard</a>
+                    @endif
+
+                    @if (Auth::user()->role == 3)
+                        <a href="{{ route('delivery') }}">Delivery Dashboard</a>
+                    @endif
+
                     <form method="POST" action="{{ route('logout') }}" style="display: inline;">
                         @csrf
                         <button type="submit" class="link-button">Logout</button>
@@ -387,7 +403,8 @@
                     <img src="{{ asset('logos/sabun_pasal_linear_color_inversion.png') }}" alt="SabunPasal.com Logo"
                         class="logo-image-footer">
                 </a>
-                <p>Your one-stop shop for quality cleaning supplies. We provide effective solutions for a sparkling
+                <p>Your one-stop shop for quality cleaning supplies by <strong>Swastika Shirish Traders</strong>. We
+                    provide effective solutions for a sparkling
                     clean home and business.</p>
                 <div class="social-media-links">
                     <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>

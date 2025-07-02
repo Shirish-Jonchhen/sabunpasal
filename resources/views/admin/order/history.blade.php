@@ -97,7 +97,8 @@
                             <div class="order-item">
                                 <div class="order-header">
                                     <h3>{{ $order->order_tracking_number }}</h3>
-                                    <span>Date: {{ \Carbon\Carbon::parse($order->created_at)->format('F j, Y') }}</span>
+                                    <span>Date Placed: {{ \Carbon\Carbon::parse($order->created_at)->format('F j, Y') }}</span>
+                                    <span>Date Delivered: {{ $order->delivered_at?\Carbon\Carbon::parse($order->delivered_at)->format('F j, Y'):'N/A' }}</span>
                                     <span>Total: NRs. {{ $order->total_amount }}</span>
                                     @php
                                         $statusClass = match ($order->order_status) {
@@ -129,6 +130,15 @@
                                     <span class="status {{ $statusClass }}">
                                         Payment: {{ $order->payment_status }}
                                     </span>
+
+
+                                    <span class="status ">
+                                        Delivery By: @if ($order->delivery_method == 'delivery')
+                                            {{ $order->DeliveryPerson ? $order->DeliveryPerson->name : 'Not Assigned' }}
+                                        @else
+                                            Self
+                                        @endif
+                                    </span>
                                 </div>
                                 <div class="order-details">
                                     <h4>Items:</h4>
@@ -154,11 +164,11 @@
                                                 <ol>
 
                                                     @foreach ($store_order->storeOrederProducts as $product)
-                                                        <li>{{ $product->variantPrice->variant->product->name }} |
-                                                            {{ $product->variantPrice->variant->variant_name }} |
-                                                            {{ $product->variantPrice->variant->size }}
+                                                        <li>{{ $product->variantPrice->variant->product->name ?? 'N/A' }} |
+                                                            {{ $product->variantPrice->variant->variant_name ?? 'N/A'}} |
+                                                            {{ $product->variantPrice->variant->size ?? 'N/A'}}
                                                             (x{{ $product->quantity }}
-                                                            {{ $product->variantPrice->unit->attribute_value }})
+                                                            {{ $product->variantPrice->unit->attribute_value ?? 'N/A'}})
                                                         </li>
                                                     @endforeach
                                                 </ol>

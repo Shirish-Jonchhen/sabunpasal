@@ -36,8 +36,8 @@
                             value="{{ $user->email }}">
 
                         <label for="google_id" class="form-label fw-bold mb-2">Google ID</label>
-                        <input readonly type="text" class="form-control mb-2" name="google_id" placeholder="sabunpasal@gmail.com"
-                            value="{{ $user->google_id }}">
+                        <input readonly type="text" class="form-control mb-2" name="google_id" placeholder="0123456789011"
+                            value="{{ $user->google_id ?? "N/A" }}">
 
                         <label class="form-label fw-bold mb-2">Role</label>
                         <select class="form-select mb-2" name="role">
@@ -45,12 +45,13 @@
                             <option value="0" {{ $user->role == '0' ? 'selected' : '' }}>Admin</option>
                             <option value="1" {{ $user->role == '1' ? 'selected' : '' }}>Vendor</option>
                             <option value="2" {{ $user->role == '2' ? 'selected' : '' }}>Customer</option>
+                            <option value="3" {{ $user->role == '3' ? 'selected' : '' }}>Delivery</option>
                            
                         </select>
 
                         <label for="email_verified_at" class="form-label fw-bold mb-2">Email Verified At</label>
-                        <input type="text" class="form-control mb-2" name="email_verified_at" placeholder="Meta Titles"
-                            value="{{ $user->email_verified_at }}">
+                        <input type="text" class="form-control mb-2" name="email_verified_at" placeholder="2023-25-20"
+                            value="{{ $user->email_verified_at ?? "N/A" }}">
 
                         <label for="created_at" class="form-label fw-bold mb-2">Created At</label>
                         <input type="text" class="form-control mb-2" name="created_at" placeholder="Meta Descriptions"

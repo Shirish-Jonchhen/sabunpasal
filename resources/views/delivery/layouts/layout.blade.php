@@ -22,7 +22,7 @@
     <link rel="canonical" href="https://demo-basic.adminkit.io/" />
 
 
-    <title>@yield('admin_page_title')</title>
+    <title>@yield('delivery_page_title')</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.4/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-DQvkBjpPgn7RC31MCQoOeC9TI2kdqa4+BSgNMNj8v77fdC77Kj5zpWFTJaaAoMbC" crossorigin="anonymous">
 
@@ -39,7 +39,7 @@
         <nav id="sidebar" class="sidebar js-sidebar">
             <div class="sidebar-content js-simplebar">
                 <a class="sidebar-brand" href="index.html">
-                    <span class="align-middle">SabunPasal.com - Admin</span>
+                    <span class="align-middle">SabunPasal.com - Delivery</span>
                 </a>
 
                 <ul class="sidebar-nav">
@@ -47,193 +47,60 @@
                         Main
                     </li>
 
-                    <li class="sidebar-item {{ request()->routeIs('admin') ? 'active' : '' }}">
-                        <a class="sidebar-link" href="{{ route('admin') }}">
+                    <li class="sidebar-item {{ request()->routeIs('delivery') ? 'active' : '' }}  ">
+                        <a class="sidebar-link" href="{{ route('delivery') }}">
                             <i class="align-middle" data-feather="home"></i> <span class="align-middle">Dashboard</span>
                         </a>
                     </li>
 
 
                     <li class="sidebar-header">
-                        Users
-                    </li>
-
-                    <li class="sidebar-item {{ request()->routeIs('admin.manage.user') ? 'active' : '' }}">
-                        <a class="sidebar-link" href="{{ route('admin.manage.user') }}">
-                            <i class="align-middle" data-feather="users"></i> <span class="align-middle">Users</span>
-                        </a>
-                    </li>
-
-                    <li class="sidebar-header">
-                        Home Page Banner
-                    </li>
-
-                    <li class="sidebar-item {{ request()->routeIs('home.banner.create') ? 'active' : '' }}">
-                        <a class="sidebar-link" href="{{ route('home.banner.create') }}">
-                            <i class="align-middle" data-feather="plus-circle"></i> <span
-                                class="align-middle">Create</span>
-                        </a>
-                    </li>
-                    <li class="sidebar-item {{ request()->routeIs('home.banner.manage') ? 'active' : '' }}">
-                        <a class="sidebar-link" href="{{ route('home.banner.manage') }}">
-                            <i class="align-middle" data-feather="sliders"></i> <span class="align-middle">Manage</span>
-                        </a>
-                    </li>
-
-                    <li class="sidebar-header">
-                        Category
-                    </li>
-
-                    <li class="sidebar-item {{ request()->routeIs('category.create') ? 'active' : '' }}">
-                        <a class="sidebar-link" href="{{ route('category.create') }}">
-                            <i class="align-middle" data-feather="plus-circle"></i> <span
-                                class="align-middle">Create</span>
-                        </a>
-                    </li>
-                    <li class="sidebar-item {{ request()->routeIs('category.manage') ? 'active' : '' }}">
-                        <a class="sidebar-link" href="{{ route('category.manage') }}">
-                            <i class="align-middle" data-feather="sliders"></i> <span class="align-middle">Manage</span>
-                        </a>
-                    </li>
-                    <li class="sidebar-header">
-                        Sub-Category
-                    </li>
-
-                    <li class="sidebar-item {{ request()->routeIs('subcategory.create') ? 'active' : '' }}">
-                        <a class="sidebar-link" href="{{ route('subcategory.create') }}">
-                            <i class="align-middle" data-feather="plus-circle"></i> <span
-                                class="align-middle">Create</span>
-                        </a>
-                    </li>
-                    <li class="sidebar-item {{ request()->routeIs('subcategory.manage') ? 'active' : '' }}">
-                        <a class="sidebar-link" href="{{ route('subcategory.manage') }}">
-                            <i class="align-middle" data-feather="sliders"></i> <span class="align-middle">Manage</span>
-                        </a>
-                    </li>
-
-
-                    <li class="sidebar-header">
-                        Brand
-                    </li>
-
-                    <li class="sidebar-item {{ request()->routeIs('brand.create') ? 'active' : '' }}">
-                        <a class="sidebar-link" href="{{ route('brand.create') }}">
-                            <i class="align-middle" data-feather="plus-circle"></i> <span
-                                class="align-middle">Create</span>
-                        </a>
-                    </li>
-                    <li class="sidebar-item {{ request()->routeIs('brand.manage') ? 'active' : '' }}">
-                        <a class="sidebar-link" href="{{ route('brand.manage') }}">
-                            <i class="align-middle" data-feather="sliders"></i> <span
-                                class="align-middle">Manage</span>
-                        </a>
-                    </li>
-
-                    <li class="sidebar-header">
                         Orders
                     </li>
 
-                    <li class="sidebar-item {{ request()->routeIs('admin.orders') ? 'active' : '' }}">
-                        <a class="sidebar-link" href="{{ route('admin.orders') }}">
-                            <i class="align-middle" data-feather="package"></i> <span
-                                class="align-middle">orders</span>
+                    <li class="sidebar-item {{ request()->routeIs('delivery.active') ? 'active' : '' }} ">
+                        <a class="sidebar-link" href="{{ route('delivery.active') }}">
+                            <i class="align-middle" data-feather="truck"></i> <span class="align-middle">Active
+                                Deliveries</span>
+                        </a>
+                    </li>
+
+                    <li class="sidebar-item {{ request()->routeIs('delivery.completed') ? 'active' : '' }} ">
+                        <a class="sidebar-link" href="{{ route('delivery.completed') }}">
+                            <i class="align-middle" data-feather="check-square"></i> <span
+                                class="align-middle">Completed Deliveries</span>
+                        </a>
+                    </li>
+
+                    <li class="sidebar-item {{ request()->routeIs('delivery.other') ? 'active' : '' }} ">
+                        <a class="sidebar-link" href=" {{ route('delivery.other') }}">
+                            <i class="align-middle" data-feather="slash"></i> <span class="align-middle">Other
+                                Deliveries</span>
                         </a>
                     </li>
 
                     <li class="sidebar-header">
-                        District
+                        Earnings
                     </li>
 
-                    <li class="sidebar-item {{ request()->routeIs('district.create') ? 'active' : '' }}">
-                        <a class="sidebar-link" href="{{ route('district.create') }}">
-                            <i class="align-middle" data-feather="plus-circle"></i> <span
-                                class="align-middle">Create</span>
+                    <li class="sidebar-item {{ request()->routeIs('delivery.collections') ? 'active' : '' }} ">
+                        <a class="sidebar-link" href=" {{ route('delivery.collections') }} ">
+                            <i class="align-middle" data-feather="dollar-sign"></i> <span class="align-middle">My
+                                Collections</span>
                         </a>
                     </li>
-                    <li class="sidebar-item {{ request()->routeIs('district.manage') ? 'active' : '' }}">
-                        <a class="sidebar-link" href="{{ route('district.manage') }}">
-                            <i class="align-middle" data-feather="sliders"></i> <span
-                                class="align-middle">Manage</span>
-                        </a>
-                    </li>
-
-                    <li class="sidebar-header">
-                        Municipality
-                    </li>
-
-                    <li class="sidebar-item {{ request()->routeIs('municipality.create') ? 'active' : '' }}">
-                        <a class="sidebar-link" href="{{ route('municipality.create') }}">
-                            <i class="align-middle" data-feather="plus-circle"></i> <span
-                                class="align-middle">Create</span>
-                        </a>
-                    </li>
-                    <li class="sidebar-item {{ request()->routeIs('municipality.manage') ? 'active' : '' }}">
-                        <a class="sidebar-link" href="{{ route('municipality.manage') }}">
-                            <i class="align-middle" data-feather="sliders"></i> <span
-                                class="align-middle">Manage</span>
-                        </a>
-                    </li>
-
-                    <li class="sidebar-header">
-                        Attribute
-                    </li>
-
-                    <li class="sidebar-item {{ request()->routeIs('productattribute.create') ? 'active' : '' }}">
-                        <a class="sidebar-link" href="{{ route('productattribute.create') }}">
-                            <i class="align-middle" data-feather="plus-circle"></i> <span
-                                class="align-middle">Create</span>
-                        </a>
-                    </li>
-                    <li class="sidebar-item {{ request()->routeIs('productattribute.manage') ? 'active' : '' }}">
-                        <a class="sidebar-link" href="{{ route('productattribute.manage') }}">
-                            <i class="align-middle" data-feather="sliders"></i> <span
-                                class="align-middle">Manage</span>
-                        </a>
-                    </li>
-
-                    <li class="sidebar-header">
-                        Finances
-                    </li>
-
-                    <li
-                        class="sidebar-item {{ request()->routeIs('admin.finance.remaining.collections') ? 'active' : '' }} ">
-                        <a class="sidebar-link" href="{{ route('admin.finance.remaining.collections') }}">
-                            <i class="align-middle" data-feather="plus-circle"></i> <span
-                                class="align-middle">Remaining Collections</span>
-                        </a>
-                    </li>
-                    <li class="sidebar-item {{ request()->routeIs('admin.finance.collections') ? 'active' : '' }}">
-                        <a class="sidebar-link" href="{{ route('admin.finance.collections') }}">
-                            <i class="align-middle" data-feather="sliders"></i> <span
-                                class="align-middle">Collections</span>
-                        </a>
-                    </li>
-
-                    <li
-                        class="sidebar-item {{ request()->routeIs('admin.finance.remaining.payouts') ? 'active' : '' }}">
-                        <a class="sidebar-link" href="{{ route('admin.finance.remaining.payouts') }}">
-                            <i class="align-middle" data-feather="plus-circle"></i> <span
-                                class="align-middle">Remaining Payouts</span>
-                        </a>
-                    </li>
-                    <li class="sidebar-item {{ request()->routeIs('admin.finance.payouts') ? 'active' : '' }}">
-                        <a class="sidebar-link" href="{{ route('admin.finance.payouts') }}">
-                            <i class="align-middle" data-feather="sliders"></i> <span
-                                class="align-middle">Payouts</span>
+                    <li class="sidebar-item {{ request()->routeIs('delivery.payouts') ? 'active' : '' }} ">
+                        <a class="sidebar-link" href=" {{ route('delivery.payouts') }} ">
+                            <i class="align-middle" data-feather="send"></i> <span class="align-middle">My
+                                PayOuts</span>
                         </a>
                     </li>
 
 
-                    {{-- <li class="sidebar-item {{ request()->routeIs('product.review.manage') ? 'active' : '' }}">
-                        <a class="sidebar-link" href="{{ route('product.review.manage') }}">
-                            <i class="align-middle" data-feather="star"></i> <span class="align-middle">Review</span>
-                        </a>
-                    </li> --}}
                 </ul>
 
                 <div class="sidebar-cta">
                     <div class="sidebar-cta-content">
-
                         <div class="d-grid">
                             <a href="{{ route('home') }}" class="btn btn-primary">HOME</a>
                         </div>
@@ -443,7 +310,7 @@
                 <div class="container-fluid p-0">
 
                     {{-- <h1 class="h3 mb-3">Blank Page</h1> --}}
-                    @yield('admin_layout')
+                    @yield('delivery_layout')
                 </div>
             </main>
 
