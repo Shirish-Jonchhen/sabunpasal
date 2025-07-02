@@ -30,7 +30,7 @@ use App\Models\Product;
 
                             <div class="col-auto">
                                 <div class="stat text-primary">
-                                    <i class="align-middle" data-feather="truck"></i>
+                                    <i class="align-middle" data-feather="dollar-sign"></i>
                                 </div>
                             </div>
                         </div>
@@ -54,7 +54,7 @@ use App\Models\Product;
 
                             <div class="col-auto">
                                 <div class="stat text-primary">
-                                    <i class="align-middle" data-feather="users"></i>
+                                    <i class="align-middle" data-feather="truck"></i>
                                 </div>
                             </div>
                         </div>
@@ -80,7 +80,7 @@ use App\Models\Product;
 
                             <div class="col-auto">
                                 <div class="stat text-primary">
-                                    <i class="align-middle" data-feather="shopping-bag"></i>
+                                    <i class="align-middle" data-feather="arrow-up-circle"></i>
                                 </div>
                             </div>
                         </div>
@@ -103,7 +103,7 @@ use App\Models\Product;
 
                             <div class="col-auto">
                                 <div class="stat text-primary">
-                                    <i class="align-middle" data-feather="shopping-cart"></i>
+                                    <i class="align-middle" data-feather="arrow-down-circle"></i>
                                 </div>
                             </div>
                         </div>

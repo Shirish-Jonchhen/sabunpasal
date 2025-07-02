@@ -161,8 +161,8 @@ class DeliveryMainController extends Controller
         // To preserve query parameters in pagination links
         $orders->appends($request->all());
 
-        $orderStatuses = ['pending', 'processing', 'shpipped', 'delivered', 'cancelled', 'returned'];
-        $paymentStatuses = ['unapid', 'partial', 'paid'];
+        $orderStatuses = ['pending', 'processing', 'shpipped', 'delivered'];
+        $paymentStatuses = ['unapid', 'paid'];
         $municipalities = Municipality::orderBy('municipality_name')->get();
 
         return view('delivery.orders.active', compact(
