@@ -141,7 +141,7 @@
                                     @endphp
 
                                     <span class="status {{ $statusClass }}">
-                                        Admin-Status: {{ $storeOrder->order->order_status }}
+                                        Admin-Status: {{ $storeOrder->order->order_status ?? 'N/A' }}
                                     </span>
 
 
@@ -152,9 +152,9 @@
 
 
                                         @foreach ($storeOrder->storeOrederProducts as $product)
-                                            <li>{{ $product->variantPrice->variant->product->name }} |
-                                                {{ $product->variantPrice->variant->variant_name }} |
-                                                {{ $product->variantPrice->variant->size }}
+                                            <li>{{ $product->variantPrice->variant->product->name ?? 'N/A' }} |
+                                                {{ $product->variantPrice->variant->variant_name ?? 'N/A' }} |
+                                                {{ $product->variantPrice->variant->size ?? 'N/A' }}
                                                 (x{{ $product->quantity }}
                                                 {{ $product->variantPrice->unit->attribute_value }})
                                             </li>
