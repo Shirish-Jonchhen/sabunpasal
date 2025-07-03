@@ -129,7 +129,7 @@
 
 
                                     @php
-                                        $statusClass = match ($storeOrder->order->order_status) {
+                                        $statusClass = match ($storeOrder->order->order_status ?? 'N/A') {
                                             'pending' => 'status-pending',
                                             'processing' => 'status-processing',
                                             'shipped' => 'status-shipped',
