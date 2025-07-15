@@ -70,3 +70,4 @@ The Laravel framework is open-sourced software licensed under the [MIT license](
 Composer version - 2.8.6
 php version - 8.4.4
 Laravel Framework - 12.5.0
+node - 23.7.0 
