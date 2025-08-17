@@ -69,8 +69,8 @@ html {
     max-width: 80vw;
 }
 
-/* For screens ≤ 922px */
-@media (max-width: 922px) {
+/* For screens ≤ 992px */
+@media (max-width: 992px) {
     .loader-inner img {
         width: 400px;
     }
@@ -4119,7 +4119,7 @@ ul {
         width: fit-content;
         height: fit-content;
         margin-bottom: 1rem;
-        z-index: 1001;
+        /* z-index: 1001; */
         top: 10px;
         left: 10px;
     }

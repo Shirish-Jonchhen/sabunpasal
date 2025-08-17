@@ -52,6 +52,18 @@
                             <i class="align-middle" data-feather="home"></i> <span class="align-middle">Dashboard</span>
                         </a>
                     </li>
+
+
+                    <li class="sidebar-header">
+                        Users
+                    </li>
+
+                    <li class="sidebar-item {{ request()->routeIs('admin.manage.user') ? 'active' : '' }}">
+                        <a class="sidebar-link" href="{{ route('admin.manage.user') }}">
+                            <i class="align-middle" data-feather="users"></i> <span class="align-middle">Users</span>
+                        </a>
+                    </li>
+
                     <li class="sidebar-header">
                         Home Page Banner
                     </li>
@@ -112,7 +124,8 @@
                     </li>
                     <li class="sidebar-item {{ request()->routeIs('brand.manage') ? 'active' : '' }}">
                         <a class="sidebar-link" href="{{ route('brand.manage') }}">
-                            <i class="align-middle" data-feather="sliders"></i> <span class="align-middle">Manage</span>
+                            <i class="align-middle" data-feather="sliders"></i> <span
+                                class="align-middle">Manage</span>
                         </a>
                     </li>
 
@@ -122,7 +135,8 @@
 
                     <li class="sidebar-item {{ request()->routeIs('admin.orders') ? 'active' : '' }}">
                         <a class="sidebar-link" href="{{ route('admin.orders') }}">
-                            <i class="align-middle" data-feather="package"></i> <span class="align-middle">orders</span>
+                            <i class="align-middle" data-feather="package"></i> <span
+                                class="align-middle">orders</span>
                         </a>
                     </li>
 
@@ -138,7 +152,8 @@
                     </li>
                     <li class="sidebar-item {{ request()->routeIs('district.manage') ? 'active' : '' }}">
                         <a class="sidebar-link" href="{{ route('district.manage') }}">
-                            <i class="align-middle" data-feather="sliders"></i> <span class="align-middle">Manage</span>
+                            <i class="align-middle" data-feather="sliders"></i> <span
+                                class="align-middle">Manage</span>
                         </a>
                     </li>
 
@@ -154,7 +169,8 @@
                     </li>
                     <li class="sidebar-item {{ request()->routeIs('municipality.manage') ? 'active' : '' }}">
                         <a class="sidebar-link" href="{{ route('municipality.manage') }}">
-                            <i class="align-middle" data-feather="sliders"></i> <span class="align-middle">Manage</span>
+                            <i class="align-middle" data-feather="sliders"></i> <span
+                                class="align-middle">Manage</span>
                         </a>
                     </li>
 
@@ -170,23 +186,40 @@
                     </li>
                     <li class="sidebar-item {{ request()->routeIs('productattribute.manage') ? 'active' : '' }}">
                         <a class="sidebar-link" href="{{ route('productattribute.manage') }}">
-                            <i class="align-middle" data-feather="sliders"></i> <span class="align-middle">Manage</span>
+                            <i class="align-middle" data-feather="sliders"></i> <span
+                                class="align-middle">Manage</span>
                         </a>
                     </li>
 
                     <li class="sidebar-header">
-                        Discount
+                        Finances
                     </li>
 
-                    <li class="sidebar-item {{ request()->routeIs('discount.create') ? 'active' : '' }}">
-                        <a class="sidebar-link" href="{{ route('discount.create') }}">
+                    <li
+                        class="sidebar-item {{ request()->routeIs('admin.finance.remaining.collections') ? 'active' : '' }} ">
+                        <a class="sidebar-link" href="{{ route('admin.finance.remaining.collections') }}">
                             <i class="align-middle" data-feather="plus-circle"></i> <span
-                                class="align-middle">Create</span>
+                                class="align-middle">Remaining Collections</span>
                         </a>
                     </li>
-                    <li class="sidebar-item {{ request()->routeIs('discount.manage') ? 'active' : '' }}">
-                        <a class="sidebar-link" href="{{ route('discount.manage') }}">
-                            <i class="align-middle" data-feather="sliders"></i> <span class="align-middle">Manage</span>
+                    <li class="sidebar-item {{ request()->routeIs('admin.finance.collections') ? 'active' : '' }}">
+                        <a class="sidebar-link" href="{{ route('admin.finance.collections') }}">
+                            <i class="align-middle" data-feather="sliders"></i> <span
+                                class="align-middle">Collections</span>
+                        </a>
+                    </li>
+
+                    <li
+                        class="sidebar-item {{ request()->routeIs('admin.finance.remaining.payouts') ? 'active' : '' }}">
+                        <a class="sidebar-link" href="{{ route('admin.finance.remaining.payouts') }}">
+                            <i class="align-middle" data-feather="plus-circle"></i> <span
+                                class="align-middle">Remaining Payouts</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-item {{ request()->routeIs('admin.finance.payouts') ? 'active' : '' }}">
+                        <a class="sidebar-link" href="{{ route('admin.finance.payouts') }}">
+                            <i class="align-middle" data-feather="sliders"></i> <span
+                                class="align-middle">Payouts</span>
                         </a>
                     </li>
 
@@ -196,43 +229,13 @@
                             <i class="align-middle" data-feather="star"></i> <span class="align-middle">Review</span>
                         </a>
                     </li> --}}
-
-                    <li class="sidebar-header">
-                        History
-                    </li>
-
-                    <li class="sidebar-item {{ request()->routeIs('admin.cart.histroy') ? 'active' : '' }}">
-                        <a class="sidebar-link" href="{{ route('admin.cart.histroy') }}">
-                            <i class="align-middle" data-feather="shopping-cart"></i> <span
-                                class="align-middle">Cart</span>
-                        </a>
-                    </li>
-                    <li class="sidebar-item {{ request()->routeIs('admin.order.histroy') ? 'active' : '' }}">
-                        <a class="sidebar-link" href="{{ route('admin.order.histroy') }}">
-                            <i class="align-middle" data-feather="list"></i> <span class="align-middle">Order</span>
-                        </a>
-                    </li>
-
-                    <li class="sidebar-header">
-                        Settings
-                    </li>
-
-                    <li class="sidebar-item {{ request()->routeIs('admin.settings') ? 'active' : '' }}">
-                        <a class="sidebar-link" href="{{ route('admin.settings') }}">
-                            <i class="align-middle" data-feather="settings"></i> <span
-                                class="align-middle">Settings</span>
-                        </a>
-                    </li>
                 </ul>
 
                 <div class="sidebar-cta">
                     <div class="sidebar-cta-content">
-                        <strong class="d-inline-block mb-2">Upgrade to Pro</strong>
-                        <div class="mb-3 text-sm">
-                            Are you looking for more components? Check out our premium version.
-                        </div>
+
                         <div class="d-grid">
-                            <a href="upgrade-to-pro.html" class="btn btn-primary">Upgrade to Pro</a>
+                            <a href="{{ route('home') }}" class="btn btn-primary">HOME</a>
                         </div>
                     </div>
                 </div>
@@ -248,7 +251,8 @@
                 <div class="navbar-collapse collapse">
                     <ul class="navbar-nav navbar-align">
                         <li class="nav-item dropdown">
-                            <a class="nav-icon dropdown-toggle" href="#" id="alertsDropdown" data-bs-toggle="dropdown">
+                            <a class="nav-icon dropdown-toggle" href="#" id="alertsDropdown"
+                                data-bs-toggle="dropdown">
                                 <div class="position-relative">
                                     <i class="align-middle" data-feather="bell"></i>
                                     <span class="indicator">4</span>
@@ -404,8 +408,9 @@
 
                             <a class="nav-link dropdown-toggle d-none d-sm-inline-block" href="#"
                                 data-bs-toggle="dropdown">
-                                <img loading="lazy" src="img/avatars/avatar.jpg" class="avatar img-fluid rounded me-1"
-                                    alt="Charles Hall" /> <span class="text-dark">{{ Auth::user()->name }}</span>
+                                <img loading="lazy" src="img/avatars/avatar.jpg"
+                                    class="avatar img-fluid rounded me-1" alt="Charles Hall" /> <span
+                                    class="text-dark">{{ Auth::user()->name }}</span>
                             </a>
                             <div class="dropdown-menu dropdown-menu-end">
                                 <a class="dropdown-item" href="pages-profile.html"><i class="align-middle me-1"

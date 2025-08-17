@@ -2,6 +2,8 @@
 
 namespace App\Livewire\Admin;
 
+use App\Mail\OrderShipped;
+use Illuminate\Support\Facades\Mail;
 use Livewire\Component;
 
 class OrderStatusUpdater extends Component
@@ -21,6 +23,10 @@ class OrderStatusUpdater extends Component
     public function updatedOrderStatus($value)
     {
         $this->order->order_status = $value;
+        if ($value === 'shipped') {
+            // Send email notification when order is shipped
+            Mail::to($this->order->user->email)->send(new OrderShipped($this->order));
+        }
         $this->order->save();
         session()->flash('message', 'Order status updated!');
     }

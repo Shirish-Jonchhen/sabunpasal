@@ -25,6 +25,8 @@ use App\Http\Controllers\MasterSubCategoryController;
 use App\Http\Controllers\WishlistController;
 use App\Http\Controllers\CustomerCategoryController;
 use App\Http\Controllers\CustomerSubcategoryConroller;
+use App\Http\Controllers\DeliveryMainController;
+use App\Http\Controllers\FinanceController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\InvoiceController;
@@ -119,6 +121,8 @@ Route::middleware(['auth', 'verified', 'rolemanager:admin'])->group(function () 
             Route::get('/dashboard', 'index')->name('admin');
             Route::get('/settings', 'setting')->name('admin.settings');
             Route::get('/manage/users', 'manage_user')->name('admin.manage.user');
+            Route::get('/edit/users/{id}', 'edit_user')->name('admin.edit.user');
+            Route::put('/update/users/{id}', 'update_user')->name('admin.update.user');
             Route::get('/manage/store', 'manage_stores')->name('admin.manage.store');
             Route::get('/cart/history', 'cart_history')->name('admin.cart.histroy');
             Route::get('/order/history', 'order_history')->name('admin.order.histroy');
@@ -128,10 +132,7 @@ Route::middleware(['auth', 'verified', 'rolemanager:admin'])->group(function () 
 
             Route::get('/home/banner/create', 'index')->name('home.banner.create');
             Route::get('/home/banner/manage', 'manage')->name('home.banner.manage');
-
             Route::post('/home/banner/add', 'add_home_banner')->name('add.home.banner');
-            // Route::get('/home/banner/{id}', 'show_single_home_banner')->name('show.home.banner');
-            // Route::put('/home/banner/update/{id}', 'update_home_banner')->name('update.home.banner');
             Route::delete('/home/banner/delete/{id}', 'delete_home_banner')->name('delete.home.banner');
         });
 
@@ -228,6 +229,18 @@ Route::middleware(['auth', 'verified', 'rolemanager:admin'])->group(function () 
         Route::controller(OrderController::class)->group(function () {
             Route::get('/orders', 'get_all_orders')->name('admin.orders');
             Route::get('/orders/{trackingNumber}', 'show_one_order')->name('admin.order.show');
+            Route::put('/orders/assign/delivery/{trackingNumber}', 'assign_delivery_person')->name('admin.order.assign.delivery');
+        });
+
+        Route::controller(FinanceController::class)->group(function () {
+            Route::get('/finance/remaining-collections', 'goToRemainingCollections')->name('admin.finance.remaining.collections');
+            Route::get('/finance/collections', 'goToCollections')->name('admin.finance.collections');
+            Route::get('/finance/collect', 'collectDeliverypayments')->name('admin.finance.collect');
+
+
+            Route::get('/finance/remaining-payouts', 'goToRemainingPayouts')->name('admin.finance.remaining.payouts');
+            Route::get('/finance/payouts', 'goToPayouts')->name('admin.finance.payouts');
+            Route::get('/finance/pay', 'payDeliveryCommissions')->name('admin.finance.pay');
         });
     });
 });
@@ -287,6 +300,23 @@ Route::middleware(['auth', 'verified', 'rolemanager:customer'])->group(function 
             Route::get('/order/history', 'history')->name('customer.history');
             Route::get('/setting/payment', 'payment')->name('customer.payment');
             Route::get('/affiliate', 'affiliate')->name('customer.affiliate');
+        });
+    });
+});
+
+Route::middleware(['auth', 'verified', 'rolemanager:delivery'])->group(function () {
+    Route::prefix('delivery')->group(function () {
+        Route::controller(DeliveryMainController::class)->group(function () {
+            Route::get('/dashboard', 'index')->name('delivery');
+            Route::get('/orders/active', 'go_to_active_orders')->name('delivery.active');
+            Route::get('/orders/completed', 'go_to_completed_orders')->name('delivery.completed');
+            Route::get('/orders/other', 'go_to_other_orders')->name('delivery.other');
+            Route::get('/collections', 'go_to_collections')->name('delivery.collections');
+            Route::get('/payouts', 'go_to_payouts')->name('delivery.payouts');
+        });
+
+        Route::controller(OrderController::class)->group(function () {
+            Route::put('/orders/update/{trackingNumber}', 'update_order_status')->name('delivery.order.update');
         });
     });
 });

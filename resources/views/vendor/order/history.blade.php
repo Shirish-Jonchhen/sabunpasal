@@ -57,15 +57,19 @@
                                 <select name="admin_status"
                                     style="width: 20%; padding: 0.375rem 0.75rem; border: 1px solid #ccc; border-radius: 0.375rem;">
                                     <option value="">Admin Status</option>
-                                    <option value="pending" {{ ($adminStatus ?? '') == 'pending' ? 'selected' : '' }}>Pending
+                                    <option value="pending" {{ ($adminStatus ?? '') == 'pending' ? 'selected' : '' }}>
+                                        Pending
                                     </option>
-                                    <option value="processing" {{ ($adminStatus ?? '') == 'processing' ? 'selected' : '' }}>
+                                    <option value="processing"
+                                        {{ ($adminStatus ?? '') == 'processing' ? 'selected' : '' }}>
                                         Processing</option>
-                                    <option value="shipped" {{ ($adminStatus ?? '') == 'shipped' ? 'selected' : '' }}>Shipped
+                                    <option value="shipped" {{ ($adminStatus ?? '') == 'shipped' ? 'selected' : '' }}>
+                                        Shipped
                                     </option>
                                     <option value="delivered" {{ ($adminStatus ?? '') == 'delivered' ? 'selected' : '' }}>
                                         Delivered</option>
-                                    <option value="cancelled" {{ ($staadminStatusus ?? '') == 'cancelled' ? 'selected' : '' }}>
+                                    <option value="cancelled"
+                                        {{ ($staadminStatusus ?? '') == 'cancelled' ? 'selected' : '' }}>
                                         Cancelled</option>
                                 </select>
 
@@ -83,8 +87,8 @@
                                     <option value="date_oldest" {{ ($sort ?? '') == 'date_oldest' ? 'selected' : '' }}>
                                         Date: Oldest</option>
                                 </select>
-                                
-                            
+
+
 
                                 <button type="submit"
                                     style="padding: 0.375rem 0.75rem; background-color: #0d6efd; color: white; border: none; border-radius: 0.375rem; cursor: pointer;">
@@ -103,7 +107,7 @@
                         @foreach ($orders as $storeOrder)
                             <div class="order-item">
                                 <div class="order-header">
-                                    <h3>{{ $storeOrder->order->order_tracking_number }}</h3>
+                                    <h3>{{ $storeOrder->order->order_tracking_number ?? 'N/A' }}</h3>
                                     <span>Date:
                                         {{ \Carbon\Carbon::parse($storeOrder->created_at)->format('F j, Y') }}</span>
                                     <span>Total: NRs. {{ $storeOrder->total }}</span>
@@ -125,7 +129,7 @@
 
 
                                     @php
-                                        $statusClass = match ($storeOrder->order->order_status) {
+                                        $statusClass = match ($storeOrder->order->order_status ?? 'N/A') {
                                             'pending' => 'status-pending',
                                             'processing' => 'status-processing',
                                             'shipped' => 'status-shipped',
@@ -137,7 +141,7 @@
                                     @endphp
 
                                     <span class="status {{ $statusClass }}">
-                                        Admin-Status: {{ $storeOrder->order->order_status}}
+                                        Admin-Status: {{ $storeOrder->order->order_status ?? 'N/A' }}
                                     </span>
 
 
@@ -148,9 +152,9 @@
 
 
                                         @foreach ($storeOrder->storeOrederProducts as $product)
-                                            <li>{{ $product->variantPrice->variant->product->name }} |
-                                                {{ $product->variantPrice->variant->variant_name }} |
-                                                {{ $product->variantPrice->variant->size }}
+                                            <li>{{ $product->variantPrice->variant->product->name ?? 'N/A' }} |
+                                                {{ $product->variantPrice->variant->variant_name ?? 'N/A' }} |
+                                                {{ $product->variantPrice->variant->size ?? 'N/A' }}
                                                 (x{{ $product->quantity }}
                                                 {{ $product->variantPrice->unit->attribute_value }})
                                             </li>
@@ -163,12 +167,11 @@
                                     </ul>
                                     @if ($storeOrder->order->order_status == 'processing')
                                         <div class="order-actions">
-            
+
                                             <a href="{{ route('vendor.order.show', $storeOrder->order->order_tracking_number) }}"
                                                 class="btn btn-secondary btn-sm">View Details</a>
-              
+
                                         </div>
-                                        
                                     @endif
                                     {{-- <div class="order-actions-list">
                                         <a href="{{ route('vendor.order.show', $storeOrder->order->order_tracking_number) }}"

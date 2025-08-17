@@ -50,11 +50,11 @@
                                     @endphp
                                     @if ($percentageChange > 0)
                                         <span class="text-success"> <i class="mdi mdi-arrow-bottom-right"></i>
-                                            +{{ number_format($percentageChange, 2) }}%</span><span class="text-muted"> Since
+                                            {{ number_format($percentageChange, 2) }}%</span><span class="text-muted"> Since
                                             last month</span>
                                     @else
                                         <span class="text-danger"> <i class="mdi mdi-arrow-bottom-right"></i>
-                                            -{{ number_format($percentageChange, 2) }}%</span><span class="text-muted"> Since
+                                            {{ number_format($percentageChange, 2) }}%</span><span class="text-muted"> Since
                                             last month</span>
                                     @endif
                                     {{-- <span class="text-danger"> <i class="mdi mdi-arrow-bottom-right"></i>
@@ -78,7 +78,7 @@
                                     </div>
                                 </div>
                                 <h1 class="mt-1 mb-3">
-                                    {{ User::whereYear('created_at', now()->year)->whereMonth('created_at', now()->month)->count() }}
+                                    {{ User::count() }}
                                 </h1>
 
                                 <div class="mb-0">
@@ -100,11 +100,11 @@
 
                                     @if ($percentageChange > 0)
                                         <span class="text-success"> <i class="mdi mdi-arrow-bottom-right"></i>
-                                            +{{ number_format($percentageChange, 2) }}%</span><span class="text-muted"> Since
+                                            {{ number_format($percentageChange, 2) }}%</span><span class="text-muted"> Since
                                             last month</span>
                                     @else
                                         <span class="text-danger"> <i class="mdi mdi-arrow-bottom-right"></i>
-                                            -{{ number_format($percentageChange, 2) }}%</span><span class="text-muted"> Since
+                                            {{ number_format($percentageChange, 2) }}%</span><span class="text-muted"> Since
                                             last month</span>
                                     @endif
 
@@ -127,7 +127,7 @@
                                     </div>
                                 </div>
                                 <h1 class="mt-1 mb-3">
-                                    {{ Store::whereYear('created_at', now()->year)->whereMonth('created_at', now()->month)->count() }}
+                                    {{ Store::count() }}
                                 </h1>
                                 <div class="mb-0">
 
@@ -148,11 +148,11 @@
                                     @endphp
                                      @if ($percentageChange > 0)
                                      <span class="text-success"> <i class="mdi mdi-arrow-bottom-right"></i>
-                                         +{{ number_format($percentageChange, 2) }}%</span><span class="text-muted"> Since last month</span>
+                                         {{ number_format($percentageChange, 2) }}%</span><span class="text-muted"> Since last month</span>
                                  @else
                                          
                                      <span class="text-danger"> <i class="mdi mdi-arrow-bottom-right"></i>
-                                         -{{ number_format($percentageChange, 2) }}%</span><span class="text-muted"> Since last month</span>
+                                         {{ number_format($percentageChange, 2) }}%</span><span class="text-muted"> Since last month</span>
                                  @endif
                                 </div>
                             </div>
@@ -171,7 +171,7 @@
                                     </div>
                                 </div>
                                 <h1 class="mt-1 mb-3">
-                                    {{ Order::whereYear('created_at', now()->year)->whereMonth('created_at', now()->month)->count() }}
+                                    {{ Order::count() }}
                                 </h1>
                                 <div class="mb-0">
                                     @php
@@ -191,11 +191,11 @@
                                     @endphp
                                      @if ($percentageChange > 0)
                                      <span class="text-success"> <i class="mdi mdi-arrow-bottom-right"></i>
-                                         +{{ number_format($percentageChange, 2) }}%</span><span class="text-muted"> Since last month</span>
+                                         {{ number_format($percentageChange, 2) }}%</span><span class="text-muted"> Since last month</span>
                                  @else
                                          
                                      <span class="text-danger"> <i class="mdi mdi-arrow-bottom-right"></i>
-                                         -{{ number_format($percentageChange, 2) }}%</span><span class="text-muted"> Since last month</span>
+                                         {{ number_format($percentageChange, 2) }}%</span><span class="text-muted"> Since last month</span>
                                  @endif
                                     
                                 </div>

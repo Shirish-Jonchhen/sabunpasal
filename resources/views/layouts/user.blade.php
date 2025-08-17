@@ -279,8 +279,24 @@
         <div class="container header-top-bar">
             <span class="announcement"></span>
             <div class="top-bar-links">
+
+
+
                 {{-- <a href="#">Track Order</a> --}}
                 @if (Auth::user())
+
+                    @if (Auth::user()->role == 0)
+                        <a href="{{ route('admin') }}">Admin Dashboard</a>
+                    @endif
+
+                    @if (Auth::user()->role == 1)
+                        <a href="{{ route('vendor') }}">Vendor Dashboard</a>
+                    @endif
+
+                    @if (Auth::user()->role == 3)
+                        <a href="{{ route('delivery') }}">Delivery Dashboard</a>
+                    @endif
+
                     <form method="POST" action="{{ route('logout') }}" style="display: inline;">
                         @csrf
                         <button type="submit" class="link-button">Logout</button>
@@ -311,8 +327,7 @@
                         {{-- <span class="count" id="wishlist-count">0</span> --}}
                     </a>
                 @else
-                    <a href="wishlist.html" class="header-action-link"
-                        onclick="event.preventDefault(); openLoginModal();">
+                    <a href="#" class="header-action-link" onclick="event.preventDefault(); openLoginModal();">
                         {{-- <a href="{{ route('user.wishlist') }}" class="header-action-link"> --}}
                         {{-- <a href="#" class="header-action-link" onclick="event.preventDefault(); openLoginModal();"> --}}
                         <i class="fas fa-heart"></i>
@@ -388,7 +403,8 @@
                     <img src="{{ asset('logos/sabun_pasal_linear_color_inversion.png') }}" alt="SabunPasal.com Logo"
                         class="logo-image-footer">
                 </a>
-                <p>Your one-stop shop for quality cleaning supplies. We provide effective solutions for a sparkling
+                <p>Your one-stop shop for quality cleaning supplies by <strong>Swastika Shirish Traders</strong>. We
+                    provide effective solutions for a sparkling
                     clean home and business.</p>
                 <div class="social-media-links">
                     <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
@@ -448,6 +464,10 @@
     {{-- Login Modal --}}
     <div id="loginModal" class="modal" style="display: none;">
         <div class="modal-content">
+            <span onclick="closeLoginModal()"
+                style="position: absolute; top: 10px; right: 10px;; font-size: 40px; cursor: pointer; color: #333;">
+                &times;
+            </span>
             <img src="{{ asset('logos/sabun_pasal_linear.png') }}" alt="SabunPasal.com Logo"
                 class="logo-image-modal mb-4">
 
@@ -511,6 +531,10 @@
     {{-- Register Modal --}}
     <div id="registerModal" class="modal" style="display: none;">
         <div class="modal-content">
+            <span onclick="closeRegisterModal()"
+                style="position: absolute; top: 10px; right: 10px;; font-size: 40px; cursor: pointer; color: #333;">
+                &times;
+            </span>
             <img src="{{ asset('logos/sabun_pasal_linear.png') }}" alt="SabunPasal.com Logo"
                 class="logo-image-modal mb-4">
 
@@ -569,6 +593,10 @@
     {{-- Change Password Modal --}}
     <div id="changePasswordModal" class="modal" style="display: none;">
         <div class="modal-content">
+            <span onclick="closeChangePasswordModal()"
+                style="position: absolute; top: 10px; right: 10px; font-size: 40px; cursor: pointer; color: #333;">
+                &times;
+            </span>
             <img src="{{ asset('logos/sabun_pasal_linear.png') }}" alt="SabunPasal.com Logo"
                 class="logo-image-modal mb-4">
 
@@ -614,10 +642,15 @@
 
     <div id="forgotPasswordModal" class="modal" style="display: none;">
         <div class="modal-content">
+            <span onclick="closeForgotPasswordModal()"
+                style="position: absolute; top: 10px; right: 10px;; font-size: 40px; cursor: pointer; color: #333;">
+                &times;
+            </span>
             <img src="{{ asset('logos/sabun_pasal_linear.png') }}" alt="SabunPasal.com Logo"
                 class="logo-image-modal mb-4">
 
-            <h4 class="">Forgot your password? No problem. Just let us know your email address and we will email
+            <h4 class="">Forgot your password? No problem. Just let us know your email address and we will
+                email
                 you a password reset link that will allow you to choose a new one.</h4>
             <form method="POST" action="{{ route('password.email') }}">
                 @csrf
@@ -643,13 +676,18 @@
     {{-- verify email Modal --}}
     <div id="verifyEmailModal" class="modal" style="display: none;">
         <div class="modal-content">
+            <span onclick="closeVerifyEmailModal()"
+                style="position: absolute; top: 10px; right: 10px;; font-size: 40px; cursor: pointer; color: #333;">
+                &times;
+            </span>
             <img src="{{ asset('logos/sabun_pasal_linear.png') }}" alt="SabunPasal.com Logo"
                 class="logo-image-modal mb-4">
 
             <h3 class="">Seems like you havent verified your email?</h3>
 
             <p>
-                Thanks for signing up! Before getting started, could you verify your email address by clicking on the
+                Thanks for signing up! Before getting started, could you verify your email address by clicking on
+                the
                 link we just emailed to you? If you didn\'t receive the email, we will gladly send you another.
             </p>
             <form method="POST" action="{{ route('verification.send') }}">
@@ -720,7 +758,7 @@
             @endphp
         @endif
         function openLoginModal() {
-            console.log("hello");
+            // console.log("hello");
             document.getElementById('loginModal').style.display = 'block';
         }
 
@@ -785,6 +823,7 @@
 
     <script src="{{ asset('user_asset/js/script.js') }}"></script>
     <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
 
     @livewireScripts
 </body>

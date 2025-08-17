@@ -9,11 +9,12 @@ class WishlistController extends Controller
 {
     public function index()
     {
+        // dd(Auth::check());
+
         if (Auth::check()) {
             return view('customer.wishlist.wishlist');
-        }else{
+        } else {
             return redirect()->route('home')->withErrors('Please login to view your wishlist.');
         }
-        
     }
 }

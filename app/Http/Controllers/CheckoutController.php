@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\OrderConfirmation;
 use App\Models\CartItem;
 use App\Models\District;
 use App\Models\Municipality;
@@ -14,6 +15,7 @@ use App\Models\VariantPrice;
 use App\Models\Ward;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 
 class CheckoutController extends Controller
 {
@@ -54,6 +56,14 @@ class CheckoutController extends Controller
         ]);
 
         $cartItems = CartItem::where('user_id', Auth::user()->id)->get();
+
+        foreach ($cartItems as $item) {
+            if ($item->variantPrice->variant->stock < $item->quantity * $item->variantPrice->pieces_per_unit) {
+                
+                return redirect()->back()->with('error', 'Insufficient stock for product: ' . $item->variantPrice->variant->product->name);
+            }
+        }
+
         $subtotal = 0;
         foreach ($cartItems as $item) {
             $subtotal += $item->variantPrice->old_price * $item->quantity;
@@ -154,16 +164,20 @@ class CheckoutController extends Controller
 
         //reduce variantPrice quantity by order quantity
         foreach ($cartItems as $item) {
-            $variantPrice = $item->variantPrice;
-            $variantPrice->stock -= $item->quantity;
-            $variantPrice->save();
+            $variant = $item->variantPrice->variant;
+            $variant->stock -= ($item->quantity * $item->variantPrice->pieces_per_unit);
+            $variant->save();
         }
+
+        // Send order confirmation email
+        Mail::to(Auth::user()->email)->send(new OrderConfirmation($order));
 
         return redirect()->route("user.orders")->with('success', 'Order created successfully.');
     }
 
 
-    public function create_single_order(Request $request){
+    public function create_single_order(Request $request)
+    {
         // <input type="hidden" name="product_variant_id" value="{{ $productVariantPriceId }}">
         // <input type="hidden" name="quantity" value="{{ $quantity }}">
         $request->validate([
@@ -183,10 +197,17 @@ class CheckoutController extends Controller
             'delivery_charge' => 'nullable|numeric',
         ]);
 
+
+
         $variantPrice = VariantPrice::findOrFail($request->product_variant_price_id);
         $subtotal = $variantPrice->old_price * $request->quantity;
         $totalTax = (($variantPrice->variant->product->tax_rate / 100) * $variantPrice->price) * $request->quantity;
         $discountAmount = ($variantPrice->old_price - $variantPrice->price) * $request->quantity;
+
+
+        if ($variantPrice->variant->stock < ($request->quantity * $variantPrice->pieces_per_unit)) {
+            return redirect()->back()->with('error', 'Insufficient stock for product: ' . $variantPrice->variant->product->name);
+        }
 
         $order = Order::create([
 
@@ -241,18 +262,22 @@ class CheckoutController extends Controller
             'order_id' => $order->id,
             'amount' => $order->total_amount,
             'method' => $request->payment_method,
-            'payment_status' => 'pending', // Set payment status if applicable
-            'payment_reference' => null, // Set payment reference if applicable
+            'payment_status' => 'pending', 
+            'payment_reference' => null, 
             // 'notes' => $request->note,
             'status' => 'pending',
             // Add other payment-related fields as needed
         ]);
 
+              //reduce variantPrice quantity by order quantity
+                $variant = $variantPrice->variant;
+                $variant->stock -= ($request->quantity * $variantPrice->pieces_per_unit);
+                $variant->save();
+    
+
+        Mail::to(Auth::user()->email)->send(new OrderConfirmation($order));
 
         return redirect()->route("user.orders")->with('success', 'Order created successfully.');
-
-
-
     }
 
 

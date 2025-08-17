@@ -31,29 +31,28 @@
                                     </div>
                                 </div>
                                 <h1 class="mt-1 mb-3">NRs.
-                                    {{ StoreOrder::whereIn('store_id', function ($query)  {
-        $query->select('id')
-              ->from('stores')
-              ->where('user_id', Auth::user()->id);
-    })
-    ->whereYear('created_at', now()->year)
-    ->whereMonth('created_at', now()->month)
-    ->sum('total') }}
+                                    {{ StoreOrder::whereIn('store_id', function ($query) {
+                                        $query->select('id')->from('stores')->where('user_id', Auth::user()->id);
+                                    })->whereYear('created_at', now()->year)->whereMonth('created_at', now()->month)->sum('total') }}
                                 </h1>
                                 <div class="mb-0">
                                     @php
-                                        $lastMonthSales = StoreOrder::whereIn('store_id', function ($query)  {
-        $query->select('id')
-              ->from('stores')
-              ->where('user_id', Auth::user()->id);
-    })->whereYear('created_at', now()->year)
+                                        $lastMonthSales = StoreOrder::whereIn('store_id', function ($query) {
+                                            $query
+                                                ->select('id')
+                                                ->from('stores')
+                                                ->where('user_id', Auth::user()->id);
+                                        })
+                                            ->whereYear('created_at', now()->year)
                                             ->whereMonth('created_at', now()->subMonth()->month)
                                             ->sum('total');
-                                        $currentMonthSales = StoreOrder::whereIn('store_id', function ($query)  {
-        $query->select('id')
-              ->from('stores')
-              ->where('user_id', Auth::user()->id);
-    })->whereYear('created_at', now()->year)
+                                        $currentMonthSales = StoreOrder::whereIn('store_id', function ($query) {
+                                            $query
+                                                ->select('id')
+                                                ->from('stores')
+                                                ->where('user_id', Auth::user()->id);
+                                        })
+                                            ->whereYear('created_at', now()->year)
                                             ->whereMonth('created_at', now()->month)
                                             ->sum('total');
 
@@ -66,11 +65,13 @@
                                     @endphp
                                     @if ($percentageChange > 0)
                                         <span class="text-success"> <i class="mdi mdi-arrow-bottom-right"></i>
-                                            +{{ number_format($percentageChange, 2) }}%</span><span class="text-muted"> Since
+                                            +{{ number_format($percentageChange, 2) }}%</span><span class="text-muted">
+                                            Since
                                             last month</span>
                                     @else
                                         <span class="text-danger"> <i class="mdi mdi-arrow-bottom-right"></i>
-                                            -{{ number_format($percentageChange, 2) }}%</span><span class="text-muted"> Since
+                                            -{{ number_format($percentageChange, 2) }}%</span><span class="text-muted">
+                                            Since
                                             last month</span>
                                     @endif
                                     {{-- <span class="text-danger"> <i class="mdi mdi-arrow-bottom-right"></i>
@@ -95,20 +96,22 @@
                                 </div>
                                 <h1 class="mt-1 mb-3">
                                     {{ Product::whereHas('store', function ($query) {
-    $query->where('user_id', Auth::user()->id);
-})->get()->count() }}
+                                        $query->where('user_id', Auth::user()->id);
+                                    })->get()->count() }}
                                 </h1>
 
                                 <div class="mb-0">
                                     @php
-                                        $lastMonthUsers =  Product::whereHas('store', function ($query) {
-    $query->where('user_id', Auth::user()->id);
-})->whereYear('created_at', now()->year)
+                                        $lastMonthUsers = Product::whereHas('store', function ($query) {
+                                            $query->where('user_id', Auth::user()->id);
+                                        })
+                                            ->whereYear('created_at', now()->year)
                                             ->whereMonth('created_at', now()->subMonth()->month)
                                             ->count();
-                                        $currentMonthUsers =  Product::whereHas('store', function ($query) {
-    $query->where('user_id', Auth::user()->id);
-})->whereYear('created_at', now()->year)
+                                        $currentMonthUsers = Product::whereHas('store', function ($query) {
+                                            $query->where('user_id', Auth::user()->id);
+                                        })
+                                            ->whereYear('created_at', now()->year)
                                             ->whereMonth('created_at', now()->month)
                                             ->count();
 
@@ -122,11 +125,13 @@
 
                                     @if ($percentageChange > 0)
                                         <span class="text-success"> <i class="mdi mdi-arrow-bottom-right"></i>
-                                            +{{ number_format($percentageChange, 2) }}%</span><span class="text-muted"> Since
+                                            +{{ number_format($percentageChange, 2) }}%</span><span class="text-muted">
+                                            Since
                                             last month</span>
                                     @else
                                         <span class="text-danger"> <i class="mdi mdi-arrow-bottom-right"></i>
-                                            -{{ number_format($percentageChange, 2) }}%</span><span class="text-muted"> Since
+                                            -{{ number_format($percentageChange, 2) }}%</span><span class="text-muted">
+                                            Since
                                             last month</span>
                                     @endif
 
@@ -154,10 +159,12 @@
                                 <div class="mb-0">
 
                                     @php
-                                        $lastMonthStores = Store::where('user_id', Auth::user()->id)->whereYear('created_at', now()->year)
+                                        $lastMonthStores = Store::where('user_id', Auth::user()->id)
+                                            ->whereYear('created_at', now()->year)
                                             ->whereMonth('created_at', now()->subMonth()->month)
                                             ->count();
-                                        $currentMonthStores = Store::where('user_id', Auth::user()->id)->whereYear('created_at', now()->year)
+                                        $currentMonthStores = Store::where('user_id', Auth::user()->id)
+                                            ->whereYear('created_at', now()->year)
                                             ->whereMonth('created_at', now()->month)
                                             ->count();
 
@@ -168,14 +175,15 @@
                                             $percentageChange = 0;
                                         }
                                     @endphp
-                                     @if ($percentageChange > 0)
-                                     <span class="text-success"> <i class="mdi mdi-arrow-bottom-right"></i>
-                                         +{{ number_format($percentageChange, 2) }}%</span><span class="text-muted"> Since last month</span>
-                                 @else
-                                         
-                                     <span class="text-danger"> <i class="mdi mdi-arrow-bottom-right"></i>
-                                         -{{ number_format($percentageChange, 2) }}%</span><span class="text-muted"> Since last month</span>
-                                 @endif
+                                    @if ($percentageChange > 0)
+                                        <span class="text-success"> <i class="mdi mdi-arrow-bottom-right"></i>
+                                            +{{ number_format($percentageChange, 2) }}%</span><span class="text-muted">
+                                            Since last month</span>
+                                    @else
+                                        <span class="text-danger"> <i class="mdi mdi-arrow-bottom-right"></i>
+                                            -{{ number_format($percentageChange, 2) }}%</span><span class="text-muted">
+                                            Since last month</span>
+                                    @endif
                                 </div>
                             </div>
                         </div>
@@ -193,26 +201,28 @@
                                     </div>
                                 </div>
                                 <h1 class="mt-1 mb-3">
-                                    {{ StoreOrder::whereIn('store_id', function ($query)  {
-        $query->select('id')
-              ->from('stores')
-              ->where('user_id', Auth::user()->id);
-    })->whereYear('created_at', now()->year)->whereMonth('created_at', now()->month)->count() }}
+                                    {{ StoreOrder::whereIn('store_id', function ($query) {
+                                        $query->select('id')->from('stores')->where('user_id', Auth::user()->id);
+                                    })->whereYear('created_at', now()->year)->whereMonth('created_at', now()->month)->count() }}
                                 </h1>
                                 <div class="mb-0">
                                     @php
-                                        $lastMonthOrders = StoreOrder::whereIn('store_id', function ($query)  {
-        $query->select('id')
-              ->from('stores')
-              ->where('user_id', Auth::user()->id);
-    })->whereYear('created_at', now()->year)
+                                        $lastMonthOrders = StoreOrder::whereIn('store_id', function ($query) {
+                                            $query
+                                                ->select('id')
+                                                ->from('stores')
+                                                ->where('user_id', Auth::user()->id);
+                                        })
+                                            ->whereYear('created_at', now()->year)
                                             ->whereMonth('created_at', now()->subMonth()->month)
                                             ->count();
-                                        $currentMonthOrders = StoreOrder::whereIn('store_id', function ($query)  {
-        $query->select('id')
-              ->from('stores')
-              ->where('user_id', Auth::user()->id);
-    })->whereYear('created_at', now()->year)
+                                        $currentMonthOrders = StoreOrder::whereIn('store_id', function ($query) {
+                                            $query
+                                                ->select('id')
+                                                ->from('stores')
+                                                ->where('user_id', Auth::user()->id);
+                                        })
+                                            ->whereYear('created_at', now()->year)
                                             ->whereMonth('created_at', now()->month)
                                             ->count();
 
@@ -223,15 +233,16 @@
                                             $percentageChange = 0;
                                         }
                                     @endphp
-                                     @if ($percentageChange > 0)
-                                     <span class="text-success"> <i class="mdi mdi-arrow-bottom-right"></i>
-                                         +{{ number_format($percentageChange, 2) }}%</span><span class="text-muted"> Since last month</span>
-                                 @else
-                                         
-                                     <span class="text-danger"> <i class="mdi mdi-arrow-bottom-right"></i>
-                                         -{{ number_format($percentageChange, 2) }}%</span><span class="text-muted"> Since last month</span>
-                                 @endif
-                                    
+                                    @if ($percentageChange > 0)
+                                        <span class="text-success"> <i class="mdi mdi-arrow-bottom-right"></i>
+                                            +{{ number_format($percentageChange, 2) }}%</span><span class="text-muted">
+                                            Since last month</span>
+                                    @else
+                                        <span class="text-danger"> <i class="mdi mdi-arrow-bottom-right"></i>
+                                            -{{ number_format($percentageChange, 2) }}%</span><span class="text-muted">
+                                            Since last month</span>
+                                    @endif
+
                                 </div>
                             </div>
                         </div>
@@ -273,12 +284,12 @@
                         <table class="table mb-0">
                             <tbody>
                                 @for ($i = 0; $i < $deliveryMethodLabels->count(); $i++)
-                                <tr>
-                                    <td>{{ $deliveryMethodLabels[$i] }}</td>
-                                    <td class="text-end">{{ $deliveryMethodCountsData[$i] }}</td>
-                                </tr>
+                                    <tr>
+                                        <td>{{ $deliveryMethodLabels[$i] }}</td>
+                                        <td class="text-end">{{ $deliveryMethodCountsData[$i] }}</td>
+                                    </tr>
                                 @endfor
-                                
+
                             </tbody>
                         </table>
                     </div>
@@ -335,42 +346,40 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach (StoreOrder::whereIn('store_id', function ($query)  {
-        $query->select('id')
-              ->from('stores')
-              ->where('user_id', Auth::user()->id);
-    })->latest()->take(5)->get() as $order )
-                        <tr>
-                            <td>{{$order->order->order_tracking_number}}</td>
-                            <td class="d-none d-xl-table-cell">{{$order->created_at}}</td>
-                            <td class="d-none d-xl-table-cell">{{$order->subtotal}}</td>
-                            <td class="d-none d-xl-table-cell">{{$order->discount}}</td>
-                            <td class="d-none d-xl-table-cell">{{$order->tax}}</td>
-                            {{-- <td class="d-none d-xl-table-cell">{{$order->delivery_charge}}</td> --}}
-                            <td class="d-none d-xl-table-cell">{{$order->total}}</td>
-                            <td class="d-none d-xl-table-cell">{{$order->store->store_name}}</td>
-                            @php
-                                $statusClass = '';
-                                if ($order->status == 'pending') {
-                                    $statusClass = 'bg-secondary';
-                                } elseif ($order->status == 'processing') {
-                                    $statusClass = 'bg-warning';
-                                } elseif ($order->status == 'shipped') {
-                                    $statusClass = 'bg-primary';
-                                }elseif ($order->status == 'delivered') {
-                                    $statusClass = 'bg-success';
-                                }elseif ($order->status == 'cancelled') {
-                                    $statusClass = 'bg-danger';
-                                }elseif ($order->status == 'returned') {
-                                    $statusClass = 'bg-danger';
-                                }
-                            @endphp
-                            <td><span class="badge {{ $statusClass }}">{{$order->status}}</span></td>
+                        @foreach (StoreOrder::with('order')->whereIn('store_id', function ($query) {
+                $query->select('id')->from('stores')->where('user_id', Auth::user()->id);
+            })->latest()->take(5)->get() as $order)
+                            <tr>
+                                <td>{{ $order->order?->order_tracking_number ?? 'N/A' }}</td>
+                                <td class="d-none d-xl-table-cell">{{ $order->created_at }}</td>
+                                <td class="d-none d-xl-table-cell">{{ $order->subtotal }}</td>
+                                <td class="d-none d-xl-table-cell">{{ $order->discount }}</td>
+                                <td class="d-none d-xl-table-cell">{{ $order->tax }}</td>
+                                {{-- <td class="d-none d-xl-table-cell">{{$order->delivery_charge}}</td> --}}
+                                <td class="d-none d-xl-table-cell">{{ $order->total }}</td>
+                                <td class="d-none d-xl-table-cell">{{ $order->store->store_name }}</td>
+                                @php
+                                    $statusClass = '';
+                                    if ($order->status == 'pending') {
+                                        $statusClass = 'bg-secondary';
+                                    } elseif ($order->status == 'processing') {
+                                        $statusClass = 'bg-warning';
+                                    } elseif ($order->status == 'shipped') {
+                                        $statusClass = 'bg-primary';
+                                    } elseif ($order->status == 'delivered') {
+                                        $statusClass = 'bg-success';
+                                    } elseif ($order->status == 'cancelled') {
+                                        $statusClass = 'bg-danger';
+                                    } elseif ($order->status == 'returned') {
+                                        $statusClass = 'bg-danger';
+                                    }
+                                @endphp
+                                <td><span class="badge {{ $statusClass }}">{{ $order->status }}</span></td>
 
-                        </tr>
+                            </tr>
                         @endforeach
-                        
-                        
+
+
                     </tbody>
                 </table>
             </div>
@@ -455,8 +464,8 @@
                 type: "pie",
                 data: {
                     labels: {!! json_encode($deliveryMethodLabels) !!},
-                datasets: [{
-                    data: {!! json_encode($deliveryMethodCountsData) !!},
+                    datasets: [{
+                        data: {!! json_encode($deliveryMethodCountsData) !!},
                         backgroundColor: [
                             window.theme.primary,
                             window.theme.warning,
@@ -523,10 +532,10 @@
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             var markers = [{
-                    coords: [28.3949,  84.1240],
+                    coords: [28.3949, 84.1240],
                     name: "Nepal"
                 },
-    
+
                 // {
                 //     coords: [6.524379, 3.379206],
                 //     name: "Lagos"
