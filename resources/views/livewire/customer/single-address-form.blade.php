@@ -25,7 +25,7 @@
                 <div class="form-group">
                     <label for="city">District</label>
                     {{-- <input type="text" id="district" name="district" required> --}}
-                    <select id="district" name="district" class="form-select mb-2" wire:model.live = 'district_id'
+                    <select id="district" name="district" class="form-select mb-2" wire:model.live='district_id'
                         required>
                         <option value="" selected>Select District</option>
                         @foreach ($districts as $district)
@@ -37,7 +37,7 @@
                     <label for="state">Municipality</label>
                     {{-- <input type="text" id="municipality" name="municipality" required> --}}
                     <select id="municipality" name="municipality" class="form-select mb-2"
-                        wire:model.live = 'municipality_id' required>
+                        wire:model.live='municipality_id' required>
                         <option value="" selected>Select Municipality</option>
                         @foreach ($municipalities as $municipality)
                             <option value="{{ $municipality->id }}">{{ $municipality->municipality_name }}</option>
@@ -48,7 +48,7 @@
                 <div class="form-group">
                     <label for="zip">Ward</label>
                     {{-- <input type="text" id="ward" name="ward" required> --}}
-                    <select id="ward" name="ward" class="form-select mb-2" wire:model.live = 'ward_id' required>
+                    <select id="ward" name="ward" class="form-select mb-2" wire:model.live='ward_id' required>
                         <option value="" selected>Select Municipality</option>
 
                         @foreach ($wards as $ward)
@@ -65,14 +65,20 @@
             </div>
             <div class="form-group">
                 <label for="country">Note</label>
-                <textarea type="text" id="note" name="note" placeholder="Eg, Landmarks, Special Instructions"></textarea>
+                <textarea type="text" id="note" name="note"
+                    placeholder="Eg, Landmarks, Special Instructions"></textarea>
                 </textarea>
             </div>
             <h2>Payment Method</h2>
+            
             <div class="form-group" style="display: flex; flex-direction: row;">
                 <label>
                     <input type="radio" name="payment_method" value="cod" checked>
                     Cash on Delivery
+                </label>
+                <label style="margin-left: 10px;">
+                    <input type="radio" name="payment_method" value="khalti" checked>
+                    Khalti
                 </label>
             </div>
 
@@ -130,8 +136,7 @@
         </div>
 
 
-        <div class
-        ="summary-total">
+        <div class="summary-total">
             <span>Total:</span>
             <strong id="summary-total-amount">NRs. {{ $subtotal + $totalTax + $delivery_charge }}</strong>
         </div>
