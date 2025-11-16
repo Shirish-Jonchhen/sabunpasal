@@ -51,6 +51,7 @@
                         index = nextIndex;
                         updateDots(index);
 
+                        
                         // Fade in
                         imgTag.style.opacity = 1;
 
