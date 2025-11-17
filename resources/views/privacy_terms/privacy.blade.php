@@ -10,65 +10,77 @@
         </ol>
     </nav>
     <h1>Privacy Policy</h1>
-    <p>Last updated: <span id="last-updated-date"></span></p>
+    <p>Last updated: <span id="last-updated-date"> <strong> 25th August, 2025</strong> </span></p>
 
     <p>
-      Welcome to SabunPasal.com! We are committed to protecting your privacy.
-      This Privacy Policy explains how we collect, use, disclose, and safeguard
-      your information when you visit our website. Please read this privacy
-      policy carefully. If you do not agree with the terms of this privacy
-      policy, please do not access the site.
+      Welcome to SabunPasal.com! We value your trust and are committed to 
+      safeguarding your personal information. This Privacy Policy explains 
+      what information we collect, how we use it, and how we protect it. 
+      By using our website, you agree to the practices described in this policy.
     </p>
 
     <h2>Collection of Your Information</h2>
     <p>
-      We may collect information about you in a variety of ways. The
-      information we may collect on the Site includes:
+      We may collect information about you in the following ways:
     </p>
     <ul>
       <li>
-        <strong>Personal Data:</strong> Personally identifiable information,
-        such as your name, shipping address, email address, and telephone
-        number, and demographic information, such as your age, gender,
-        hometown, and interests, that you voluntarily give to us when you
-        register with the Site or when you choose to participate in various
-        activities related to the Site, such as online chat and message boards.
-        You are under no obligation to provide us with personal information of
-        any kind, however your refusal to do so may prevent you from using
-        certain features of the Site.
+        <strong>Personal Information:</strong> We collect details such as 
+        your name, phone number, delivery address, and email address. 
+        This information is used for record-keeping, order processing, 
+        user personalization, and ensuring timely delivery of products.
       </li>
       <li>
-        <strong>Derivative Data:</strong> Information our servers automatically
-        collect when you access the Site, such as your IP address, your
-        browser type, your operating system, your access times, and the pages
-        you have viewed directly before and after accessing the Site. (This part would be handled by the server-side framework like Laravel).
+        <strong>Derivative Data:</strong> When you access our site, our system 
+        automatically collects technical information such as your IP address, 
+        browser type, device information, operating system, and the pages 
+        you visit. This helps us analyze usage trends and improve your 
+        experience on the site.
       </li>
-       <li>
-         <strong>Financial Data:</strong> Financial information, such as data related to your payment method (e.g., valid credit card number, card brand, expiration date) that we may collect when you purchase, order, return, or exchange goods or services from the Site. [We store only very limited, if any, financial information that we collect. Otherwise, all financial information is stored by our payment processor, [Payment Processor Name - **REPLACE THIS**], and you are encouraged to review their privacy policy and contact them directly for responses to your questions.]
-       </li>
+      <li>
+        <strong>Payment Information:</strong> Currently, we only support 
+        <em>Cash on Delivery (COD)</em>. In the future, we may add additional 
+        payment options such as Fonepay, eSewa, and other digital wallets. 
+        If and when such services are introduced, your financial details will 
+        be securely handled by the respective payment providers in compliance 
+        with their policies.
+      </li>
     </ul>
 
-     <h2>Use of Your Information</h2>
-     <p>
-       Having accurate information about you permits us to provide you with a
-       smooth, efficient, and customized experience. Specifically, we may use
-       information collected about you via the Site to:
-     </p>
+    <h2>Use of Your Information</h2>
+    <p>
+       The information we collect allows us to provide you with a smooth, 
+       efficient, and personalized shopping experience. We may use your 
+       information to:
+    </p>
     <ul>
       <li>Create and manage your account.</li>
-      <li>Email you regarding your account or order.</li>
-      <li>Fulfill and manage purchases, orders, payments, and other transactions related to the Site.</li>
-       <li>Improve the efficiency and operation of the Site.</li>
-       <li>Monitor and analyze usage and trends to improve your experience with the Site (Server-side function).</li>
-       <li>Notify you of updates to the Site.</li>
-     </ul>
+      <li>Process and deliver your orders.</li>
+      <li>Communicate with you about your account, orders, or support queries.</li>
+      <li>Improve our website’s performance and user experience.</li>
+      <li>Send updates about our products, offers, or important changes.</li>
+    </ul>
 
-    {/* Add more sections as needed: Disclosure of Your Information, Security of Your Information, Policy for Children, Contact Us */}
+    <h2>Security of Your Information</h2>
+    <p>
+      We implement appropriate technical and organizational measures to 
+      protect your information. While no method of transmission over the 
+      Internet is 100% secure, we strive to protect your personal data 
+      to the best of our ability.
+    </p>
+
+    <h2>Changes to This Policy</h2>
+    <p>
+      We may update this Privacy Policy from time to time to reflect changes 
+      in our practices or for other operational, legal, or regulatory reasons. 
+      Any changes will be posted on this page with the updated date.
+    </p>
 
     <h2>Contact Us</h2>
     <p>
-      If you have questions or comments about this Privacy Policy, please
-      contact us at: [Your Contact Email/Info - **REPLACE THIS**] or via the <a href="contact.html">Contact Page</a>.
+      If you have any questions or concerns about this Privacy Policy, please 
+      contact us at: <strong>info@sabunpasal.com</strong> 
+      or via our <a href="{{ route('contact.us') }}">Contact Page</a>.
     </p>
 </div>
 @endsection

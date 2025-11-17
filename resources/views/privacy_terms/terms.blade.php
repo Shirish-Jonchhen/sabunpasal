@@ -1,5 +1,5 @@
 @extends('layouts.user')
-@section('user_page_title', 'Sabun Pasal - Terms of service')
+@section('user_page_title', 'Sabun Pasal - Terms of Service')
 
 @section('user_content')
 <div class="container">
@@ -10,105 +10,99 @@
         </ol>
     </nav>
     <h1>Terms of Service</h1>
-    <p>Last updated: <span id="last-updated-date"></span></p>
+    <p>Last updated: <span id="last-updated-date"> <strong> 25th August, 2025</strong></span></p>
 
     <p>
-      Please read these Terms of Service ("Terms", "Terms of Service")
-      carefully before using the SabunPasal.com website (the "Service")
-      operated by [Your Company Name - **REPLACE THIS**] ("us", "we", or "our").
-    </p>
-
-    <p>
-      Your access to and use of the Service is conditioned on your acceptance
-      of and compliance with these Terms. These Terms apply to all visitors,
-      users and others who access or use the Service.
-    </p>
-
-    <p>
-      By accessing or using the Service you agree to be bound by these Terms.
-      If you disagree with any part of the terms then you may not access the
-      Service.
+      Welcome to SabunPasal.com! These Terms of Service ("Terms") govern your 
+      use of our website and services. By registering, placing an order, or 
+      accessing the site, you agree to comply with these Terms. If you do not 
+      agree, please do not use our services.
     </p>
 
     <h2>Accounts</h2>
     <p>
-      When you create an account with us (if applicable), you must provide us information that
-      is accurate, complete, and current at all times. Failure to do so
-      constitutes a breach of the Terms, which may result in immediate
-      termination of your account on our Service.
+      To place an order on SabunPasal.com, you may be required to create an 
+      account by providing accurate and complete personal information such as 
+      your name, phone number, address, and email. You are responsible for 
+      maintaining the confidentiality of your login details and for all 
+      activities under your account.
     </p>
     <p>
-      You are responsible for safeguarding the password that you use to access
-      the Service and for any activities or actions under your password,
-      whether your password is with our Service or a third-party service.
-    </p>
-    <p>
-      You agree not to disclose your password to any third party. You must
-      notify us immediately upon becoming aware of any breach of security or
-      unauthorized use of your account.
+      If we suspect any unauthorized use or security breach, we may suspend 
+      or terminate your account without prior notice.
     </p>
 
-    <h2>Purchases</h2>
-     <p>
-       If you wish to purchase any product or service made available through
-       the Service ("Purchase"), you may be asked to supply certain
-       information relevant to your Purchase including, without limitation,
-       your credit card number, the expiration date of your credit card, your
-       billing address, and your shipping information.
-     </p>
-     <p>
-       You represent and warrant that: (i) you have the legal right to use any
-       credit card(s) or other payment method(s) in connection with any
-       Purchase; and that (ii) the information you supply to us is true,
-       correct and complete.
-     </p>
-     <p>
-       By submitting such information, you grant us the right to provide the
-       information to third parties (like payment processors) for purposes of facilitating the completion
-       of Purchases.
-     </p>
+    <h2>Orders and Deliveries</h2>
     <p>
-      We reserve the right to refuse or cancel your order at any time for
-      certain reasons including but not limited to: product or service
-      availability, errors in the description or price of the product or
-      service, error in your order or other reasons.
+      Once you place an order, you will receive a confirmation. Orders can be 
+      fulfilled through either <strong>home delivery</strong> or 
+      <strong>store pickup</strong>, as per your selection. Delivery times 
+      may vary depending on location, availability, and circumstances beyond 
+      our control.
+    </p>
+    <p>
+      We reserve the right to refuse or cancel orders in cases of product 
+      unavailability, pricing errors, or suspicious/fraudulent activity.
+    </p>
+
+    <h2>Payments</h2>
+    <p>
+      Currently, we only support <strong>Cash on Delivery (COD)</strong> as a 
+      payment method. In the near future, we will introduce secure electronic 
+      payment options such as eSewa, Fonepay, and other digital wallets. 
+      If digital payments are introduced, transactions will be processed 
+      securely by the respective payment providers, and their terms will 
+      apply.
+    </p>
+
+    <h2>Pricing & Product Information</h2>
+    <p>
+      All product prices listed on the site are subject to change without 
+      notice. While we strive to ensure accuracy, errors in pricing, 
+      availability, or product descriptions may occur. We reserve the right 
+      to correct such errors and cancel or modify orders accordingly.
     </p>
 
     <h2>Intellectual Property</h2>
     <p>
-        The Service and its original content, features and functionality are and will remain the exclusive property of [Your Company Name - **REPLACE THIS**] and its licensors. The Service is protected by copyright, trademark, and other laws of both the [Your Country - **REPLACE THIS**] and foreign countries. Our trademarks and trade dress may not be used in connection with any product or service without the prior written consent of [Your Company Name - **REPLACE THIS**].
+      All content, trademarks, logos, and materials on SabunPasal.com remain 
+      the property of Sabun Pasal and/or its licensors. You may not copy, 
+      distribute, or reproduce any content without our prior written consent.
     </p>
 
-    <h2>Links To Other Web Sites</h2>
+    <h2>Third-Party Links</h2>
     <p>
-        Our Service may contain links to third-party web sites or services that are not owned or controlled by [Your Company Name - **REPLACE THIS**].
-    </p>
-    <p>
-        [Your Company Name - **REPLACE THIS**] has no control over, and assumes no responsibility for, the content, privacy policies, or practices of any third party web sites or services. You further acknowledge and agree that [Your Company Name - **REPLACE THIS**] shall not be responsible or liable, directly or indirectly, for any damage or loss caused or alleged to be caused by or in connection with use of or reliance on any such content, goods or services available on or through any such web sites or services.
+      Our website may contain links to third-party websites or services. We 
+      are not responsible for the content, policies, or practices of any 
+      third-party platforms. Use of such sites is at your own risk.
     </p>
 
     <h2>Termination</h2>
     <p>
-        We may terminate or suspend access to our Service immediately, without prior notice or liability, for any reason whatsoever, including without limitation if you breach the Terms.
-    </p>
-    <p>
-        All provisions of the Terms which by their nature should survive termination shall survive termination, including, without limitation, ownership provisions, warranty disclaimers, indemnity and limitations of liability.
+      We may suspend or terminate your access to our services immediately, 
+      without notice, if you violate these Terms or engage in fraudulent, 
+      illegal, or abusive activity. Certain provisions, such as limitations 
+      of liability and ownership rights, shall survive termination.
     </p>
 
     <h2>Governing Law</h2>
     <p>
-        These Terms shall be governed and construed in accordance with the laws of [Your Jurisdiction/Country - **REPLACE THIS**], without regard to its conflict of law provisions.
+      These Terms shall be governed by and construed in accordance with the 
+      laws of Nepal, without regard to conflict of law principles.
     </p>
 
-    <h2>Changes</h2>
+    <h2>Changes to Terms</h2>
     <p>
-        We reserve the right, at our sole discretion, to modify or replace these Terms at any time. If a revision is material we will try to provide at least 30 days notice prior to any new terms taking effect. What constitutes a material change will be determined at our sole discretion.
+      We may update these Terms from time to time. Any changes will be posted 
+      on this page with the updated date. Your continued use of our services 
+      after such updates constitutes acceptance of the revised Terms.
     </p>
 
     <h2>Contact Us</h2>
     <p>
-      If you have any questions about these Terms, please <a href="{{ route('contact.us') }}">contact us</a>.
+      For any questions regarding these Terms, please contact us via our 
+      <a href="{{ route('contact.us') }}">Contact Page</a> or email us at 
+      <strong>info@sabunpasal.com</strong>.
     </p>
 </div>
-
 @endsection

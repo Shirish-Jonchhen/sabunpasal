@@ -403,7 +403,7 @@
                     <img src="{{ asset('logos/sabun_pasal_linear_color_inversion.png') }}" alt="SabunPasal.com Logo"
                         class="logo-image-footer">
                 </a>
-                <p>Your one-stop shop for quality cleaning supplies by <strong>Swastika Shirish Traders</strong>. We
+                <p>Your one-stop shop for quality cleaning supplies. We
                     provide effective solutions for a sparkling
                     clean home and business.</p>
                 <div class="social-media-links">
