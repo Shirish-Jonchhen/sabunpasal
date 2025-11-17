@@ -76,10 +76,10 @@
                     <input type="radio" name="payment_method" value="cod" checked>
                     Cash on Delivery
                 </label>
-                <label style="margin-left: 10px;">
+                {{-- <label style="margin-left: 10px;">
                     <input type="radio" name="payment_method" value="khalti" checked>
                     Khalti
-                </label>
+                </label> --}}
             </div>
 
             <h2>Shipping Method</h2>
