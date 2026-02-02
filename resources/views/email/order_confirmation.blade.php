@@ -377,7 +377,7 @@
                                 <tr>
                                     <td class="text-gray-600 leading-normal"
                                         style="font-size: 15px; line-height: 22px; color: #666666">
-                                        {{ Auth::user()->name }}<br />
+                                        {{ optional($order->user)->name ?? 'Customer' }}<br />
                                         {{ $order->street }}, {{ $order->ward }}<br />
                                         {{ $order->municipality }}, {{ $order->district }}<br>
                                         {{ $order->country }}
@@ -387,7 +387,7 @@
                                         @if ($order->delivery_method == 'pickup')
                                             Store Pick-Up
                                         @else
-                                            {{ Auth::user()->name }}<br />
+                                            {{ optional($order->user)->name ?? 'Customer' }}<br />
                                             {{ $order->street }}, {{ $order->ward }}<br />
                                             {{ $order->municipality }}, {{ $order->district }}<br>
                                             {{ $order->country }}

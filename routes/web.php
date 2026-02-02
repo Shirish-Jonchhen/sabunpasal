@@ -97,6 +97,7 @@ Route::controller(CheckoutController::class)->group(function () {
     Route::post('/checkout/create', 'create_order')->name('user.create.order');
     Route::post('/checkout/create_single', 'create_single_order')->name('user.create.single.order');
     Route::get('/product/{slug}/checkout', 'single_checkout')->name('user.single.checkout');
+    Route::get('/payment/khalti/return', 'handleKhaltiReturn')->name('payment.khalti.return');
     // Route::post('/product/review/{slug}', 'addReview')->name('product.review');
 });
 

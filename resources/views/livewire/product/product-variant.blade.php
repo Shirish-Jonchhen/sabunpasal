@@ -195,10 +195,24 @@
                     <!-- Add data-product-id to the add to cart button -->
 
                     @if (Auth::user())
-                        <button class="btn btn-primary btn-buy-now" wire:click="buyNow">Buy Now</button>
+                        <button class="btn btn-primary btn-buy-now"
+                            wire:click="buyNow"
+                            wire:loading.attr="disabled"
+                            wire:target="buyNow">
+                            <span class="btn-spinner" wire:loading wire:target="buyNow" aria-hidden="true"></span>
+                            <span class="btn-loading-text" wire:loading wire:target="buyNow">Processing...</span>
+                            <span wire:loading.remove wire:target="buyNow">Buy Now</span>
+                        </button>
 
-                        <button class="btn btn-secondary add-to-cart-button" wire:click="addToCart">
-                            <i class="fas fa-cart-plus"></i> Add to Cart
+                        <button class="btn btn-secondary add-to-cart-button"
+                            wire:click="addToCart"
+                            wire:loading.attr="disabled"
+                            wire:target="addToCart">
+                            <span class="btn-spinner" wire:loading wire:target="addToCart" aria-hidden="true"></span>
+                            <span class="btn-loading-text" wire:loading wire:target="addToCart">Adding...</span>
+                            <span wire:loading.remove wire:target="addToCart">
+                                <i class="fas fa-cart-plus"></i> Add to Cart
+                            </span>
                         </button>
                     @else
                         <button class="btn btn-primary btn-buy-now"
