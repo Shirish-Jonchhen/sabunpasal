@@ -315,6 +315,54 @@
     </div>
 
     <script src="{{ asset('admin_asset/js/app.js') }}"></script>
+    <script>
+        (function() {
+            const LOADING_TEXT = 'Loading...';
+
+            const setLoading = (btn) => {
+                if (!btn || btn.dataset.loadingActive === '1') return;
+                if (btn.disabled) return;
+                btn.dataset.loadingActive = '1';
+                const loadingText = btn.getAttribute('data-loading-text') || LOADING_TEXT;
+                btn.classList.add('is-loading');
+                btn.setAttribute('disabled', 'disabled');
+
+                if (btn.tagName === 'INPUT') {
+                    if (!btn.dataset.originalText) {
+                        btn.dataset.originalText = btn.value;
+                    }
+                    btn.value = loadingText;
+                    return;
+                }
+
+                if (!btn.dataset.originalText) {
+                    btn.dataset.originalText = btn.innerHTML;
+                }
+
+                btn.innerHTML =
+                    '<span class="btn-spinner" aria-hidden="true"></span><span class="btn-loading-text">' +
+                    loadingText +
+                    '</span>';
+            };
+
+            document.addEventListener('submit', function(event) {
+                const form = event.target;
+                if (!form || form.dataset.loading === 'false') return;
+
+                const buttons = form.querySelectorAll('button, input[type="submit"], input[type="button"]');
+                buttons.forEach(function(btn) {
+                    if (btn.hasAttribute('data-loading-skip')) return;
+                    setLoading(btn);
+                });
+            }, true);
+
+            document.addEventListener('click', function(event) {
+                const btn = event.target.closest('[data-loading-on-click]');
+                if (!btn || btn.hasAttribute('data-loading-skip')) return;
+                setLoading(btn);
+            });
+        })();
+    </script>
 
 </body>
 

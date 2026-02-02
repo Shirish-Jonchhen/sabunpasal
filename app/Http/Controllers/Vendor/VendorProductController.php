@@ -11,6 +11,7 @@ use App\Models\Product;
 use App\Models\ProductVariant;
 use App\Models\VariantPrice;
 use App\Models\VariantImage;
+use App\Models\SubCategory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -32,10 +33,78 @@ class VendorProductController extends Controller
         return view('vendor.product.create', compact('stores', 'brands', 'units'));
     }
 
-    public function manage()
+    public function manage(Request $request)
     {
-        $products = Product::where('vendor_id', Auth::user()->id)->get();
-        return view('vendor.product.manage', compact('products'));
+        $search = $request->string('search')->trim()->toString();
+        $categoryId = $request->input('category_id');
+        $subcategoryId = $request->input('subcategory_id');
+        $storeId = $request->input('store_id');
+        $status = $request->input('status');
+        $visibility = $request->input('visibility');
+        $onSale = $request->input('on_sale');
+        $priceMin = $request->input('price_min');
+        $priceMax = $request->input('price_max');
+        $stockMin = $request->input('stock_min');
+        $stockMax = $request->input('stock_max');
+        $sort = $request->input('sort');
+
+        $products = Product::with(['variants.prices', 'variants.images', 'category', 'subcategory', 'store'])
+            ->where('vendor_id', Auth::user()->id)
+            ->when($search, function ($query) use ($search) {
+                $query->where(function ($q) use ($search) {
+                    $q->where('name', 'like', '%' . $search . '%')
+                        ->orWhere('slug', 'like', '%' . $search . '%');
+                });
+            })
+            ->when($categoryId, fn ($query) => $query->where('category_id', $categoryId))
+            ->when($subcategoryId, fn ($query) => $query->where('subcategory_id', $subcategoryId))
+            ->when($storeId, fn ($query) => $query->where('store_id', $storeId))
+            ->when($status && $status !== 'all', fn ($query) => $query->where('status', $status))
+            ->when($visibility && $visibility !== 'all', fn ($query) => $query->where('visibility', $visibility))
+            ->when($onSale !== null && $onSale !== '' && $onSale !== 'all', fn ($query) => $query->where('is_on_sale', (bool) $onSale))
+            ->when(($priceMin !== null && $priceMin !== '') || ($priceMax !== null && $priceMax !== ''), function ($query) use ($priceMin, $priceMax) {
+                $query->whereHas('variants.prices', function ($q) use ($priceMin, $priceMax) {
+                    if ($priceMin !== null && $priceMin !== '') {
+                        $q->where('price', '>=', $priceMin);
+                    }
+                    if ($priceMax !== null && $priceMax !== '') {
+                        $q->where('price', '<=', $priceMax);
+                    }
+                });
+            })
+            ->when(($stockMin !== null && $stockMin !== '') || ($stockMax !== null && $stockMax !== ''), function ($query) use ($stockMin, $stockMax) {
+                $query->whereHas('variants', function ($q) use ($stockMin, $stockMax) {
+                    if ($stockMin !== null && $stockMin !== '') {
+                        $q->where('stock', '>=', $stockMin);
+                    }
+                    if ($stockMax !== null && $stockMax !== '') {
+                        $q->where('stock', '<=', $stockMax);
+                    }
+                });
+            })
+            ->when($sort, function ($query) use ($sort) {
+                switch ($sort) {
+                    case 'name_asc':
+                        $query->orderBy('name', 'asc');
+                        break;
+                    case 'name_desc':
+                        $query->orderBy('name', 'desc');
+                        break;
+                    case 'date_oldest':
+                        $query->orderBy('created_at', 'asc');
+                        break;
+                    case 'date_latest':
+                    default:
+                        $query->orderBy('created_at', 'desc');
+                        break;
+                }
+            }, fn ($query) => $query->orderBy('created_at', 'desc'))
+            ->paginate(10)
+            ->appends($request->query());
+
+        $stores = Store::where('user_id', Auth::user()->id)->orderBy('store_name')->get();
+
+        return view('vendor.product.manage', compact('products', 'stores'));
     }
 
     public function store_product(Request $request)

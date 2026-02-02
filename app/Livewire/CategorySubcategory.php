@@ -12,16 +12,27 @@ class CategorySubcategory extends Component
     public $selectedCategory;
     public $subcategories=[];
     public $selectedSubcategory;
+    public $layout = 'block';
 
-    public function mount()
+    public function mount($selectedCategory = null, $selectedSubcategory = null, $layout = 'block')
     {
         $this->categories = Category::all();
+        $this->selectedCategory = $selectedCategory;
+        $this->layout = $layout ?: 'block';
+        if ($selectedCategory) {
+            $this->subcategories = SubCategory::where('category_id', $selectedCategory)->get();
+            $this->selectedSubcategory = $selectedSubcategory;
+        }
     }
 
     public function updatedSelectedCategory($categoryId)
     {
-        $this->subcategories = SubCategory::where('category_id', $categoryId)->get();
-        $this->selectedSubcategory = null; 
+        if ($categoryId) {
+            $this->subcategories = SubCategory::where('category_id', $categoryId)->get();
+        } else {
+            $this->subcategories = [];
+        }
+        $this->selectedSubcategory = null;
     }
 
     public function render()

@@ -110,11 +110,6 @@ class CheckoutController extends Controller
             'payment_method' => $request->payment_method,
         ]);
 
-        // attach transient customer info to the order instance (not persisted) for payment payloads
-        $order->setAttribute('customer_name', $request->name);
-        $order->setAttribute('customer_email', $request->email);
-        $order->setAttribute('customer_phone', $request->phone);
-
 
         $groupedByStore = $cartItems->groupBy(function ($item) {
             return $item->variantPrice->variant->product->store->id ?? null;
@@ -160,7 +155,11 @@ class CheckoutController extends Controller
 
         if ($isKhalti) {
             try {
-                $initiate = $this->khaltiService->initiate($order, (int) round($order->total_amount * 100));
+                $initiate = $this->khaltiService->initiate($order, (int) round($order->total_amount * 100), [
+                    'name' => $request->name,
+                    'email' => $request->email,
+                    'phone' => $request->phone,
+                ]);
             } catch (Throwable $exception) {
                 return redirect()->route('user.checkout')->with('error', 'Unable to initiate Khalti payment. Please try again.');
             }
@@ -274,15 +273,13 @@ class CheckoutController extends Controller
             ]);
         }
 
-        // attach transient customer info to the order instance (not persisted) for payment payloads
-        $order->setAttribute('customer_name', $request->name);
-        $order->setAttribute('customer_email', $request->email);
-        $order->setAttribute('customer_phone', $request->phone);
-
         if ($isKhalti) {
             try {
-    
-                $initiate = $this->khaltiService->initiate($order, (int) round($order->total_amount * 100));
+                $initiate = $this->khaltiService->initiate($order, (int) round($order->total_amount * 100), [
+                    'name' => $request->name,
+                    'email' => $request->email,
+                    'phone' => $request->phone,
+                ]);
             } catch (Throwable $exception) {
                 return redirect()->route('user.checkout')->with('error', 'Unable to initiate Khalti payment. Please try again.');
             }

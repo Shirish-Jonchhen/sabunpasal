@@ -9,7 +9,7 @@ use Illuminate\Support\Str;
 
 class KhaltiService
 {
-    public function initiate(Order $order, int $amountInPaisa): array
+    public function initiate(Order $order, int $amountInPaisa, array $customerInfo = []): array
     {
         $payload = [
             'return_url' => config('khalti.return_url'),
@@ -20,9 +20,9 @@ class KhaltiService
         ];
 
         $customerInfo = array_filter([
-            'name' => $order->getAttribute('customer_name'),
-            'email' => $order->getAttribute('customer_email'),
-            'phone' => $order->getAttribute('customer_phone'),
+            'name' => $customerInfo['name'] ?? null,
+            'email' => $customerInfo['email'] ?? null,
+            'phone' => $customerInfo['phone'] ?? null,
         ]);
 
         if (!empty($customerInfo)) {
